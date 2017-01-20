@@ -24,39 +24,22 @@ import java.util.zip.GZIPInputStream;
  */
 public class DeserializerSchematic implements Deserializer<BlockArray> {
 
+    private Map<String, NBTTag> schematic;
+
     @Override
     public BlockArray deserialize(InputStream stream) throws IOException {
-        NBTInputStream nbtStream = new NBTInputStream(new GZIPInputStream(stream));
-        NamedTag rootTag = nbtStream.readNamedTag();
-        nbtStream.close();
+        TagCompound schematicTag = readSchematic(stream);
 
-        if (!rootTag.getName().equals("Schematic"))
-            throw new FileFormatException("NBTTag 'Schematic' does not exist or is not first");
+        this.schematic = schematicTag.getValue();
+        validateSchematic();
 
-        TagCompound schematicTag = (TagCompound) rootTag.getTag();
-
-        Map<String, NBTTag> schematic = schematicTag.getValue();
-        if (!schematic.containsKey("Blocks"))
-            throw new FileSyntaxException("Schematic file is missing a 'Blocks' tag");
-
-        final short
-                sizeX = getChildTag(schematic, "Width",  TagShort.class).getValue(),
-                sizeY = getChildTag(schematic, "Height", TagShort.class).getValue(),
-                sizeZ = getChildTag(schematic, "Length", TagShort.class).getValue();
+        final short sizeX = readShort("Width"), sizeY = readShort("Height"), sizeZ = readShort("Length");
         BlockArray result = new BlockArray(sizeX, sizeY, sizeZ);
 
-        String materials = getChildTag(schematic, "Materials", TagString.class).getValue();
-        if (!materials.equals("Alpha"))
-            throw new FileVersionException("Schematic file is not an Alpha schematic");
-
-        short[] blocks;
-        byte[] datas = getChildTag(schematic, "Data", TagByteArray.class).getValue();
-        {
-            byte[] baseBlocks = getChildTag(schematic, "Blocks", TagByteArray.class).getValue();
-            byte[] addBlocks = schematic.containsKey("AddBlocks")?
-                    getChildTag(schematic, "AddBlocks", TagByteArray.class).getValue() : new byte[0];
-            blocks = combine(baseBlocks, addBlocks);
-        }
+        short[] blocks = readBlocks();
+        byte[] datas = readBytes("Data");
+        if (blocks.length != datas.length)
+            throw new FileSyntaxException("block and data array lengths do not match");
 
         for (int x = 0; x < sizeX; ++x) for (int y = 0; y < sizeY; ++y) for (int z = 0; z < sizeZ; ++z) {
             final int index = y*sizeX*sizeZ + z*sizeX + x;
@@ -66,52 +49,77 @@ public class DeserializerSchematic implements Deserializer<BlockArray> {
         return result;
     }
 
+    private TagCompound readSchematic(InputStream stream) throws IOException {
+        NBTInputStream nbtStream = new NBTInputStream(new GZIPInputStream(stream));
+        NamedTag rootTag = nbtStream.readNamedTag();
+        nbtStream.close();
+
+        if (!rootTag.getName().equals("Schematic"))
+            throw new FileFormatException("NBTTag 'Schematic' does not exist or is not first");
+
+        return (TagCompound) rootTag.getTag();
+    }
+
+    private void validateSchematic() throws IOException {
+        if (!schematic.containsKey("Blocks"))
+            throw new FileSyntaxException("schematic is missing 'Blocks' tag");
+
+        TagString materials = (TagString) schematic.get("Materials");
+        if (!materials.getValue().equals("Alpha"))
+            throw new FileVersionException("schematic is not an Alpha schematic");
+    }
+
+    private short[] readBlocks() throws IOException {
+        byte[] baseBlocks = readBytes("Blocks");
+        byte[] addBlocks = schematic.containsKey("AddBlocks")? readBytes("AddBlocks") : new byte[0];
+        return combine(baseBlocks, addBlocks);
+    }
+
+    private short readShort(String key) throws IOException {
+        if (!schematic.containsKey(key))
+            throw new FileSyntaxException("schematic is missing '"+key+"' tag");
+
+        return ((TagShort) schematic.get(key)).getShortValue();
+    }
+
+    private byte[] readBytes(String key) throws IOException {
+        if (!schematic.containsKey(key))
+            throw new FileSyntaxException("schematic is missing '"+key+"' tag");
+
+        return ((TagByteArray) schematic.get(key)).getValue();
+    }
+
     /**
-     * Long story short, Mojang didn't think ahead and used a single byte array to store block id's. Surprise, surprise,
-     * they added more blocks than expected and now we need a second array to store extra bits for up to 4096 blocks.
+     * <p>
+     *     Long story short, Mojang didn't think ahead and used a single byte array to store block id's. Surprise,
+     *     surprise, they added more blocks than expected and now we need a second array to store extra bits for up to
+     *     4096 blocks.
+     * </p>
+     * <p>
+     *     The byte array containing the additional blocks is of half the length of the base block array, with every
+     *     byte storing 2 times 4 bits of additional id space.
+     * </p>
      *
      * @param baseBlocks the base array of block id's
      * @param addBlocks the array of additional block id's
      * @return a new array containing the full block id
      */
     private static short[] combine(byte[] baseBlocks, byte[] addBlocks) {
-        short[] blocks = new short[baseBlocks.length]; // Have to later combine IDs
+        short[] blocks = new short[baseBlocks.length];
 
-        for (int index = 0; index < baseBlocks.length; index++) {
-            if ((index >> 1) >= addBlocks.length) { // No corresponding AddBlocks index
-                blocks[index] = (short) (baseBlocks[index] & 0xFF);
-            } else {
-                if ((index & 1) == 0) {
-                    blocks[index] = (short) (((addBlocks[index >> 1] & 0x0F) << 8) + (baseBlocks[index] & 0xFF));
-                } else {
-                    blocks[index] = (short) (((addBlocks[index >> 1] & 0xF0) << 4) + (baseBlocks[index] & 0xFF));
-                }
-            }
+        for (int i = 0; i < baseBlocks.length; i++) {
+
+            if ((i >> 1) >= addBlocks.length)// No corresponding AddBlocks index
+                blocks[i] = (short) (baseBlocks[i] & 0xFF);
+
+            else if ((i & 1) == 0)
+                blocks[i] = (short) (((addBlocks[i >> 1] & 0x0F) << 8) + (baseBlocks[i] & 0xFF));
+
+            else
+                blocks[i] = (short) (((addBlocks[i >> 1] & 0xF0) << 4) + (baseBlocks[i] & 0xFF));
         }
 
         return blocks;
-    }
-
-    /**
-     * Get child tag of a NBT structure.
-     *
-     * @param items The parent tag map
-     * @param key The name of the tag to get
-     * @param expected The expected type of the tag
-     * @return child tag casted to the expected type
-     * @throws FileSyntaxException if the tag does not exist or the tag is not of the expected type
-     */
-    private static <T extends NBTTag> T getChildTag(Map<String, NBTTag> items, String key, Class<T> expected)
-            throws FileSyntaxException {
-
-        if (!items.containsKey(key)) {
-            throw new FileSyntaxException("Schematic file is missing a \"" + key + "\" tag");
-        }
-        NBTTag tag = items.get(key);
-        if (!expected.isInstance(tag)) {
-            throw new FileSyntaxException(key + " tag is not of tag type " + expected.getName());
-        }
-        return expected.cast(tag);
     }
 
 }

@@ -22,6 +22,10 @@ public final class TagByte extends NBTTag {
         return value;
     }
 
+    public byte getByteValue() {
+        return value;
+    }
+
     @Override
     public TagType getType() {
         return TagType.BYTE;

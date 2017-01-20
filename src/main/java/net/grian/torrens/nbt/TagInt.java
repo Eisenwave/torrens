@@ -22,6 +22,10 @@ public final class TagInt extends NBTTag {
         return value;
     }
 
+    public int getIntValue() {
+        return value;
+    }
+
     @Override
     public TagType getType() {
         return TagType.INT;

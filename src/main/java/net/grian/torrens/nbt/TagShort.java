@@ -22,6 +22,10 @@ public final class TagShort extends NBTTag {
         return value;
     }
 
+    public short getShortValue() {
+        return value;
+    }
+
     @Override
     public TagType getType() {
         return TagType.SHORT;

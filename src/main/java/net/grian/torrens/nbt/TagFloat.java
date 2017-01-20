@@ -22,6 +22,10 @@ public final class TagFloat extends NBTTag {
         return value;
     }
 
+    public float getFloatValue() {
+        return value;
+    }
+
     @Override
     public TagType getType() {
         return TagType.FLOAT;

@@ -124,13 +124,13 @@ public class SerializerModelJSON implements Serializer<MCModel> {
     }
 
     private static float[] toJSONUV(MCUV uv, int width, int height) {
-        final float mx = 16F / width, my = 16F / height;
+        final float multiX = 16F / width, multiY = 16F / height;
 
         return new float[] {
-                down(uv.getMinX() * mx + ANTI_BLEED),
-                down(uv.getMinY() * my + ANTI_BLEED),
-                down(uv.getMaxX() * mx - ANTI_BLEED),
-                down(uv.getMaxY() * my - ANTI_BLEED)
+                down(uv.getMinX() * multiX + ANTI_BLEED),
+                down(uv.getMinY() * multiY + ANTI_BLEED),
+                down(uv.getMaxX() * multiX - ANTI_BLEED),
+                down(uv.getMaxY() * multiY - ANTI_BLEED)
         };
     }
 
@@ -142,19 +142,21 @@ public class SerializerModelJSON implements Serializer<MCModel> {
 
     private final static float ANTI_BLEED = 1/128F;
 
+    /**
+     * <p>
+     *     Rounds a floating point number towards zero to a precision of <code>2<sup>-8</sup></code>.
+     * </p>
+     * <p>
+     *     This is done to reduce file size by lowering the amount of floating point decimals which are unneeded for
+     *     uv-coordinates.
+     * </p>
+     *
+     * @param number the number
+     * @return a rounded number
+     * @see RoundingMode#DOWN
+     */
     private static float down(float number) {
         return (int) (number * 256) / 256F;
-    }
-
-    /**
-     * Rounds a number towards 8, leaving two decimals of accuracy. This both reduces JSON file size and prevents edge
-     * bleeding.
-     *
-     * @param coordinate the coordinate to round
-     * @return a rounded coordinate
-     */
-    public static float preventBleed(float coordinate) {
-        return (coordinate >= 8)? coordinate-ANTI_BLEED : coordinate+ANTI_BLEED;
     }
 
     private void writeVector(Vector vector, JsonWriter writer) throws IOException {

@@ -23,6 +23,10 @@ public final class TagLong extends NBTTag {
         return value;
     }
 
+    public long getLongValue() {
+        return value;
+    }
+
     @Override
     public TagType getType() {
         return TagType.LONG;
