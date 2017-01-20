@@ -1,22 +1,3 @@
-/*
- * WorldEdit, a Minecraft world manipulation toolkit
- * Copyright (C) sk89q <http://www.sk89q.com>
- * Copyright (C) WorldEdit team and contributors
- *
- * This program is free software: you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published by the
- * Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License
- * for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
- */
-
 package net.grian.torrens.nbt;
 
 import java.util.Collections;
@@ -28,10 +9,10 @@ import java.util.Objects;
  * The {@code TAG_List} tag.
  */
 @SuppressWarnings("Duplicates")
-public final class TagList extends Tag {
+public final class TagList<E extends Tag> extends Tag {
 
     private final TagType type;
-    private final List<Tag> value;
+    private final List<E> value;
 
     /**
      * Creates the tag with an empty name.
@@ -39,7 +20,7 @@ public final class TagList extends Tag {
      * @param type the type of tag
      * @param value the value of the tag
      */
-    public TagList(TagType type, List<? extends Tag> value) {
+    public TagList(TagType type, List<? extends E> value) {
         Objects.requireNonNull(type);
         this.type = type;
         this.value = Collections.unmodifiableList(value);
@@ -55,7 +36,7 @@ public final class TagList extends Tag {
     }
 
     @Override
-    public List<Tag> getValue() {
+    public List<E> getValue() {
         return value;
     }
 
@@ -70,8 +51,8 @@ public final class TagList extends Tag {
      * @param list the new list
      * @return a new list tag
      */
-    public TagList setValue(List<Tag> list) {
-        return new TagList(getElementType(), list);
+    public TagList setValue(List<E> list) {
+        return new TagList<>(getElementType(), list);
     }
 
     /**
@@ -239,6 +220,7 @@ public final class TagList extends Tag {
      * @param index the index
      * @return a list of tags
      */
+    @SuppressWarnings("unchecked")
     public List<Tag> getList(int index) {
         Tag tag = getIfExists(index);
         if (tag instanceof TagList) {
@@ -257,12 +239,12 @@ public final class TagList extends Tag {
      * @param index the index
      * @return a tag list instance
      */
-    public TagList getListTag(int index) {
+    public TagList<?> getListTag(int index) {
         Tag tag = getIfExists(index);
         if (tag instanceof TagList) {
             return (TagList) tag;
         } else {
-            return new TagList(TagType.STRING, Collections.emptyList());
+            return new TagList<>(TagType.STRING, Collections.emptyList());
         }
     }
 
@@ -277,15 +259,14 @@ public final class TagList extends Tag {
      * @param index the index
      * @param elementType the type of the list elements
      * @return a list of tags
-     * @param <T> the NBT type
      */
     @SuppressWarnings({"unchecked", "Duplicates"})
-    public <T extends Tag> List<T> getList(int index, TagType elementType) {
+    public List<Tag> getList(int index, TagType elementType) {
         Tag tag = getIfExists(index);
         if (tag instanceof TagList) {
             TagList listTag = (TagList) tag;
             return listTag.getElementType().equals(elementType)?
-                    (List<T>) listTag.getValue() :
+                    listTag.getValue() :
                     Collections.emptyList();
         }
         else return Collections.emptyList();
@@ -366,7 +347,7 @@ public final class TagList extends Tag {
     public String toString() {
         StringBuilder builder = new StringBuilder();
         builder
-                .append("TAG_List")
+                .append(type.getName())
                 .append(": ")
                 .append(value.size())
                 .append(" entries of type ")

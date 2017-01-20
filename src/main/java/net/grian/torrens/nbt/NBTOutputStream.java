@@ -1,28 +1,10 @@
-/*
- * WorldEdit, a Minecraft world manipulation toolkit
- * Copyright (C) sk89q <http://www.sk89q.com>
- * Copyright (C) WorldEdit team and contributors
- *
- * This program is free software: you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published by the
- * Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License
- * for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
- */
-
 package net.grian.torrens.nbt;
 
 import java.io.Closeable;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.charset.Charset;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -37,6 +19,8 @@ import java.util.Objects;
  */
 public final class NBTOutputStream implements Closeable {
 
+    private final static Charset UTF_8 = Charset.forName("UTF-8");
+
     /**
      * The output stream.
      */
@@ -46,10 +30,8 @@ public final class NBTOutputStream implements Closeable {
      * Creates a new {@code NBTOutputStream}, which will write data to the
      * specified underlying output stream.
      * 
-     * @param os
-     *            The output stream.
-     * @throws IOException
-     *             if an I/O error occurs.
+     * @param os the output stream
+     * @throws IOException if an I/O error occurs
      */
     public NBTOutputStream(OutputStream os) throws IOException {
         this.os = new DataOutputStream(os);
@@ -58,17 +40,15 @@ public final class NBTOutputStream implements Closeable {
     /**
      * Writes a tag.
      * 
-     * @param tag
-     *            The tag to write.
-     * @throws IOException
-     *             if an I/O error occurs.
+     * @param tag the tag to write
+     * @throws IOException if an I/O error occurs
      */
     public void writeNamedTag(String name, Tag tag) throws IOException {
         Objects.requireNonNull(name);
         Objects.requireNonNull(tag);
 
         int typeId = tag.getType().getId();
-        byte[] nameBytes = name.getBytes(NBTUtils.CHARSET);
+        byte[] nameBytes = name.getBytes(UTF_8);
 
         os.writeByte(typeId);
         os.writeShort(nameBytes.length);
@@ -81,12 +61,10 @@ public final class NBTOutputStream implements Closeable {
     }
 
     /**
-     * Writes tag payload.
+     * Writes a tag payload.
      * 
-     * @param tag
-     *            The tag.
-     * @throws IOException
-     *             if an I/O error occurs.
+     * @param tag the tag
+     * @throws IOException if an I/O error occurs
      */
     private void writeTagPayload(Tag tag) throws IOException {
         switch (tag.getType()) {
@@ -102,17 +80,26 @@ public final class NBTOutputStream implements Closeable {
             case LIST: writeListTagPayload((TagList) tag); break;
             case COMPOUND: writeCompoundTagPayload((TagCompound) tag); break;
             case INT_ARRAY: writeIntArrayTagPayload((TagIntArray) tag); break;
-            default: throw new IOException("Invalid tag type: " + tag.getType());
+            default: throw new IOException("invalid tag type: " + tag.getType());
         }
+    }
+
+    /**
+     * Writes a {@code TAG_End} tag.
+     *
+     * @param tag the tag
+     * @throws IOException if an I/O error occurs
+     */
+    @SuppressWarnings("UnusedParameters")
+    private void writeEndTagPayload(TagEnd tag) throws IOException {
+        /* empty */
     }
 
     /**
      * Writes a {@code TAG_Byte} tag.
      * 
-     * @param tag
-     *            The tag.
-     * @throws IOException
-     *             if an I/O error occurs.
+     * @param tag the tag
+     * @throws IOException if an I/O error occurs
      */
     private void writeByteTagPayload(TagByte tag) throws IOException {
         os.writeByte(tag.getValue());
@@ -121,10 +108,8 @@ public final class NBTOutputStream implements Closeable {
     /**
      * Writes a {@code TAG_Byte_Array} tag.
      * 
-     * @param tag
-     *            The tag.
-     * @throws IOException
-     *             if an I/O error occurs.
+     * @param tag the tag
+     * @throws IOException if an I/O error occurs
      */
     private void writeByteArrayTagPayload(TagByteArray tag) throws IOException {
         byte[] bytes = tag.getValue();
@@ -135,10 +120,8 @@ public final class NBTOutputStream implements Closeable {
     /**
      * Writes a {@code TAG_Compound} tag.
      * 
-     * @param tag
-     *            The tag.
-     * @throws IOException
-     *             if an I/O error occurs.
+     * @param tag the tag
+     * @throws IOException if an I/O error occurs
      */
     private void writeCompoundTagPayload(TagCompound tag) throws IOException {
         for (Map.Entry<String, Tag> entry : tag.getValue().entrySet()) {
@@ -151,7 +134,7 @@ public final class NBTOutputStream implements Closeable {
      * Writes a {@code TAG_List} tag.
      * 
      * @param tag the tag.
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException if an I/O error occurs
      */
     private void writeListTagPayload(TagList tag) throws IOException {
         TagType type = tag.getElementType();
@@ -168,13 +151,11 @@ public final class NBTOutputStream implements Closeable {
     /**
      * Writes a {@code TAG_String} tag.
      * 
-     * @param tag
-     *            The tag.
-     * @throws IOException
-     *             if an I/O error occurs.
+     * @param tag the tag.
+     * @throws IOException if an I/O error occurs
      */
     private void writeStringTagPayload(TagString tag) throws IOException {
-        byte[] bytes = tag.getValue().getBytes(NBTUtils.CHARSET);
+        byte[] bytes = tag.getValue().getBytes(UTF_8);
         os.writeShort(bytes.length);
         os.write(bytes);
     }
@@ -182,10 +163,8 @@ public final class NBTOutputStream implements Closeable {
     /**
      * Writes a {@code TAG_Double} tag.
      * 
-     * @param tag
-     *            The tag.
-     * @throws IOException
-     *             if an I/O error occurs.
+     * @param tag the tag
+     * @throws IOException if an I/O error occurs
      */
     private void writeDoubleTagPayload(TagDouble tag) throws IOException {
         os.writeDouble(tag.getValue());
@@ -194,10 +173,8 @@ public final class NBTOutputStream implements Closeable {
     /**
      * Writes a {@code TAG_Float} tag.
      * 
-     * @param tag
-     *            The tag.
-     * @throws IOException
-     *             if an I/O error occurs.
+     * @param tag The tag
+     * @throws IOException if an I/O error occurs
      */
     private void writeFloatTagPayload(TagFloat tag) throws IOException {
         os.writeFloat(tag.getValue());
@@ -205,11 +182,9 @@ public final class NBTOutputStream implements Closeable {
 
     /**
      * Writes a {@code TAG_Long} tag.
-     * 
-     * @param tag
-     *            The tag.
-     * @throws IOException
-     *             if an I/O error occurs.
+     *
+     * @param tag the tag
+     * @throws IOException if an I/O error occurs
      */
     private void writeLongTagPayload(TagLong tag) throws IOException {
         os.writeLong(tag.getValue());
@@ -218,10 +193,8 @@ public final class NBTOutputStream implements Closeable {
     /**
      * Writes a {@code TAG_Int} tag.
      * 
-     * @param tag
-     *            The tag.
-     * @throws IOException
-     *             if an I/O error occurs.
+     * @param tag the tag.
+     * @throws IOException if an I/O error occurs
      */
     private void writeIntTagPayload(TagInt tag) throws IOException {
         os.writeInt(tag.getValue());
@@ -230,25 +203,19 @@ public final class NBTOutputStream implements Closeable {
     /**
      * Writes a {@code TAG_Short} tag.
      * 
-     * @param tag
-     *            The tag.
-     * @throws IOException
-     *             if an I/O error occurs.
+     * @param tag the tag
+     * @throws IOException if an I/O error occurs
      */
     private void writeShortTagPayload(TagShort tag) throws IOException {
         os.writeShort(tag.getValue());
     }
 
     /**
-     * Writes a {@code TAG_Empty} tag.
-     * 
+     * Writes a {@code TAG_Int_Array} tag.
+     *
      * @param tag the tag
+     * @throws IOException if an I/O error occurs
      */
-    @SuppressWarnings("UnusedParameters")
-    private void writeEndTagPayload(TagEnd tag) {
-        /* empty */
-    }
-    
     private void writeIntArrayTagPayload(TagIntArray tag) throws IOException {
         int[] data = tag.getValue();
         os.writeInt(data.length);

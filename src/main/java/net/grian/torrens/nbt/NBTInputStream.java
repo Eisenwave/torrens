@@ -1,35 +1,17 @@
-/*
- * WorldEdit, a Minecraft world manipulation toolkit
- * Copyright (C) sk89q <http://www.sk89q.com>
- * Copyright (C) WorldEdit team and contributors
- *
- * This program is free software: you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published by the
- * Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License
- * for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
- */
-
 package net.grian.torrens.nbt;
 
 import java.io.Closeable;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 /**
- * This class reads <strong>NBT</strong>, or <strong>Named Binary Tag</strong>
+ * This class reads <b>NBT</b>, or <b>Named Binary Tag</b>
  * streams, and produces an object graph of subclasses of the {@code Tag}
  * object.
  * 
@@ -39,11 +21,12 @@ import java.util.Map;
  */
 public final class NBTInputStream implements Closeable {
 
+    private final static Charset UTF_8 = Charset.forName("UTF-8");
+
     private final DataInputStream is;
 
     /**
-     * Creates a new {@code NBTInputStream}, which will source its data
-     * from the specified input stream.
+     * Creates a new {@code NBTInputStream}, which will source its data from the specified input stream.
      * 
      * @param is the input stream
      * @throws IOException if an I/O error occurs
@@ -53,21 +36,11 @@ public final class NBTInputStream implements Closeable {
     }
 
     /**
-     * Reads an NBT tag from the stream.
-     * 
-     * @return The tag that was read.
-     * @throws IOException if an I/O error occurs.
-     */
-    public NamedTag readNamedTag() throws IOException {
-        return readNamedTag(0);
-    }
-
-    /**
      * Reads an NBT from the stream.
      * 
      * @param depth the depth of this tag
-     * @return The tag that was read.
-     * @throws IOException if an I/O error occurs.
+     * @return the tag that was read
+     * @throws IOException if an I/O error occurs
      */
     private NamedTag readNamedTag(int depth) throws IOException {
         TagType type = TagType.fromId(is.readByte() & 0xFF);
@@ -77,12 +50,22 @@ public final class NBTInputStream implements Closeable {
             int nameLength = is.readShort() & 0xFFFF;
             byte[] nameBytes = new byte[nameLength];
             is.readFully(nameBytes);
-            name = new String(nameBytes, NBTUtils.CHARSET);
-        } else {
-            name = "";
+            name = new String(nameBytes, UTF_8);
         }
+        else
+            name = "";
 
         return new NamedTag(name, readTagPayload(type, depth));
+    }
+
+    /**
+     * Reads an NBT tag from the stream.
+     *
+     * @return the tag that was read
+     * @throws IOException if an I/O error occurs
+     */
+    public NamedTag readNamedTag() throws IOException {
+        return readNamedTag(0);
     }
 
     /**
@@ -119,7 +102,7 @@ public final class NBTInputStream implements Closeable {
                 length = is.readShort();
                 bytes = new byte[length];
                 is.readFully(bytes);
-                return new TagString(new String(bytes, NBTUtils.CHARSET));
+                return new TagString(new String(bytes, UTF_8));
 
             case LIST:
                 TagType elementType = TagType.fromId(is.readByte());
@@ -150,7 +133,7 @@ public final class NBTInputStream implements Closeable {
                     data[i] = is.readInt();
                 return new TagIntArray(data);
 
-            default: throw new IOException("Invalid tag type: " + type + ".");
+            default: throw new IOException("invalid tag type: " + type);
         }
     }
 
