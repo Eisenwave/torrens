@@ -20,30 +20,30 @@
 package net.grian.torrens.nbt;
 
 /**
- * The {@code TAG_Byte} tag.
+ * The {@code TAG_Short} tag.
  */
-public final class ByteTag extends Tag {
+public final class TagShort extends Tag {
 
-    private final byte value;
+    private final short value;
 
     /**
      * Creates the tag with an empty name.
      *
      * @param value the value of the tag
      */
-    public ByteTag(byte value) {
+    public TagShort(short value) {
         super();
         this.value = value;
     }
 
     @Override
-    public Byte getValue() {
+    public Short getValue() {
         return value;
     }
 
     @Override
-    public String toString() {
-        return "TAG_Byte(" + value + ")";
+    public TagType getType() {
+        return TagType.SHORT;
     }
 
 }

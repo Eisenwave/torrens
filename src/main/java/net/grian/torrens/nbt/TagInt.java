@@ -20,38 +20,30 @@
 package net.grian.torrens.nbt;
 
 /**
- * The {@code TAG_Byte_Array} tag.
+ * The {@code TAG_Int} tag.
  */
-public final class ByteArrayTag extends Tag {
+public final class TagInt extends Tag {
 
-    private final byte[] value;
+    private final int value;
 
     /**
      * Creates the tag with an empty name.
      *
      * @param value the value of the tag
      */
-    public ByteArrayTag(byte[] value) {
+    public TagInt(int value) {
         super();
         this.value = value;
     }
 
     @Override
-    public byte[] getValue() {
+    public Integer getValue() {
         return value;
     }
 
     @Override
-    public String toString() {
-        StringBuilder hex = new StringBuilder();
-        for (byte b : value) {
-            String hexDigits = Integer.toHexString(b).toUpperCase();
-            if (hexDigits.length() == 1) {
-                hex.append("0");
-            }
-            hex.append(hexDigits).append(" ");
-        }
-        return "TAG_Byte_Array(" + hex + ")";
+    public TagType getType() {
+        return TagType.INT;
     }
 
 }

@@ -20,30 +20,31 @@
 package net.grian.torrens.nbt;
 
 /**
- * The {@code TAG_Float} tag.
+ * The {@code TAG_Long} tag.
+ * 
  */
-public final class FloatTag extends Tag {
+public final class TagLong extends Tag {
 
-    private final float value;
+    private final long value;
 
     /**
      * Creates the tag with an empty name.
      *
      * @param value the value of the tag
      */
-    public FloatTag(float value) {
+    public TagLong(long value) {
         super();
         this.value = value;
     }
 
     @Override
-    public Float getValue() {
+    public Long getValue() {
         return value;
     }
 
     @Override
-    public String toString() {
-        return "TAG_Float(" + value + ")";
+    public TagType getType() {
+        return TagType.LONG;
     }
 
 }

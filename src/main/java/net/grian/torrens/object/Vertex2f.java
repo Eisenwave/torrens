@@ -12,10 +12,20 @@ public class Vertex2f {
         this.y = y;
     }
 
+    /**
+     * Returns the vertex x-coordinate.
+     *
+     * @return vertex x-coordinate
+     */
     public float getX() {
         return x;
     }
 
+    /**
+     * Returns the vertex y-coordinate.
+     *
+     * @return vertex y-coordinate
+     */
     public float getY() {
         return y;
     }

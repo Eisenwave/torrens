@@ -19,28 +19,28 @@ public class DeserializerSchematic implements Deserializer<BlockArray> {
         if (!rootTag.getName().equals("Schematic"))
             throw new FileFormatException("Tag 'Schematic' does not exist or is not first");
 
-        CompoundTag schematicTag = (CompoundTag) rootTag.getTag();
+        TagCompound schematicTag = (TagCompound) rootTag.getTag();
 
         Map<String, Tag> schematic = schematicTag.getValue();
         if (!schematic.containsKey("Blocks"))
             throw new FileSyntaxException("Schematic file is missing a 'Blocks' tag");
 
         final short
-                sizeX = getChildTag(schematic, "Width",  ShortTag.class).getValue(),
-                sizeY = getChildTag(schematic, "Height", ShortTag.class).getValue(),
-                sizeZ = getChildTag(schematic, "Length", ShortTag.class).getValue();
+                sizeX = getChildTag(schematic, "Width",  TagShort.class).getValue(),
+                sizeY = getChildTag(schematic, "Height", TagShort.class).getValue(),
+                sizeZ = getChildTag(schematic, "Length", TagShort.class).getValue();
         BlockArray result = new BlockArray(sizeX, sizeY, sizeZ);
 
-        String materials = getChildTag(schematic, "Materials", StringTag.class).getValue();
+        String materials = getChildTag(schematic, "Materials", TagString.class).getValue();
         if (!materials.equals("Alpha"))
             throw new FileVersionException("Schematic file is not an Alpha schematic");
 
         short[] blocks;
-        byte[] datas = getChildTag(schematic, "Data", ByteArrayTag.class).getValue();
+        byte[] datas = getChildTag(schematic, "Data", TagByteArray.class).getValue();
         {
-            byte[] baseBlocks = getChildTag(schematic, "Blocks", ByteArrayTag.class).getValue();
+            byte[] baseBlocks = getChildTag(schematic, "Blocks", TagByteArray.class).getValue();
             byte[] addBlocks = schematic.containsKey("AddBlocks")?
-                    getChildTag(schematic, "AddBlocks", ByteArrayTag.class).getValue() : new byte[0];
+                    getChildTag(schematic, "AddBlocks", TagByteArray.class).getValue() : new byte[0];
             blocks = combine(baseBlocks, addBlocks);
         }
 

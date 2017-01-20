@@ -19,42 +19,31 @@
 
 package net.grian.torrens.nbt;
 
-import java.util.Objects;
-
 /**
- * The {@code TAG_Int_Array} tag.
+ * The {@code TAG_Float} tag.
  */
-public final class IntArrayTag extends Tag {
+public final class TagFloat extends Tag {
 
-    private final int[] value;
+    private final float value;
 
     /**
      * Creates the tag with an empty name.
      *
      * @param value the value of the tag
      */
-    public IntArrayTag(int[] value) {
+    public TagFloat(float value) {
         super();
-        Objects.requireNonNull(value);
         this.value = value;
     }
 
     @Override
-    public int[] getValue() {
+    public Float getValue() {
         return value;
     }
 
     @Override
-    public String toString() {
-        StringBuilder hex = new StringBuilder();
-        for (int b : value) {
-            String hexDigits = Integer.toHexString(b).toUpperCase();
-            if (hexDigits.length() == 1) {
-                hex.append("0");
-            }
-            hex.append(hexDigits).append(" ");
-        }
-        return "TAG_Int_Array(" + hex + ")";
+    public TagType getType() {
+        return TagType.FLOAT;
     }
 
 }

@@ -19,34 +19,24 @@
 
 package net.grian.torrens.nbt;
 
-import java.util.Objects;
-
 /**
- * The {@code TAG_String} tag.
+ * The {@code TAG_End} tag.
  */
-public final class StringTag extends Tag {
+public final class TagEnd extends Tag {
 
-    private final String value;
-
-    /**
-     * Creates the tag with an empty name.
-     *
-     * @param value the value of the tag
-     */
-    public StringTag(String value) {
-        super();
-        Objects.requireNonNull(value);
-        this.value = value;
+    @Override
+    public Object getValue() {
+        return null;
     }
 
     @Override
-    public String getValue() {
-        return value;
+    public TagType getType() {
+        return TagType.END;
     }
 
     @Override
     public String toString() {
-        return "TAG_String(" + value + ")";
+        return "TAG_End";
     }
 
 }

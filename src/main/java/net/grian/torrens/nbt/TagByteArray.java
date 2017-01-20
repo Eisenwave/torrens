@@ -20,31 +20,43 @@
 package net.grian.torrens.nbt;
 
 /**
- * The {@code TAG_Double} tag.
- * 
+ * The {@code TAG_Byte_Array} tag.
  */
-public final class DoubleTag extends Tag {
+public final class TagByteArray extends Tag {
 
-    private final double value;
+    private final byte[] value;
 
     /**
      * Creates the tag with an empty name.
      *
      * @param value the value of the tag
      */
-    public DoubleTag(double value) {
+    public TagByteArray(byte[] value) {
         super();
         this.value = value;
     }
 
     @Override
-    public Double getValue() {
+    public byte[] getValue() {
         return value;
     }
 
     @Override
+    public TagType getType() {
+        return TagType.BYTE_ARRAY;
+    }
+
+    @Override
     public String toString() {
-        return "TAG_Double(" + value + ")";
+        StringBuilder hex = new StringBuilder();
+        for (byte b : value) {
+            String hexDigits = Integer.toHexString(b).toUpperCase();
+            if (hexDigits.length() == 1) {
+                hex.append("0");
+            }
+            hex.append(hexDigits).append(" ");
+        }
+        return "TAG_Byte_Array(" + hex + ")";
     }
 
 }

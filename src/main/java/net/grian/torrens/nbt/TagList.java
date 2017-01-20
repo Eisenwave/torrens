@@ -27,9 +27,10 @@ import java.util.Objects;
 /**
  * The {@code TAG_List} tag.
  */
-public final class ListTag extends Tag {
+@SuppressWarnings("Duplicates")
+public final class TagList extends Tag {
 
-    private final Class<? extends Tag> type;
+    private final TagType type;
     private final List<Tag> value;
 
     /**
@@ -38,9 +39,8 @@ public final class ListTag extends Tag {
      * @param type the type of tag
      * @param value the value of the tag
      */
-    public ListTag(Class<? extends Tag> type, List<? extends Tag> value) {
-        super();
-        Objects.requireNonNull(value);
+    public TagList(TagType type, List<? extends Tag> value) {
+        Objects.requireNonNull(type);
         this.type = type;
         this.value = Collections.unmodifiableList(value);
     }
@@ -50,7 +50,7 @@ public final class ListTag extends Tag {
      *
      * @return The type of item in this list.
      */
-    public Class<? extends Tag> getType() {
+    public TagType getElementType() {
         return type;
     }
 
@@ -59,14 +59,19 @@ public final class ListTag extends Tag {
         return value;
     }
 
+    @Override
+    public TagType getType() {
+        return TagType.LIST;
+    }
+
     /**
      * Create a new list tag with this tag's name and type.
      *
      * @param list the new list
      * @return a new list tag
      */
-    public ListTag setValue(List<Tag> list) {
-        return new ListTag(getType(), list);
+    public TagList setValue(List<Tag> list) {
+        return new TagList(getElementType(), list);
     }
 
     /**
@@ -94,8 +99,8 @@ public final class ListTag extends Tag {
      */
     public byte[] getByteArray(int index) {
         Tag tag = getIfExists(index);
-        if (tag instanceof ByteArrayTag) {
-            return ((ByteArrayTag) tag).getValue();
+        if (tag instanceof TagByteArray) {
+            return ((TagByteArray) tag).getValue();
         } else {
             return new byte[0];
         }
@@ -112,8 +117,8 @@ public final class ListTag extends Tag {
      */
     public byte getByte(int index) {
         Tag tag = getIfExists(index);
-        if (tag instanceof ByteTag) {
-            return ((ByteTag) tag).getValue();
+        if (tag instanceof TagByte) {
+            return ((TagByte) tag).getValue();
         } else {
             return (byte) 0;
         }
@@ -130,8 +135,8 @@ public final class ListTag extends Tag {
      */
     public double getDouble(int index) {
         Tag tag = getIfExists(index);
-        if (tag instanceof DoubleTag) {
-            return ((DoubleTag) tag).getValue();
+        if (tag instanceof TagDouble) {
+            return ((TagDouble) tag).getValue();
         } else {
             return 0;
         }
@@ -149,27 +154,9 @@ public final class ListTag extends Tag {
      */
     public double asDouble(int index) {
         Tag tag = getIfExists(index);
-        if (tag instanceof ByteTag) {
-            return ((ByteTag) tag).getValue();
-
-        } else if (tag instanceof ShortTag) {
-            return ((ShortTag) tag).getValue();
-
-        } else if (tag instanceof IntTag) {
-            return ((IntTag) tag).getValue();
-
-        } else if (tag instanceof LongTag) {
-            return ((LongTag) tag).getValue();
-
-        } else if (tag instanceof FloatTag) {
-            return ((FloatTag) tag).getValue();
-
-        } else if (tag instanceof DoubleTag) {
-            return ((DoubleTag) tag).getValue();
-
-        } else {
-            return 0;
-        }
+        return tag!=null && tag.getType().isNumeric()?
+                ((Number) tag.getValue()).doubleValue() :
+                0;
     }
 
     /**
@@ -183,8 +170,8 @@ public final class ListTag extends Tag {
      */
     public float getFloat(int index) {
         Tag tag = getIfExists(index);
-        if (tag instanceof FloatTag) {
-            return ((FloatTag) tag).getValue();
+        if (tag instanceof TagFloat) {
+            return ((TagFloat) tag).getValue();
         } else {
             return 0;
         }
@@ -201,8 +188,8 @@ public final class ListTag extends Tag {
      */
     public int[] getIntArray(int index) {
         Tag tag = getIfExists(index);
-        if (tag instanceof IntArrayTag) {
-            return ((IntArrayTag) tag).getValue();
+        if (tag instanceof TagIntArray) {
+            return ((TagIntArray) tag).getValue();
         } else {
             return new int[0];
         }
@@ -219,8 +206,8 @@ public final class ListTag extends Tag {
      */
     public int getInt(int index) {
         Tag tag = getIfExists(index);
-        if (tag instanceof IntTag) {
-            return ((IntTag) tag).getValue();
+        if (tag instanceof TagInt) {
+            return ((TagInt) tag).getValue();
         } else {
             return 0;
         }
@@ -238,27 +225,9 @@ public final class ListTag extends Tag {
      */
     public int asInt(int index) {
         Tag tag = getIfExists(index);
-        if (tag instanceof ByteTag) {
-            return ((ByteTag) tag).getValue();
-
-        } else if (tag instanceof ShortTag) {
-            return ((ShortTag) tag).getValue();
-
-        } else if (tag instanceof IntTag) {
-            return ((IntTag) tag).getValue();
-
-        } else if (tag instanceof LongTag) {
-            return ((LongTag) tag).getValue().intValue();
-
-        } else if (tag instanceof FloatTag) {
-            return ((FloatTag) tag).getValue().intValue();
-
-        } else if (tag instanceof DoubleTag) {
-            return ((DoubleTag) tag).getValue().intValue();
-
-        } else {
-            return 0;
-        }
+        return tag!=null && tag.getType().isNumeric()?
+                ((Number) tag.getValue()).intValue() :
+                0;
     }
 
     /**
@@ -272,8 +241,8 @@ public final class ListTag extends Tag {
      */
     public List<Tag> getList(int index) {
         Tag tag = getIfExists(index);
-        if (tag instanceof ListTag) {
-            return ((ListTag) tag).getValue();
+        if (tag instanceof TagList) {
+            return ((TagList) tag).getValue();
         } else {
             return Collections.emptyList();
         }
@@ -288,12 +257,12 @@ public final class ListTag extends Tag {
      * @param index the index
      * @return a tag list instance
      */
-    public ListTag getListTag(int index) {
+    public TagList getListTag(int index) {
         Tag tag = getIfExists(index);
-        if (tag instanceof ListTag) {
-            return (ListTag) tag;
+        if (tag instanceof TagList) {
+            return (TagList) tag;
         } else {
-            return new ListTag(StringTag.class, Collections.<Tag>emptyList());
+            return new TagList(TagType.STRING, Collections.emptyList());
         }
     }
 
@@ -306,23 +275,20 @@ public final class ListTag extends Tag {
      * list will also be returned.</p>
      *
      * @param index the index
-     * @param listType the class of the contained type
+     * @param elementType the type of the list elements
      * @return a list of tags
      * @param <T> the NBT type
      */
-    @SuppressWarnings("unchecked")
-    public <T extends Tag> List<T> getList(int index, Class<T> listType) {
+    @SuppressWarnings({"unchecked", "Duplicates"})
+    public <T extends Tag> List<T> getList(int index, TagType elementType) {
         Tag tag = getIfExists(index);
-        if (tag instanceof ListTag) {
-            ListTag listTag = (ListTag) tag;
-            if (listTag.getType().equals(listType)) {
-                return (List<T>) listTag.getValue();
-            } else {
-                return Collections.emptyList();
-            }
-        } else {
-            return Collections.emptyList();
+        if (tag instanceof TagList) {
+            TagList listTag = (TagList) tag;
+            return listTag.getElementType().equals(elementType)?
+                    (List<T>) listTag.getValue() :
+                    Collections.emptyList();
         }
+        else return Collections.emptyList();
     }
 
     /**
@@ -336,8 +302,8 @@ public final class ListTag extends Tag {
      */
     public long getLong(int index) {
         Tag tag = getIfExists(index);
-        if (tag instanceof LongTag) {
-            return ((LongTag) tag).getValue();
+        if (tag instanceof TagLong) {
+            return ((TagLong) tag).getValue();
         } else {
             return 0L;
         }
@@ -355,27 +321,9 @@ public final class ListTag extends Tag {
      */
     public long asLong(int index) {
         Tag tag = getIfExists(index);
-        if (tag instanceof ByteTag) {
-            return ((ByteTag) tag).getValue();
-
-        } else if (tag instanceof ShortTag) {
-            return ((ShortTag) tag).getValue();
-
-        } else if (tag instanceof IntTag) {
-            return ((IntTag) tag).getValue();
-
-        } else if (tag instanceof LongTag) {
-            return ((LongTag) tag).getValue();
-
-        } else if (tag instanceof FloatTag) {
-            return ((FloatTag) tag).getValue().longValue();
-
-        } else if (tag instanceof DoubleTag) {
-            return ((DoubleTag) tag).getValue().longValue();
-
-        } else {
-            return 0;
-        }
+        return tag!=null && tag.getType().isNumeric()?
+                ((Number) tag.getValue()).longValue() :
+                0;
     }
 
     /**
@@ -389,8 +337,8 @@ public final class ListTag extends Tag {
      */
     public short getShort(int index) {
         Tag tag = getIfExists(index);
-        if (tag instanceof ShortTag) {
-            return ((ShortTag) tag).getValue();
+        if (tag instanceof TagShort) {
+            return ((TagShort) tag).getValue();
         } else {
             return 0;
         }
@@ -407,8 +355,8 @@ public final class ListTag extends Tag {
      */
     public String getString(int index) {
         Tag tag = getIfExists(index);
-        if (tag instanceof StringTag) {
-            return ((StringTag) tag).getValue();
+        if (tag instanceof TagString) {
+            return ((TagString) tag).getValue();
         } else {
             return "";
         }
@@ -416,13 +364,22 @@ public final class ListTag extends Tag {
 
     @Override
     public String toString() {
-        StringBuilder bldr = new StringBuilder();
-        bldr.append("TAG_List").append(": ").append(value.size()).append(" entries of type ").append(NBTUtils.getTypeName(type)).append("\r\n{\r\n");
+        StringBuilder builder = new StringBuilder();
+        builder
+                .append("TAG_List")
+                .append(": ")
+                .append(value.size())
+                .append(" entries of type ")
+                .append(type.getName())
+                .append("\r\n{\r\n");
         for (Tag t : value) {
-            bldr.append("   ").append(t.toString().replaceAll("\r\n", "\r\n   ")).append("\r\n");
+            builder
+                    .append("   ")
+                    .append(t.toString().replaceAll("\r\n", "\r\n   "))
+                    .append("\r\n");
         }
-        bldr.append("}");
-        return bldr.toString();
+
+        return builder.append("}").toString();
     }
 
 }

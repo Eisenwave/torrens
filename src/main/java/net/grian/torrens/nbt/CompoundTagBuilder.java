@@ -63,109 +63,109 @@ public class CompoundTagBuilder {
 
     /**
      * Put the given key and value into the compound tag as a
-     * {@code ByteArrayTag}.
+     * {@code TagByteArray}.
      *
      * @param key they key
      * @param value the value
      * @return this object
      */
     public CompoundTagBuilder putByteArray(String key, byte[] value) {
-        return put(key, new ByteArrayTag(value));
+        return put(key, new TagByteArray(value));
     }
 
     /**
      * Put the given key and value into the compound tag as a
-     * {@code ByteTag}.
+     * {@code TagByte}.
      *
      * @param key they key
      * @param value the value
      * @return this object
      */
     public CompoundTagBuilder putByte(String key, byte value) {
-        return put(key, new ByteTag(value));
+        return put(key, new TagByte(value));
     }
 
     /**
      * Put the given key and value into the compound tag as a
-     * {@code DoubleTag}.
+     * {@code TagDouble}.
      *
      * @param key they key
      * @param value the value
      * @return this object
      */
     public CompoundTagBuilder putDouble(String key, double value) {
-        return put(key, new DoubleTag(value));
+        return put(key, new TagDouble(value));
     }
 
     /**
      * Put the given key and value into the compound tag as a
-     * {@code FloatTag}.
+     * {@code TagFloat}.
      *
      * @param key they key
      * @param value the value
      * @return this object
      */
     public CompoundTagBuilder putFloat(String key, float value) {
-        return put(key, new FloatTag(value));
+        return put(key, new TagFloat(value));
     }
 
     /**
      * Put the given key and value into the compound tag as a
-     * {@code IntArrayTag}.
+     * {@code TagIntArray}.
      *
      * @param key they key
      * @param value the value
      * @return this object
      */
     public CompoundTagBuilder putIntArray(String key, int[] value) {
-        return put(key, new IntArrayTag(value));
+        return put(key, new TagIntArray(value));
     }
 
     /**
-     * Put the given key and value into the compound tag as an {@code IntTag}.
+     * Put the given key and value into the compound tag as an {@code TagInt}.
      *
      * @param key they key
      * @param value the value
      * @return this object
      */
     public CompoundTagBuilder putInt(String key, int value) {
-        return put(key, new IntTag(value));
+        return put(key, new TagInt(value));
     }
 
     /**
      * Put the given key and value into the compound tag as a
-     * {@code LongTag}.
+     * {@code TagLong}.
      *
      * @param key they key
      * @param value the value
      * @return this object
      */
     public CompoundTagBuilder putLong(String key, long value) {
-        return put(key, new LongTag(value));
+        return put(key, new TagLong(value));
     }
 
     /**
      * Put the given key and value into the compound tag as a
-     * {@code ShortTag}.
+     * {@code TagShort}.
      *
      * @param key they key
      * @param value the value
      * @return this object
      */
     public CompoundTagBuilder putShort(String key, short value) {
-        return put(key, new ShortTag(value));
+        return put(key, new TagShort(value));
     }
 
     /**
      * Put the given key and value into the compound tag as a
-     * {@code StringTag}.
+     * {@code TagString}.
      *
      * @param key they key
      * @param value the value
      * @return this object
      */
     public CompoundTagBuilder putString(String key, String value) {
-        return put(key, new StringTag(value));
+        return put(key, new TagString(value));
     }
 
     /**
@@ -187,8 +187,8 @@ public class CompoundTagBuilder {
      *
      * @return the new compound tag
      */
-    public CompoundTag build() {
-        return new CompoundTag(new HashMap<>(entries));
+    public TagCompound build() {
+        return new TagCompound(new HashMap<>(entries));
     }
 
     /**

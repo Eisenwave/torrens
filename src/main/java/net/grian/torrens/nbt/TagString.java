@@ -19,31 +19,34 @@
 
 package net.grian.torrens.nbt;
 
-/**
- * The {@code TAG_Short} tag.
- */
-public final class ShortTag extends Tag {
+import java.util.Objects;
 
-    private final short value;
+/**
+ * The {@code TAG_String} tag.
+ */
+public final class TagString extends Tag {
+
+    private final String value;
 
     /**
      * Creates the tag with an empty name.
      *
      * @param value the value of the tag
      */
-    public ShortTag(short value) {
+    public TagString(String value) {
         super();
+        Objects.requireNonNull(value);
         this.value = value;
     }
 
     @Override
-    public Short getValue() {
+    public String getValue() {
         return value;
     }
 
     @Override
-    public String toString() {
-        return "TAG_Short(" + value + ")";
+    public TagType getType() {
+        return TagType.STRING;
     }
 
 }

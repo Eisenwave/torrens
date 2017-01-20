@@ -27,8 +27,19 @@ public abstract class Tag {
     /**
      * Gets the value of this tag.
      * 
-     * @return the value
+     * @return the value of this tag
      */
     public abstract Object getValue();
 
+    /**
+     * Returns the type of this tag.
+     *
+     * @return the type of this tag
+     */
+    public abstract TagType getType();
+
+    @Override
+    public String toString() {
+        return getType().getName()+"("+getValue()+")";
+    }
 }

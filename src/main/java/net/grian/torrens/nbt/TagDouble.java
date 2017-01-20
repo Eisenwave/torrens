@@ -20,30 +20,31 @@
 package net.grian.torrens.nbt;
 
 /**
- * The {@code TAG_Int} tag.
+ * The {@code TAG_Double} tag.
+ * 
  */
-public final class IntTag extends Tag {
+public final class TagDouble extends Tag {
 
-    private final int value;
+    private final double value;
 
     /**
      * Creates the tag with an empty name.
      *
      * @param value the value of the tag
      */
-    public IntTag(int value) {
+    public TagDouble(double value) {
         super();
         this.value = value;
     }
 
     @Override
-    public Integer getValue() {
+    public Double getValue() {
         return value;
     }
 
     @Override
-    public String toString() {
-        return "TAG_Int(" + value + ")";
+    public TagType getType() {
+        return TagType.DOUBLE;
     }
 
 }

@@ -22,7 +22,7 @@ package net.grian.torrens.nbt;
 import java.util.Objects;
 
 /**
- * A tag that has a name.
+ * A named tag consisting of a {@link String} for its name and a {@link Tag} for its value.
  */
 public class NamedTag {
 
@@ -30,7 +30,7 @@ public class NamedTag {
     private final Tag tag;
 
     /**
-     * Create a new named tag.
+     * Constructs a new named tag.
      *
      * @param name the name
      * @param tag the tag
