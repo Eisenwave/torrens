@@ -8,16 +8,16 @@ import java.util.Map;
 /**
  * The {@code TAG_Compound} tag.
  */
-public final class TagCompound extends Tag {
+public final class TagCompound extends NBTTag {
 
-    private final Map<String, Tag> value;
+    private final Map<String, NBTTag> value;
 
     /**
      * Creates the tag with an empty name.
      *
      * @param value the value of the tag
      */
-    public TagCompound(Map<String, Tag> value) {
+    public TagCompound(Map<String, NBTTag> value) {
         super();
         this.value = Collections.unmodifiableMap(value);
     }
@@ -33,7 +33,7 @@ public final class TagCompound extends Tag {
     }
 
     @Override
-    public Map<String, Tag> getValue() {
+    public Map<String, NBTTag> getValue() {
         return value;
     }
 
@@ -48,7 +48,7 @@ public final class TagCompound extends Tag {
      * @param value the value
      * @return the new compound tag
      */
-    public TagCompound setValue(Map<String, Tag> value) {
+    public TagCompound setValue(Map<String, NBTTag> value) {
         return new TagCompound(value);
     }
 
@@ -71,7 +71,7 @@ public final class TagCompound extends Tag {
      * @return a byte array
      */
     public byte[] getByteArray(String key) {
-        Tag tag = value.get(key);
+        NBTTag tag = value.get(key);
         if (tag instanceof TagByteArray) {
             return ((TagByteArray) tag).getValue();
         } else {
@@ -89,7 +89,7 @@ public final class TagCompound extends Tag {
      * @return a byte
      */
     public byte getByte(String key) {
-        Tag tag = value.get(key);
+        NBTTag tag = value.get(key);
         if (tag instanceof TagByte) {
             return ((TagByte) tag).getValue();
         } else {
@@ -107,7 +107,7 @@ public final class TagCompound extends Tag {
      * @return a double
      */
     public double getDouble(String key) {
-        Tag tag = value.get(key);
+        NBTTag tag = value.get(key);
         if (tag instanceof TagDouble) {
             return ((TagDouble) tag).getValue();
         } else {
@@ -126,7 +126,7 @@ public final class TagCompound extends Tag {
      * @return a double
      */
     public double asDouble(String key) {
-        Tag tag = value.get(key);
+        NBTTag tag = value.get(key);
         return tag.getType().isNumeric()?
                 ((Number) tag.getValue()).doubleValue() :
                 0;
@@ -142,7 +142,7 @@ public final class TagCompound extends Tag {
      * @return a float
      */
     public float getFloat(String key) {
-        Tag tag = value.get(key);
+        NBTTag tag = value.get(key);
         if (tag instanceof TagFloat) {
             return ((TagFloat) tag).getValue();
         } else {
@@ -160,7 +160,7 @@ public final class TagCompound extends Tag {
      * @return an int array
      */
     public int[] getIntArray(String key) {
-        Tag tag = value.get(key);
+        NBTTag tag = value.get(key);
         if (tag instanceof TagIntArray) {
             return ((TagIntArray) tag).getValue();
         } else {
@@ -178,7 +178,7 @@ public final class TagCompound extends Tag {
      * @return an int
      */
     public int getInt(String key) {
-        Tag tag = value.get(key);
+        NBTTag tag = value.get(key);
         if (tag instanceof TagInt) {
             return ((TagInt) tag).getValue();
         } else {
@@ -197,7 +197,7 @@ public final class TagCompound extends Tag {
      * @return an int
      */
     public int asInt(String key) {
-        Tag tag = value.get(key);
+        NBTTag tag = value.get(key);
         return tag.getType().isNumeric()?
                 ((Number) tag.getValue()).intValue() :
                 0;
@@ -212,8 +212,8 @@ public final class TagCompound extends Tag {
      * @param key the key
      * @return a list of tags
      */
-    public List<Tag> getList(String key) {
-        Tag tag = value.get(key);
+    public List<NBTTag> getList(String key) {
+        NBTTag tag = value.get(key);
         if (tag instanceof TagList) {
             return ((TagList) tag).getValue();
         } else {
@@ -231,7 +231,7 @@ public final class TagCompound extends Tag {
      * @return a tag list instance
      */
     public TagList getListTag(String key) {
-        Tag tag = value.get(key);
+        NBTTag tag = value.get(key);
         if (tag instanceof TagList) {
             return (TagList) tag;
         } else {
@@ -253,8 +253,8 @@ public final class TagCompound extends Tag {
      * @param <T> the type of list
      */
     @SuppressWarnings("unchecked")
-    public <T extends Tag> List<T> getList(String key, TagType elementType) {
-        Tag tag = value.get(key);
+    public <T extends NBTTag> List<T> getList(String key, TagType elementType) {
+        NBTTag tag = value.get(key);
         if (tag instanceof TagList) {
             TagList listTag = (TagList) tag;
             return listTag.getElementType().equals(elementType)?
@@ -274,7 +274,7 @@ public final class TagCompound extends Tag {
      * @return a long
      */
     public long getLong(String key) {
-        Tag tag = value.get(key);
+        NBTTag tag = value.get(key);
         if (tag instanceof TagLong) {
             return ((TagLong) tag).getValue();
         } else {
@@ -293,7 +293,7 @@ public final class TagCompound extends Tag {
      * @return a long
      */
     public long asLong(String key) {
-        Tag tag = value.get(key);
+        NBTTag tag = value.get(key);
         return tag.getType().isNumeric()?
                 ((Number) tag.getValue()).longValue() :
                 0;
@@ -309,7 +309,7 @@ public final class TagCompound extends Tag {
      * @return a short
      */
     public short getShort(String key) {
-        Tag tag = value.get(key);
+        NBTTag tag = value.get(key);
         if (tag instanceof TagShort) {
             return ((TagShort) tag).getValue();
         } else {
@@ -327,7 +327,7 @@ public final class TagCompound extends Tag {
      * @return a string
      */
     public String getString(String key) {
-        Tag tag = value.get(key);
+        NBTTag tag = value.get(key);
         if (tag instanceof TagString) {
             return ((TagString) tag).getValue();
         } else {
@@ -339,7 +339,7 @@ public final class TagCompound extends Tag {
     public String toString() {
         StringBuilder bldr = new StringBuilder();
         bldr.append(getType().getName()).append(": ").append(value.size()).append(" entries\r\n{\r\n");
-        for (Map.Entry<String, Tag> entry : value.entrySet()) {
+        for (Map.Entry<String, NBTTag> entry : value.entrySet()) {
             bldr.append("   ").append(entry.getValue().toString().replaceAll("\r\n", "\r\n   ")).append("\r\n");
         }
         bldr.append("}");

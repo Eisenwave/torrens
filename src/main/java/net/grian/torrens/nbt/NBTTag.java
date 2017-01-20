@@ -3,7 +3,7 @@ package net.grian.torrens.nbt;
 /**
  * Represents a NBT tag.
  */
-public abstract class Tag {
+public abstract class NBTTag {
 
     /**
      * Gets the value of this tag.

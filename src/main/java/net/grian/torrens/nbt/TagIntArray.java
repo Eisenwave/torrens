@@ -5,7 +5,7 @@ import java.util.Objects;
 /**
  * The {@code TAG_Int_Array} tag.
  */
-public final class TagIntArray extends Tag {
+public final class TagIntArray extends NBTTag {
 
     private final int[] value;
 

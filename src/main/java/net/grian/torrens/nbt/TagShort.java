@@ -3,7 +3,7 @@ package net.grian.torrens.nbt;
 /**
  * The {@code TAG_Short} tag.
  */
-public final class TagShort extends Tag {
+public final class TagShort extends NBTTag {
 
     private final short value;
 

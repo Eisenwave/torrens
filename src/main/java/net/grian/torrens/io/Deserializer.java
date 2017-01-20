@@ -7,8 +7,16 @@ import java.net.URL;
 
 /**
  * Throwaway object only meant to perform one deserialization of a stream.
+ *<p>
+ *     The deserializer interface is designed as a utility interface, giving each implementation several methods for
+ *     reading from URL's, files, byte arrays and more.
+ * </p>
+ * <p>
+ *     The only method to be implemented is {@link #deserialize(InputStream)} which reads an object from a generic
+ *     input stream.
+ * </p>
  *
- * @param <T> the object that is the result of parsing the file
+ * @param <T> the type of object which is to be deserialized
  */
 public interface Deserializer<T> {
 
@@ -30,6 +38,21 @@ public interface Deserializer<T> {
      */
     public default T deserialize(File file) throws IOException {
         FileInputStream stream = new FileInputStream(file);
+        T result = deserialize(stream);
+        stream.close();
+
+        return result;
+    }
+
+    /**
+     * Deserializes an object from a {@code byte[]} using a {@link ByteArrayInputStream}.
+     *
+     * @param bytes the byte array
+     * @return the deserialized object
+     * @throws IOException if the deserialization fails
+     */
+    public default T deserialize(byte[] bytes) throws IOException {
+        ByteArrayInputStream stream = new ByteArrayInputStream(bytes);
         T result = deserialize(stream);
         stream.close();
 

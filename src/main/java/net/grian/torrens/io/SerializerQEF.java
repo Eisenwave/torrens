@@ -7,6 +7,14 @@ import java.io.*;
 import java.util.*;
 import java.util.logging.Logger;
 
+/**
+ * <p>
+ *     A serializer for <b>Qubicle Exchange Format (.qef)</b> files.
+ * </p>
+ * <p>
+ *     Only version <b>0.2</b> is supported.
+ * </p>
+ */
 @SuppressWarnings("SpellCheckingInspection")
 public class SerializerQEF implements Serializer<VoxelArray> {
 

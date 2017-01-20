@@ -3,7 +3,7 @@ package net.grian.torrens.nbt;
 /**
  * The {@code TAG_Float} tag.
  */
-public final class TagFloat extends Tag {
+public final class TagFloat extends NBTTag {
 
     private final float value;
 

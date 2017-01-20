@@ -2,6 +2,18 @@ package net.grian.torrens.io;
 
 import java.io.*;
 
+/**
+ * Throwaway object only meant to perform one deserialization of a reader.
+ *<p>
+ *     The parser interface is designed as a utility interface which is an extension of the {@link Deserializer}
+ *     interface specifically for readable files.
+ * </p>
+ * <p>
+ *     The only method to be implemented is {@link #deserialize(Reader)} which reads an object from a generic reader.
+ * </p>
+ *
+ * @param <T> the type of object which is to be parsed
+ */
 public interface Parser<T> extends Deserializer<T> {
 
     /**

@@ -1,9 +1,9 @@
-package net.grian.torrens.io;
+package net.grian.torrens.error;
 
 import java.io.IOException;
 
 /**
- * Thrown when a file can not be parsed due to invalid syntax.
+ * Thrown when a deserialized file does not follow the file syntax of its type.
  */
 public class FileSyntaxException extends IOException {
 

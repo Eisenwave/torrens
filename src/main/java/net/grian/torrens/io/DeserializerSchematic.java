@@ -1,6 +1,9 @@
 package net.grian.torrens.io;
 
 import net.grian.spatium.voxel.BlockArray;
+import net.grian.torrens.error.FileFormatException;
+import net.grian.torrens.error.FileSyntaxException;
+import net.grian.torrens.error.FileVersionException;
 import net.grian.torrens.nbt.*;
 
 import java.io.IOException;
@@ -8,6 +11,17 @@ import java.io.InputStream;
 import java.util.Map;
 import java.util.zip.GZIPInputStream;
 
+/**
+ * <p>
+ *     A parser for <b>Schematic (.schematic)</b> files.
+ * </p>
+ * <p>
+ *     These files use the <b>NBT</b> file structure.
+ * </p>
+ * <p>
+ *     Only alpha version schematics are supported.
+ * </p>
+ */
 public class DeserializerSchematic implements Deserializer<BlockArray> {
 
     @Override
@@ -17,11 +31,11 @@ public class DeserializerSchematic implements Deserializer<BlockArray> {
         nbtStream.close();
 
         if (!rootTag.getName().equals("Schematic"))
-            throw new FileFormatException("Tag 'Schematic' does not exist or is not first");
+            throw new FileFormatException("NBTTag 'Schematic' does not exist or is not first");
 
         TagCompound schematicTag = (TagCompound) rootTag.getTag();
 
-        Map<String, Tag> schematic = schematicTag.getValue();
+        Map<String, NBTTag> schematic = schematicTag.getValue();
         if (!schematic.containsKey("Blocks"))
             throw new FileSyntaxException("Schematic file is missing a 'Blocks' tag");
 
@@ -87,12 +101,13 @@ public class DeserializerSchematic implements Deserializer<BlockArray> {
      * @return child tag casted to the expected type
      * @throws FileSyntaxException if the tag does not exist or the tag is not of the expected type
      */
-    private static <T extends Tag> T getChildTag(Map<String, Tag> items, String key, Class<T> expected) throws FileSyntaxException {
+    private static <T extends NBTTag> T getChildTag(Map<String, NBTTag> items, String key, Class<T> expected)
+            throws FileSyntaxException {
 
         if (!items.containsKey(key)) {
             throw new FileSyntaxException("Schematic file is missing a \"" + key + "\" tag");
         }
-        Tag tag = items.get(key);
+        NBTTag tag = items.get(key);
         if (!expected.isInstance(tag)) {
             throw new FileSyntaxException(key + " tag is not of tag type " + expected.getName());
         }

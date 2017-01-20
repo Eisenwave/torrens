@@ -1,9 +1,9 @@
-package net.grian.torrens.io;
+package net.grian.torrens.error;
 
 import java.io.IOException;
 
 /**
- * Thrown when a file of wrong format is being read or written.
+ * Thrown when a deserialized file has an invalid format.
  */
 public class FileFormatException extends IOException {
 

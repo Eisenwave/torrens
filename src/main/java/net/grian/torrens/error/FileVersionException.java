@@ -1,9 +1,9 @@
-package net.grian.torrens.io;
+package net.grian.torrens.error;
 
 import java.io.IOException;
 
 /**
- * Thrown when parsing a particular file version or style is not supported by parser.
+ * Thrown when a deserialized file has an unsupported version.
  */
 public class FileVersionException extends IOException {
 

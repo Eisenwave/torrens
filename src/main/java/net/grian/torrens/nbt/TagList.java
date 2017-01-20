@@ -9,7 +9,7 @@ import java.util.Objects;
  * The {@code TAG_List} tag.
  */
 @SuppressWarnings("Duplicates")
-public final class TagList<E extends Tag> extends Tag {
+public final class TagList<E extends NBTTag> extends NBTTag {
 
     private final TagType type;
     private final List<E> value;
@@ -61,7 +61,7 @@ public final class TagList<E extends Tag> extends Tag {
      * @param index the index
      * @return the tag or null
      */
-    public Tag getIfExists(int index) {
+    public NBTTag getIfExists(int index) {
         try {
             return value.get(index);
         } catch (NoSuchElementException e) {
@@ -79,7 +79,7 @@ public final class TagList<E extends Tag> extends Tag {
      * @return a byte array
      */
     public byte[] getByteArray(int index) {
-        Tag tag = getIfExists(index);
+        NBTTag tag = getIfExists(index);
         if (tag instanceof TagByteArray) {
             return ((TagByteArray) tag).getValue();
         } else {
@@ -97,7 +97,7 @@ public final class TagList<E extends Tag> extends Tag {
      * @return a byte
      */
     public byte getByte(int index) {
-        Tag tag = getIfExists(index);
+        NBTTag tag = getIfExists(index);
         if (tag instanceof TagByte) {
             return ((TagByte) tag).getValue();
         } else {
@@ -115,7 +115,7 @@ public final class TagList<E extends Tag> extends Tag {
      * @return a double
      */
     public double getDouble(int index) {
-        Tag tag = getIfExists(index);
+        NBTTag tag = getIfExists(index);
         if (tag instanceof TagDouble) {
             return ((TagDouble) tag).getValue();
         } else {
@@ -134,7 +134,7 @@ public final class TagList<E extends Tag> extends Tag {
      * @return a double
      */
     public double asDouble(int index) {
-        Tag tag = getIfExists(index);
+        NBTTag tag = getIfExists(index);
         return tag!=null && tag.getType().isNumeric()?
                 ((Number) tag.getValue()).doubleValue() :
                 0;
@@ -150,7 +150,7 @@ public final class TagList<E extends Tag> extends Tag {
      * @return a float
      */
     public float getFloat(int index) {
-        Tag tag = getIfExists(index);
+        NBTTag tag = getIfExists(index);
         if (tag instanceof TagFloat) {
             return ((TagFloat) tag).getValue();
         } else {
@@ -168,7 +168,7 @@ public final class TagList<E extends Tag> extends Tag {
      * @return an int array
      */
     public int[] getIntArray(int index) {
-        Tag tag = getIfExists(index);
+        NBTTag tag = getIfExists(index);
         if (tag instanceof TagIntArray) {
             return ((TagIntArray) tag).getValue();
         } else {
@@ -186,7 +186,7 @@ public final class TagList<E extends Tag> extends Tag {
      * @return an int
      */
     public int getInt(int index) {
-        Tag tag = getIfExists(index);
+        NBTTag tag = getIfExists(index);
         if (tag instanceof TagInt) {
             return ((TagInt) tag).getValue();
         } else {
@@ -205,7 +205,7 @@ public final class TagList<E extends Tag> extends Tag {
      * @return an int
      */
     public int asInt(int index) {
-        Tag tag = getIfExists(index);
+        NBTTag tag = getIfExists(index);
         return tag!=null && tag.getType().isNumeric()?
                 ((Number) tag.getValue()).intValue() :
                 0;
@@ -221,8 +221,8 @@ public final class TagList<E extends Tag> extends Tag {
      * @return a list of tags
      */
     @SuppressWarnings("unchecked")
-    public List<Tag> getList(int index) {
-        Tag tag = getIfExists(index);
+    public List<NBTTag> getList(int index) {
+        NBTTag tag = getIfExists(index);
         if (tag instanceof TagList) {
             return ((TagList) tag).getValue();
         } else {
@@ -240,7 +240,7 @@ public final class TagList<E extends Tag> extends Tag {
      * @return a tag list instance
      */
     public TagList<?> getListTag(int index) {
-        Tag tag = getIfExists(index);
+        NBTTag tag = getIfExists(index);
         if (tag instanceof TagList) {
             return (TagList) tag;
         } else {
@@ -261,8 +261,8 @@ public final class TagList<E extends Tag> extends Tag {
      * @return a list of tags
      */
     @SuppressWarnings({"unchecked", "Duplicates"})
-    public List<Tag> getList(int index, TagType elementType) {
-        Tag tag = getIfExists(index);
+    public List<NBTTag> getList(int index, TagType elementType) {
+        NBTTag tag = getIfExists(index);
         if (tag instanceof TagList) {
             TagList listTag = (TagList) tag;
             return listTag.getElementType().equals(elementType)?
@@ -282,7 +282,7 @@ public final class TagList<E extends Tag> extends Tag {
      * @return a long
      */
     public long getLong(int index) {
-        Tag tag = getIfExists(index);
+        NBTTag tag = getIfExists(index);
         if (tag instanceof TagLong) {
             return ((TagLong) tag).getValue();
         } else {
@@ -301,7 +301,7 @@ public final class TagList<E extends Tag> extends Tag {
      * @return a long
      */
     public long asLong(int index) {
-        Tag tag = getIfExists(index);
+        NBTTag tag = getIfExists(index);
         return tag!=null && tag.getType().isNumeric()?
                 ((Number) tag.getValue()).longValue() :
                 0;
@@ -317,7 +317,7 @@ public final class TagList<E extends Tag> extends Tag {
      * @return a short
      */
     public short getShort(int index) {
-        Tag tag = getIfExists(index);
+        NBTTag tag = getIfExists(index);
         if (tag instanceof TagShort) {
             return ((TagShort) tag).getValue();
         } else {
@@ -335,7 +335,7 @@ public final class TagList<E extends Tag> extends Tag {
      * @return a string
      */
     public String getString(int index) {
-        Tag tag = getIfExists(index);
+        NBTTag tag = getIfExists(index);
         if (tag instanceof TagString) {
             return ((TagString) tag).getValue();
         } else {
@@ -353,7 +353,7 @@ public final class TagList<E extends Tag> extends Tag {
                 .append(" entries of type ")
                 .append(type.getName())
                 .append("\r\n{\r\n");
-        for (Tag t : value) {
+        for (NBTTag t : value) {
             builder
                     .append("   ")
                     .append(t.toString().replaceAll("\r\n", "\r\n   "))

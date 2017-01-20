@@ -8,6 +8,14 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
+/**
+ * <p>
+ *     A serializer for <b>Stereo-Lithography / Standard Tessellation Language (.stl)</b> files.
+ * </p>
+ * <p>
+ *     No version restrictions exist.
+ * </p>
+ */
 public class SerializerSTL implements Serializer<STLModel> {
 
     @Override

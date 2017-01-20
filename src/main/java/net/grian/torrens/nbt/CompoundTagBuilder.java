@@ -9,7 +9,7 @@ import java.util.Objects;
  */
 public class CompoundTagBuilder {
 
-    private final Map<String, Tag> entries;
+    private final Map<String, NBTTag> entries;
 
     /**
      * Create a new instance.
@@ -23,7 +23,7 @@ public class CompoundTagBuilder {
      *
      * @param value the value
      */
-    CompoundTagBuilder(Map<String, Tag> value) {
+    CompoundTagBuilder(Map<String, NBTTag> value) {
         Objects.requireNonNull(value);
         this.entries = value;
     }
@@ -35,7 +35,7 @@ public class CompoundTagBuilder {
      * @param value the value
      * @return this object
      */
-    public CompoundTagBuilder put(String key, Tag value) {
+    public CompoundTagBuilder put(String key, NBTTag value) {
         Objects.requireNonNull(key);
         Objects.requireNonNull(value);
         entries.put(key, value);
@@ -155,9 +155,9 @@ public class CompoundTagBuilder {
      * @param value the map of tags
      * @return this object
      */
-    public CompoundTagBuilder putAll(Map<String, ? extends Tag> value) {
+    public CompoundTagBuilder putAll(Map<String, ? extends NBTTag> value) {
         Objects.requireNonNull(value);
-        for (Map.Entry<String, ? extends Tag> entry : value.entrySet()) {
+        for (Map.Entry<String, ? extends NBTTag> entry : value.entrySet()) {
             put(entry.getKey(), entry.getValue());
         }
         return this;

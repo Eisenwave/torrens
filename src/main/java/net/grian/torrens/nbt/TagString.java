@@ -5,7 +5,7 @@ import java.util.Objects;
 /**
  * The {@code TAG_String} tag.
  */
-public final class TagString extends Tag {
+public final class TagString extends NBTTag {
 
     private final String value;
 

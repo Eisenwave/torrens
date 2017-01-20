@@ -1,7 +1,7 @@
 package net.grian.torrens.nbt;
 
 /**
- * The type of an NBT-Tag.
+ * The type of an NBT-NBTTag.
  */
 public enum TagType {
     /** Used to mark the end of compounds tags. May also be the type of empty list tags. */

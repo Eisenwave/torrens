@@ -11,8 +11,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * This class reads <b>NBT</b>, or <b>Named Binary Tag</b>
- * streams, and produces an object graph of subclasses of the {@code Tag}
+ * This class reads <b>NBT</b>, or <b>Named Binary NBTTag</b>
+ * streams, and produces an object graph of subclasses of the {@code NBTTag}
  * object.
  * 
  * <p>The NBT format was created by Markus Persson, and the specification may be
@@ -76,7 +76,7 @@ public final class NBTInputStream implements Closeable {
      * @return the tag
      * @throws IOException if an I/O error occurs.
      */
-    private Tag readTagPayload(TagType type, int depth) throws IOException {
+    private NBTTag readTagPayload(TagType type, int depth) throws IOException {
         switch (type) {
 
             case END:
@@ -108,19 +108,19 @@ public final class NBTInputStream implements Closeable {
                 TagType elementType = TagType.fromId(is.readByte());
                 length = is.readInt();
 
-                List<Tag> tagList = new ArrayList<>();
+                List<NBTTag> tagList = new ArrayList<>();
                 for (int i = 0; i < length; ++i) {
-                    Tag tag = readTagPayload(elementType, depth + 1);
+                    NBTTag tag = readTagPayload(elementType, depth + 1);
                     if (tag instanceof TagEnd) throw new IOException("TAG_End not permitted in a list.");
                     tagList.add(tag);
                 }
                 return new TagList(elementType, tagList);
 
             case COMPOUND:
-                Map<String, Tag> tagMap = new HashMap<>();
+                Map<String, NBTTag> tagMap = new HashMap<>();
                 while (true) {
                     NamedTag namedTag = readNamedTag(depth + 1);
-                    Tag tag = namedTag.getTag();
+                    NBTTag tag = namedTag.getTag();
                     if (tag instanceof TagEnd) break;
                     else tagMap.put(namedTag.getName(), tag);
                 }

@@ -10,8 +10,8 @@ import java.util.Map;
 import java.util.Objects;
 
 /**
- * This class writes <strong>NBT</strong>, or <strong>Named Binary Tag</strong>
- * {@code Tag} objects to an underlying {@code OutputStream}.
+ * This class writes <strong>NBT</strong>, or <strong>Named Binary NBTTag</strong>
+ * {@code NBTTag} objects to an underlying {@code OutputStream}.
  * 
  * <p>The NBT format was created by Markus Persson, and the specification may be
  * found at <a href="http://www.minecraft.net/docs/NBT.txt">
@@ -43,7 +43,7 @@ public final class NBTOutputStream implements Closeable {
      * @param tag the tag to write
      * @throws IOException if an I/O error occurs
      */
-    public void writeNamedTag(String name, Tag tag) throws IOException {
+    public void writeNamedTag(String name, NBTTag tag) throws IOException {
         Objects.requireNonNull(name);
         Objects.requireNonNull(tag);
 
@@ -66,7 +66,7 @@ public final class NBTOutputStream implements Closeable {
      * @param tag the tag
      * @throws IOException if an I/O error occurs
      */
-    private void writeTagPayload(Tag tag) throws IOException {
+    private void writeTagPayload(NBTTag tag) throws IOException {
         switch (tag.getType()) {
             case END: writeEndTagPayload((TagEnd) tag); break;
             case BYTE: writeByteTagPayload((TagByte) tag); break;
@@ -124,7 +124,7 @@ public final class NBTOutputStream implements Closeable {
      * @throws IOException if an I/O error occurs
      */
     private void writeCompoundTagPayload(TagCompound tag) throws IOException {
-        for (Map.Entry<String, Tag> entry : tag.getValue().entrySet()) {
+        for (Map.Entry<String, NBTTag> entry : tag.getValue().entrySet()) {
             writeNamedTag(entry.getKey(), entry.getValue());
         }
         os.writeByte((byte) 0); // end tag - better way?
@@ -138,12 +138,12 @@ public final class NBTOutputStream implements Closeable {
      */
     private void writeListTagPayload(TagList tag) throws IOException {
         TagType type = tag.getElementType();
-        List<Tag> tags = tag.getValue();
+        List<NBTTag> tags = tag.getValue();
         int size = tags.size();
 
         os.writeByte(type.getId());
         os.writeInt(size);
-        for (Tag tag1 : tags) {
+        for (NBTTag tag1 : tags) {
             writeTagPayload(tag1);
         }
     }

@@ -29,4 +29,14 @@ public class Vertex2f {
     public float getY() {
         return y;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof Vertex2f && equals((Vertex2f) obj);
+    }
+
+    public boolean equals(Vertex2f vertex) {
+        return this.x == vertex.x && this.y == vertex.y;
+    }
+
 }

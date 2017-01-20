@@ -40,4 +40,13 @@ public class Vertex3f {
         return z;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof Vertex3f && equals((Vertex3f) obj);
+    }
+
+    public boolean equals(Vertex3f vertex) {
+        return this.x == vertex.x && this.y == vertex.y && this.z == vertex.z;
+    }
+
 }

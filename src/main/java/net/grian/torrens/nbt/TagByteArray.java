@@ -3,7 +3,7 @@ package net.grian.torrens.nbt;
 /**
  * The {@code TAG_Byte_Array} tag.
  */
-public final class TagByteArray extends Tag {
+public final class TagByteArray extends NBTTag {
 
     private final byte[] value;
 

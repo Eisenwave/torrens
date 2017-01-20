@@ -5,10 +5,16 @@ import java.io.*;
 import java.util.logging.Logger;
 
 import net.grian.spatium.voxel.VoxelArray;
+import net.grian.torrens.error.FileSyntaxException;
+import net.grian.torrens.error.FileVersionException;
 
 /**
- * Deserializer designed for parsing Qubicle Exchange Format files (version 0.2). These files are text files for storing
- * voxels which begin with a constant header, size and color definition and end with a series of voxels.
+ * <p>
+ *     A parser for <b>Qubicle Exchange Format (.qef)</b> files.
+ * </p>
+ * <p>
+ *     Only version <b>2.0</b> is supported.
+ * </p>
  */
 public class DeserializerQEF implements Parser<VoxelArray> {
 

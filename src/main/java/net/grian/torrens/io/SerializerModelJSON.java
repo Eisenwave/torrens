@@ -13,10 +13,21 @@ import java.io.*;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 
+/**
+ * <p>
+ *     A serializer for <b>Minecraft Model (.json)</b> files.
+ * </p>
+ * <p>
+ *     These files use the <b>JSON</b> file structure.
+ * </p>
+ * <p>
+ *     No version restrictions exist.
+ * </p>
+ */
 public class SerializerModelJSON implements Serializer<MCModel> {
 
     public final static String
-            COMMENT = "Designed using VoxelVertG - http://grian.net",
+            COMMENT = "Designed on Grian Network - http://grian.net",
             INDENT = "\t";
 
     private MCModel model;

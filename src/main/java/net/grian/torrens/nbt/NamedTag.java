@@ -3,12 +3,12 @@ package net.grian.torrens.nbt;
 import java.util.Objects;
 
 /**
- * A named tag consisting of a {@link String} for its name and a {@link Tag} for its value.
+ * A named tag consisting of a {@link String} for its name and a {@link NBTTag} for its value.
  */
 public class NamedTag {
 
     private final String name;
-    private final Tag tag;
+    private final NBTTag tag;
 
     /**
      * Constructs a new named tag.
@@ -16,7 +16,7 @@ public class NamedTag {
      * @param name the name
      * @param tag the tag
      */
-    public NamedTag(String name, Tag tag) {
+    public NamedTag(String name, NBTTag tag) {
         Objects.requireNonNull(name);
         Objects.requireNonNull(tag);
         this.name = name;
@@ -37,7 +37,7 @@ public class NamedTag {
      *
      * @return the tag
      */
-    public Tag getTag() {
+    public NBTTag getTag() {
         return tag;
     }
 

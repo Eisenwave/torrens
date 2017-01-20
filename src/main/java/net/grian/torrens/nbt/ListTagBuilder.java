@@ -8,7 +8,7 @@ import java.util.*;
 public class ListTagBuilder {
 
     private final TagType type;
-    private final List<Tag> entries;
+    private final List<NBTTag> entries;
 
     /**
      * Create a new instance.
@@ -27,7 +27,7 @@ public class ListTagBuilder {
      * @param value the tag
      * @return this object
      */
-    public ListTagBuilder add(Tag value) {
+    public ListTagBuilder add(NBTTag value) {
         Objects.requireNonNull(value);
         if (this.type != value.getType())
             throw new IllegalArgumentException(value.getClass().getCanonicalName() + " is not of expected type " + type);
@@ -41,7 +41,7 @@ public class ListTagBuilder {
      * @param value a list of tags
      * @return this object
      */
-    public ListTagBuilder addAll(Collection<? extends Tag> value) {
+    public ListTagBuilder addAll(Collection<? extends NBTTag> value) {
         Objects.requireNonNull(value);
         value.forEach(this::add);
         return this;
@@ -71,7 +71,7 @@ public class ListTagBuilder {
      * @return a new builder
      */
     @SafeVarargs
-    public static <T extends Tag> ListTagBuilder createWith(T ... entries) {
+    public static <T extends NBTTag> ListTagBuilder createWith(T ... entries) {
         Objects.requireNonNull(entries);
 
         if (entries.length == 0) {
