@@ -41,7 +41,7 @@ public final class NBTUtils {
      * @param key the key to look for
      * @param expected the expected NBT class type
      * @return child tag
-     * @throws FileSyntaxException
+     * @throws FileSyntaxException if an I/O error occurs
      */
     public static <T extends Tag> T getChildTag(Map<String, Tag> items, String key, Class<T> expected) throws FileSyntaxException {
         if (!items.containsKey(key)) {
