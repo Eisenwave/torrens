@@ -13,7 +13,7 @@ import java.io.OutputStream;
  *     A serializer for <b>Stereo-Lithography / Standard Tessellation Language (.stl)</b> files.
  * </p>
  * <p>
- *     No version restrictions exist.
+ *     This serializer produces binary STL files.
  * </p>
  */
 public class SerializerSTL implements Serializer<STLModel> {

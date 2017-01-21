@@ -28,8 +28,8 @@ public final class TagDouble extends NBTTag {
     }
 
     @Override
-    public TagType getType() {
-        return TagType.DOUBLE;
+    public NBTType getType() {
+        return NBTType.DOUBLE;
     }
 
 }

@@ -26,8 +26,8 @@ public final class TagString extends NBTTag {
     }
 
     @Override
-    public TagType getType() {
-        return TagType.STRING;
+    public NBTType getType() {
+        return NBTType.STRING;
     }
 
 }

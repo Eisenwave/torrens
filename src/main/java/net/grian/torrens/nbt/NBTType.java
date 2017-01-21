@@ -3,7 +3,7 @@ package net.grian.torrens.nbt;
 /**
  * The type of an NBT-NBTTag.
  */
-public enum TagType {
+public enum NBTType {
     /** Used to mark the end of compounds tags. May also be the type of empty list tags. */
     END("TAG_End", false),
 
@@ -43,12 +43,12 @@ public enum TagType {
     final String name;
     final boolean numeric;
 
-    TagType(String name, boolean numeric) {
+    NBTType(String name, boolean numeric) {
         this.name = name;
         this.numeric = numeric;
     }
 
-    public static TagType fromId(int id) {
+    public static NBTType fromId(int id) {
         return values()[id];
     }
 

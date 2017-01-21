@@ -17,7 +17,7 @@ public abstract class NBTTag {
      *
      * @return the type of this tag
      */
-    public abstract TagType getType();
+    public abstract NBTType getType();
 
     @Override
     public String toString() {

@@ -27,8 +27,8 @@ public final class TagFloat extends NBTTag {
     }
 
     @Override
-    public TagType getType() {
-        return TagType.FLOAT;
+    public NBTType getType() {
+        return NBTType.FLOAT;
     }
 
 }

@@ -7,14 +7,23 @@ import java.util.Objects;
 /**
  * Helps create compound tags.
  */
-public class CompoundTagBuilder {
+public class NBTCompoundBuilder {
+
+    /**
+     * Create a new builder instance.
+     *
+     * @return a new builder
+     */
+    public static NBTCompoundBuilder create() {
+        return new NBTCompoundBuilder();
+    }
 
     private final Map<String, NBTTag> entries;
 
     /**
      * Create a new instance.
      */
-    CompoundTagBuilder() {
+    private NBTCompoundBuilder() {
         this.entries = new HashMap<>();
     }
 
@@ -23,7 +32,7 @@ public class CompoundTagBuilder {
      *
      * @param value the value
      */
-    CompoundTagBuilder(Map<String, NBTTag> value) {
+    private NBTCompoundBuilder(Map<String, NBTTag> value) {
         Objects.requireNonNull(value);
         this.entries = value;
     }
@@ -35,7 +44,7 @@ public class CompoundTagBuilder {
      * @param value the value
      * @return this object
      */
-    public CompoundTagBuilder put(String key, NBTTag value) {
+    public NBTCompoundBuilder put(String key, NBTTag value) {
         Objects.requireNonNull(key);
         Objects.requireNonNull(value);
         entries.put(key, value);
@@ -50,7 +59,7 @@ public class CompoundTagBuilder {
      * @param value the value
      * @return this object
      */
-    public CompoundTagBuilder putByteArray(String key, byte[] value) {
+    public NBTCompoundBuilder putByteArray(String key, byte[] value) {
         return put(key, new TagByteArray(value));
     }
 
@@ -62,7 +71,7 @@ public class CompoundTagBuilder {
      * @param value the value
      * @return this object
      */
-    public CompoundTagBuilder putByte(String key, byte value) {
+    public NBTCompoundBuilder putByte(String key, byte value) {
         return put(key, new TagByte(value));
     }
 
@@ -74,7 +83,7 @@ public class CompoundTagBuilder {
      * @param value the value
      * @return this object
      */
-    public CompoundTagBuilder putDouble(String key, double value) {
+    public NBTCompoundBuilder putDouble(String key, double value) {
         return put(key, new TagDouble(value));
     }
 
@@ -86,7 +95,7 @@ public class CompoundTagBuilder {
      * @param value the value
      * @return this object
      */
-    public CompoundTagBuilder putFloat(String key, float value) {
+    public NBTCompoundBuilder putFloat(String key, float value) {
         return put(key, new TagFloat(value));
     }
 
@@ -98,7 +107,7 @@ public class CompoundTagBuilder {
      * @param value the value
      * @return this object
      */
-    public CompoundTagBuilder putIntArray(String key, int[] value) {
+    public NBTCompoundBuilder putIntArray(String key, int[] value) {
         return put(key, new TagIntArray(value));
     }
 
@@ -109,7 +118,7 @@ public class CompoundTagBuilder {
      * @param value the value
      * @return this object
      */
-    public CompoundTagBuilder putInt(String key, int value) {
+    public NBTCompoundBuilder putInt(String key, int value) {
         return put(key, new TagInt(value));
     }
 
@@ -121,7 +130,7 @@ public class CompoundTagBuilder {
      * @param value the value
      * @return this object
      */
-    public CompoundTagBuilder putLong(String key, long value) {
+    public NBTCompoundBuilder putLong(String key, long value) {
         return put(key, new TagLong(value));
     }
 
@@ -133,7 +142,7 @@ public class CompoundTagBuilder {
      * @param value the value
      * @return this object
      */
-    public CompoundTagBuilder putShort(String key, short value) {
+    public NBTCompoundBuilder putShort(String key, short value) {
         return put(key, new TagShort(value));
     }
 
@@ -145,7 +154,7 @@ public class CompoundTagBuilder {
      * @param value the value
      * @return this object
      */
-    public CompoundTagBuilder putString(String key, String value) {
+    public NBTCompoundBuilder putString(String key, String value) {
         return put(key, new TagString(value));
     }
 
@@ -155,7 +164,7 @@ public class CompoundTagBuilder {
      * @param value the map of tags
      * @return this object
      */
-    public CompoundTagBuilder putAll(Map<String, ? extends NBTTag> value) {
+    public NBTCompoundBuilder putAll(Map<String, ? extends NBTTag> value) {
         Objects.requireNonNull(value);
         for (Map.Entry<String, ? extends NBTTag> entry : value.entrySet()) {
             put(entry.getKey(), entry.getValue());
@@ -170,15 +179,6 @@ public class CompoundTagBuilder {
      */
     public TagCompound build() {
         return new TagCompound(new HashMap<>(entries));
-    }
-
-    /**
-     * Create a new builder instance.
-     *
-     * @return a new builder
-     */
-    public static CompoundTagBuilder create() {
-        return new CompoundTagBuilder();
     }
 
 }

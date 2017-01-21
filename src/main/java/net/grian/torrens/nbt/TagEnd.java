@@ -11,8 +11,8 @@ public final class TagEnd extends NBTTag {
     }
 
     @Override
-    public TagType getType() {
-        return TagType.END;
+    public NBTType getType() {
+        return NBTType.END;
     }
 
     @Override

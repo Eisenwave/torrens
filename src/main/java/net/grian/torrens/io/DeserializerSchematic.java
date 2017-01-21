@@ -51,11 +51,14 @@ public class DeserializerSchematic implements Deserializer<BlockArray> {
 
     private TagCompound readSchematic(InputStream stream) throws IOException {
         NBTInputStream nbtStream = new NBTInputStream(new GZIPInputStream(stream));
-        NamedTag rootTag = nbtStream.readNamedTag();
+        NBTNamedTag rootTag = nbtStream.readNamedTag();
         nbtStream.close();
 
+        if (rootTag.getTag().getType() != NBTType.COMPOUND)
+            throw new IOException("root tag is not a compound");
+
         if (!rootTag.getName().equals("Schematic"))
-            throw new FileFormatException("NBTTag 'Schematic' does not exist or is not first");
+            throw new FileFormatException("tag 'Schematic' does not exist or is not first");
 
         return (TagCompound) rootTag.getTag();
     }

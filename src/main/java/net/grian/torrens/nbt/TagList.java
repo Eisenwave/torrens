@@ -11,7 +11,7 @@ import java.util.Objects;
 @SuppressWarnings("Duplicates")
 public final class TagList<E extends NBTTag> extends NBTTag {
 
-    private final TagType type;
+    private final NBTType type;
     private final List<E> value;
 
     /**
@@ -20,7 +20,7 @@ public final class TagList<E extends NBTTag> extends NBTTag {
      * @param type the type of tag
      * @param value the value of the tag
      */
-    public TagList(TagType type, List<? extends E> value) {
+    public TagList(NBTType type, List<? extends E> value) {
         Objects.requireNonNull(type);
         this.type = type;
         this.value = Collections.unmodifiableList(value);
@@ -31,7 +31,7 @@ public final class TagList<E extends NBTTag> extends NBTTag {
      *
      * @return The type of item in this list.
      */
-    public TagType getElementType() {
+    public NBTType getElementType() {
         return type;
     }
 
@@ -41,8 +41,8 @@ public final class TagList<E extends NBTTag> extends NBTTag {
     }
 
     @Override
-    public TagType getType() {
-        return TagType.LIST;
+    public NBTType getType() {
+        return NBTType.LIST;
     }
 
     /**
@@ -244,7 +244,7 @@ public final class TagList<E extends NBTTag> extends NBTTag {
         if (tag instanceof TagList) {
             return (TagList) tag;
         } else {
-            return new TagList<>(TagType.STRING, Collections.emptyList());
+            return new TagList<>(NBTType.STRING, Collections.emptyList());
         }
     }
 
@@ -261,7 +261,7 @@ public final class TagList<E extends NBTTag> extends NBTTag {
      * @return a list of tags
      */
     @SuppressWarnings({"unchecked", "Duplicates"})
-    public List<NBTTag> getList(int index, TagType elementType) {
+    public List<NBTTag> getList(int index, NBTType elementType) {
         NBTTag tag = getIfExists(index);
         if (tag instanceof TagList) {
             TagList listTag = (TagList) tag;

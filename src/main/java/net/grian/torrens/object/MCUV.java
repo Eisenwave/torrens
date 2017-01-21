@@ -32,18 +32,58 @@ public class MCUV implements BaseRectangle {
         return texture;
     }
 
+    /**
+     * <p>
+     *     Returns the minimum x-coordinate.
+     * </p>
+     * <p>
+     *     If this value is larger than the {@link #getMaxX()}, the uv is mirrored on the x-axis.
+     * </p>
+     *
+     * @return the minimum x-coordinate
+     */
     public int getMinX() {
         return xmin;
     }
 
+    /**
+     * <p>
+     *     Returns the minimum y-coordinate.
+     * </p>
+     * <p>
+     *     If this value is larger than the {@link #getMaxY()}, the uv is mirrored on the y-axis.
+     * </p>
+     *
+     * @return the minimum y-coordinate
+     */
     public int getMinY() {
         return ymin;
     }
 
+    /**
+     * <p>
+     *     Returns the maximum x-coordinate.
+     * </p>
+     * <p>
+     *     If this value is smaller than the {@link #getMinX()}, the uv is mirrored on the x-axis.
+     * </p>
+     *
+     * @return the maximum x-coordinate
+     */
     public int getMaxX() {
         return xmax;
     }
 
+    /**
+     * <p>
+     *     Returns the maximum y-coordinate.
+     * </p>
+     * <p>
+     *     If this value is smaller than the {@link #getMinY()}, the uv is mirrored on the y-axis.
+     * </p>
+     *
+     * @return the maximum y-coordinate
+     */
     public int getMaxY() {
         return ymax;
     }
@@ -98,4 +138,5 @@ public class MCUV implements BaseRectangle {
         if (rotation < 0 || rotation >= 360) throw new IllegalArgumentException("rotation out of range (0-359)");
         this.rotation = rotation;
     }
+
 }

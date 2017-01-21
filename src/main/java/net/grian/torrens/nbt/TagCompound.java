@@ -1,7 +1,6 @@
 package net.grian.torrens.nbt;
 
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -38,8 +37,8 @@ public final class TagCompound extends NBTTag {
     }
 
     @Override
-    public TagType getType() {
-        return TagType.COMPOUND;
+    public NBTType getType() {
+        return NBTType.COMPOUND;
     }
 
     /**
@@ -50,15 +49,6 @@ public final class TagCompound extends NBTTag {
      */
     public TagCompound setValue(Map<String, NBTTag> value) {
         return new TagCompound(value);
-    }
-
-    /**
-     * Create a compound tag builder.
-     *
-     * @return the builder
-     */
-    public CompoundTagBuilder createBuilder() {
-        return new CompoundTagBuilder(new HashMap<>(value));
     }
 
     /**
@@ -235,7 +225,7 @@ public final class TagCompound extends NBTTag {
         if (tag instanceof TagList) {
             return (TagList) tag;
         } else {
-            return new TagList(TagType.STRING, Collections.emptyList());
+            return new TagList(NBTType.STRING, Collections.emptyList());
         }
     }
 
@@ -253,7 +243,7 @@ public final class TagCompound extends NBTTag {
      * @param <T> the type of list
      */
     @SuppressWarnings("unchecked")
-    public <T extends NBTTag> List<T> getList(String key, TagType elementType) {
+    public <T extends NBTTag> List<T> getList(String key, NBTType elementType) {
         NBTTag tag = value.get(key);
         if (tag instanceof TagList) {
             TagList listTag = (TagList) tag;

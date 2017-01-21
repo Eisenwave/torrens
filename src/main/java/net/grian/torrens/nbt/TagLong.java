@@ -28,8 +28,8 @@ public final class TagLong extends NBTTag {
     }
 
     @Override
-    public TagType getType() {
-        return TagType.LONG;
+    public NBTType getType() {
+        return NBTType.LONG;
     }
 
 }

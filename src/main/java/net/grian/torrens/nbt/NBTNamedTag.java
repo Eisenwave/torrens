@@ -5,7 +5,7 @@ import java.util.Objects;
 /**
  * A named tag consisting of a {@link String} for its name and a {@link NBTTag} for its value.
  */
-public class NamedTag {
+public class NBTNamedTag {
 
     private final String name;
     private final NBTTag tag;
@@ -16,7 +16,7 @@ public class NamedTag {
      * @param name the name
      * @param tag the tag
      */
-    public NamedTag(String name, NBTTag tag) {
+    public NBTNamedTag(String name, NBTTag tag) {
         Objects.requireNonNull(name);
         Objects.requireNonNull(tag);
         this.name = name;

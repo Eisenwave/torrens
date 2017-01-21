@@ -26,8 +26,8 @@ public final class TagIntArray extends NBTTag {
     }
 
     @Override
-    public TagType getType() {
-        return TagType.INT_ARRAY;
+    public NBTType getType() {
+        return NBTType.INT_ARRAY;
     }
 
     @Override

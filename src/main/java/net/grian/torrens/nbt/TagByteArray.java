@@ -23,8 +23,8 @@ public final class TagByteArray extends NBTTag {
     }
 
     @Override
-    public TagType getType() {
-        return TagType.BYTE_ARRAY;
+    public NBTType getType() {
+        return NBTType.BYTE_ARRAY;
     }
 
     @Override

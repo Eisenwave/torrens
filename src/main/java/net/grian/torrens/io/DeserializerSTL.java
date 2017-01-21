@@ -13,7 +13,7 @@ import java.io.InputStream;
  *     A deserializer for <b>Stereo-Lithography / Standard-Tessellation-Language (.stl)</b> files.
  * </p>
  * <p>
- *     No version restrictions exist, triangle attributes are given no special interpretation.
+ *     Only binary STL is supported, triangle attributes are given no special interpretation.
  * </p>
  */
 public class DeserializerSTL implements Deserializer<STLModel> {
