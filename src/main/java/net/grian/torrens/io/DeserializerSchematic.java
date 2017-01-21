@@ -24,13 +24,11 @@ import java.util.zip.GZIPInputStream;
  */
 public class DeserializerSchematic implements Deserializer<BlockArray> {
 
-    private Map<String, NBTTag> schematic;
+    private TagCompound schematic;
 
     @Override
     public BlockArray deserialize(InputStream stream) throws IOException {
-        TagCompound schematicTag = readSchematic(stream);
-
-        this.schematic = schematicTag.getValue();
+        this.schematic = readSchematic(stream);
         validateSchematic();
 
         final short sizeX = readShort("Width"), sizeY = readShort("Height"), sizeZ = readShort("Length");
@@ -64,11 +62,9 @@ public class DeserializerSchematic implements Deserializer<BlockArray> {
     }
 
     private void validateSchematic() throws IOException {
-        if (!schematic.containsKey("Blocks"))
-            throw new FileSyntaxException("schematic is missing 'Blocks' tag");
+        require("Materials", NBTType.STRING);
 
-        TagString materials = (TagString) schematic.get("Materials");
-        if (!materials.getValue().equals("Alpha"))
+        if (!schematic.getString("Materials").equals("Alpha"))
             throw new FileVersionException("schematic is not an Alpha schematic");
     }
 
@@ -79,17 +75,20 @@ public class DeserializerSchematic implements Deserializer<BlockArray> {
     }
 
     private short readShort(String key) throws IOException {
-        if (!schematic.containsKey(key))
-            throw new FileSyntaxException("schematic is missing '"+key+"' tag");
+        require(key, NBTType.SHORT);
 
-        return ((TagShort) schematic.get(key)).getShortValue();
+        return schematic.getShort(key);
     }
 
     private byte[] readBytes(String key) throws IOException {
-        if (!schematic.containsKey(key))
-            throw new FileSyntaxException("schematic is missing '"+key+"' tag");
+        require(key, NBTType.BYTE_ARRAY);
 
-        return ((TagByteArray) schematic.get(key)).getValue();
+        return schematic.getByteArray(key);
+    }
+
+    private void require(String key, NBTType type) throws FileSyntaxException {
+        if (!schematic.containsKey(key, type))
+            throw new FileSyntaxException("missing tag: ("+type.getName()+") "+key);
     }
 
     /**

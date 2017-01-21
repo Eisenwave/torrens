@@ -17,7 +17,7 @@ public final class TagEnd extends NBTTag {
 
     @Override
     public String toString() {
-        return "TAG_End";
+        return getType().getName();
     }
 
 }

@@ -39,7 +39,8 @@ public final class TagIntArray extends NBTTag {
                 hex.append("0");
             hex.append(hexDigits).append(" ");
         }
-        return "TAG_Int_Array(" + hex + ")";
+
+        return getType().getName()+"(" + hex + ")";
     }
 
 }

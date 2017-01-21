@@ -4,7 +4,7 @@ package net.grian.torrens.nbt;
  * The {@code TAG_Long} tag.
  * 
  */
-public final class TagLong extends NBTTag {
+public final class TagLong extends NBTTagNumeric {
 
     private final long value;
 
