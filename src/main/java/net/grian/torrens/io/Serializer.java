@@ -11,7 +11,7 @@ import java.io.*;
  *     serializing to URL's, files, byte arrays and more.
  * </p>
  * <p>
- *     The only method to be implemented is {@link #serialize(Object, OutputStream)} which writes an object into
+ *     The only method to be implemented is {@link #toStream(Object, OutputStream)} which writes an object into
  *     a generic output stream.
  * </p>
  *
@@ -26,7 +26,7 @@ public interface Serializer<T> {
      * @param stream the output stream
      * @throws IOException if an I/O error occurs
      */
-    public void serialize(T object, OutputStream stream) throws IOException;
+    public void toStream(T object, OutputStream stream) throws IOException;
 
     /**
      * Writes the object into a {@link File} using a {@link FileOutputStream}.
@@ -35,10 +35,10 @@ public interface Serializer<T> {
      * @param file the file
      * @throws IOException if an I/O error occurs
      */
-    public default void serialize(T object, File file) throws IOException {
-        FileOutputStream stream = new FileOutputStream(file);
-        serialize(object, stream);
-        stream.close();
+    public default void toFile(T object, File file) throws IOException {
+        try (FileOutputStream stream = new FileOutputStream(file)) {
+            toStream(object, stream);
+        }
     }
 
     /**
@@ -50,9 +50,9 @@ public interface Serializer<T> {
      * @throws IOException if an I/O error occurs
      * @see ByteArrayOutputStream#ByteArrayOutputStream(int)
      */
-    public default byte[] serialize(T object, int capacity) throws IOException {
+    public default byte[] toBytes(T object, int capacity) throws IOException {
         ByteArrayOutputStream stream = new ByteArrayOutputStream(capacity);
-        serialize(object, stream);
+        toStream(object, stream);
         return stream.toByteArray();
     }
 
@@ -64,9 +64,9 @@ public interface Serializer<T> {
      * @throws IOException if an I/O error occurs
      * @see ByteArrayOutputStream#ByteArrayOutputStream()
      */
-    public default byte[] serialize(T object) throws IOException {
+    public default byte[] toBytes(T object) throws IOException {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        serialize(object, stream);
+        toStream(object, stream);
         return stream.toByteArray();
     }
 
@@ -78,8 +78,8 @@ public interface Serializer<T> {
      * @param resPath the resource path
      * @throws IOException if an I/O error occurs
      */
-    public default void serialize(T object, Class<?> clazz, String resPath) throws IOException {
-        serialize(object, Resources.getFile(clazz, resPath));
+    public default void toResource(T object, Class<?> clazz, String resPath) throws IOException {
+        toFile(object, Resources.getFile(clazz, resPath));
     }
 
 }

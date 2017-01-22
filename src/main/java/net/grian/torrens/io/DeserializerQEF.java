@@ -16,7 +16,7 @@ import net.grian.torrens.error.FileVersionException;
  *     Only version <b>2.0</b> is supported.
  * </p>
  */
-public class DeserializerQEF implements Parser<VoxelArray> {
+public class DeserializerQEF implements TextDeserializer<VoxelArray> {
 
     private final Logger logger;
 
@@ -32,15 +32,19 @@ public class DeserializerQEF implements Parser<VoxelArray> {
     }
 
     @Override
-    public VoxelArray deserialize(Reader reader) throws IOException {
+    public VoxelArray fromReader(Reader reader) throws IOException {
         BufferedReader buffReader = new BufferedReader(reader);
-        logger.info("parsing qef ...");
+        //logger.info("parsing qef ...");
 
         String line;
 
         int num = 0;
-        while ((line = buffReader.readLine()) != null) parseLine(++num, line);
-        logger.info("completed parsing qef ("+voxels.size()+"/"+voxels.getVolume()+" voxels)");
+        while ((line = buffReader.readLine()) != null)
+            parseLine(++num, line);
+        //logger.info("completed parsing qef ("+voxels.size()+"/"+voxels.getVolume()+" voxels)");
+
+        if (num < 5)
+            throw new IOException("less than 5 lines read, QEF incomplete");
 
         buffReader.close();
         return voxels;

@@ -27,7 +27,7 @@ public class DeserializerSchematic implements Deserializer<BlockArray> {
     private TagCompound schematic;
 
     @Override
-    public BlockArray deserialize(InputStream stream) throws IOException {
+    public BlockArray fromStream(InputStream stream) throws IOException {
         this.schematic = readSchematic(stream);
         validateSchematic();
 

@@ -12,7 +12,7 @@ public class DeserializerSchematicTest {
 
     @Test
     public void deserialize() throws Exception {
-        BlockArray blocks = new DeserializerSchematic().deserialize(getClass(), "bunny.schematic");
+        BlockArray blocks = new DeserializerSchematic().fromResource(getClass(), "bunny.schematic");
         /*
         blocks.forEachPos((x,y,z) -> {
             if (blocks.getBlock(x, y, z).equals(COAL_BLOCK))

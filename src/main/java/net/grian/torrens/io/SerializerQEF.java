@@ -30,12 +30,16 @@ public class SerializerQEF implements Serializer<VoxelArray> {
         this.logger = logger;
     }
 
+    public SerializerQEF() {
+        this(Logger.getGlobal());
+    }
+
     @Override
-    public void serialize(VoxelArray array, OutputStream stream) throws IOException {
+    public void toStream(VoxelArray array, OutputStream stream) throws IOException {
         Writer streamWriter = new OutputStreamWriter(stream);
         BufferedWriter writer = new BufferedWriter(streamWriter);
 
-        logger.info("serializing voxel array ("+array.size()+" voxels) as QEF ...");
+        //logger.info("serializing voxel array ("+array.size()+" voxels) as QEF ...");
 
         writeMeta(writer);
         writeDimensions(array, writer);
@@ -56,12 +60,12 @@ public class SerializerQEF implements Serializer<VoxelArray> {
 
     private void writeDimensions(VoxelArray array, BufferedWriter writer) throws IOException {
         String dimensions = array.getSizeX()+" "+array.getSizeY()+" "+array.getSizeZ();
-        logger.info("dimensions = "+dimensions);
+        //logger.info("dimensions = "+dimensions);
         writer.write(dimensions); writer.newLine();
     }
 
     private void writeColors(BufferedWriter writer) throws IOException {
-        logger.info("writing "+colors.length+" colors ...");
+        //logger.info("writing "+colors.length+" colors ...");
         writer.write(String.valueOf(colors.length));
         writer.newLine();
 
@@ -74,7 +78,7 @@ public class SerializerQEF implements Serializer<VoxelArray> {
     }
 
     private void writeVoxels(BufferedWriter writer) throws IOException {
-        logger.info("writing "+compressedArray.size()+" voxels to file ...");
+        //logger.info("writing "+compressedArray.size()+" voxels to file ...");
         for (VoxelArray.Voxel voxel : compressedArray) {
             final int color = (voxel.getRGB() & 0xFFFFFF) -1;
             writer.write(voxel.getX()+" "+voxel.getY()+" "+voxel.getZ()+" "+color);

@@ -22,7 +22,7 @@ import java.io.InputStream;
 public class DeserializerImage implements Deserializer<RenderedImage> {
 
     @Override
-    public RenderedImage deserialize(InputStream stream) throws IOException {
+    public RenderedImage fromStream(InputStream stream) throws IOException {
         return ImageIO.read(stream);
     }
 

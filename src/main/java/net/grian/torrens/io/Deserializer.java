@@ -12,7 +12,7 @@ import java.net.URL;
  *     reading from URL's, files, byte arrays and more.
  * </p>
  * <p>
- *     The only method to be implemented is {@link #deserialize(InputStream)} which reads an object from a generic
+ *     The only method to be implemented is {@link #fromStream(InputStream)} which reads an object from a generic
  *     input stream.
  * </p>
  *
@@ -27,7 +27,7 @@ public interface Deserializer<T> {
      * @return the deserialized object
      * @throws IOException if the deserialization fails
      */
-    public abstract T deserialize(InputStream stream) throws IOException;
+    public abstract T fromStream(InputStream stream) throws IOException;
 
     /**
      * Deserializes an object from a {@link File} using a {@link FileInputStream}.
@@ -36,12 +36,10 @@ public interface Deserializer<T> {
      * @return the deserialized object
      * @throws IOException if the deserialization fails
      */
-    public default T deserialize(File file) throws IOException {
-        FileInputStream stream = new FileInputStream(file);
-        T result = deserialize(stream);
-        stream.close();
-
-        return result;
+    public default T fromFile(File file) throws IOException {
+        try (InputStream stream = new FileInputStream(file)) {
+            return fromStream(stream);
+        }
     }
 
     /**
@@ -51,12 +49,9 @@ public interface Deserializer<T> {
      * @return the deserialized object
      * @throws IOException if the deserialization fails
      */
-    public default T deserialize(byte[] bytes) throws IOException {
+    public default T fromBytes(byte[] bytes) throws IOException {
         ByteArrayInputStream stream = new ByteArrayInputStream(bytes);
-        T result = deserialize(stream);
-        stream.close();
-
-        return result;
+        return fromStream(stream);
     }
 
     /**
@@ -68,11 +63,10 @@ public interface Deserializer<T> {
      * @return the deserialized object
      * @throws IOException if the deserialization fails
      */
-    public default T deserialize(Class<?> clazz, String resPath) throws IOException {
+    public default T fromResource(Class<?> clazz, String resPath) throws IOException {
         InputStream stream = Resources.getStream(clazz, resPath);
-        T result = deserialize(stream);
+        T result = fromStream(stream);
         stream.close();
-
         return result;
     }
 
@@ -83,12 +77,10 @@ public interface Deserializer<T> {
      * @return the deserialized object
      * @throws IOException if the deserialization fails
      */
-    public default T deserialize(URL url) throws IOException {
-        InputStream stream = url.openStream();
-        T result = deserialize(stream);
-        stream.close();
-
-        return result;
+    public default T fromURL(URL url) throws IOException {
+        try (InputStream stream = url.openStream()) {
+            return fromStream(stream);
+        }
     }
 
 }

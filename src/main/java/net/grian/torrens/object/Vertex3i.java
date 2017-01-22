@@ -3,26 +3,22 @@ package net.grian.torrens.object;
 import java.util.Arrays;
 
 /**
- * An immutable triplet of floating point coordinates.
+ * An immutable triplet of integer coordinates.
  */
-public class Vertex3f {
+public class Vertex3i {
 
     @SuppressWarnings("unused")
-    public final static Vertex3f ZERO = new Vertex3f(0, 0, 0);
+    public final static Vertex3i ZERO = new Vertex3i(0, 0, 0);
 
-    private final float x, y, z;
+    private final int x, y, z;
 
-    public Vertex3f(float x, float y, float z) {
+    public Vertex3i(int x, int y, int z) {
         this.x = x;
         this.y = y;
         this.z = z;
     }
 
-    public Vertex3f(Vertex3f vertex) {
-        this(vertex.getX(), vertex.getY(), vertex.getZ());
-    }
-
-    public Vertex3f(Vertex3i vertex) {
+    public Vertex3i(Vertex3i vertex) {
         this(vertex.getX(), vertex.getY(), vertex.getZ());
     }
 
@@ -31,7 +27,7 @@ public class Vertex3f {
      *
      * @return vertex x-coordinate
      */
-    public float getX() {
+    public int getX() {
         return x;
     }
 
@@ -40,7 +36,7 @@ public class Vertex3f {
      *
      * @return vertex y-coordinate
      */
-    public float getY() {
+    public int getY() {
         return y;
     }
 
@@ -49,17 +45,17 @@ public class Vertex3f {
      *
      * @return vertex z-coordinate
      */
-    public float getZ() {
+    public int getZ() {
         return z;
     }
 
-    public float[] toArray() {
-        return new float[] {x, y, z};
+    public int[] toArray() {
+        return new int[] {x, y, z};
     }
 
     @Override
     public String toString() {
-        return Vertex3f.class.getSimpleName()+"["+x+","+y+","+z+"]";
+        return Vertex3i.class.getSimpleName()+"["+x+","+y+","+z+"]";
     }
 
     @Override
@@ -69,11 +65,11 @@ public class Vertex3f {
 
     @Override
     public boolean equals(Object obj) {
-        return obj instanceof Vertex3f && equals((Vertex3f) obj);
+        return obj instanceof Vertex3i && equals((Vertex3i) obj);
     }
 
-    public boolean equals(Vertex3f vertex) {
+    public boolean equals(Vertex3i vertex) {
         return this.x == vertex.x && this.y == vertex.y && this.z == vertex.z;
     }
-
+    
 }

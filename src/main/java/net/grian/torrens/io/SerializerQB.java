@@ -37,12 +37,12 @@ public class SerializerQB implements Serializer<QBModel> {
     private int colorFormat;
 
     @Override
-    public void serialize(QBModel model, OutputStream stream) throws IOException {
+    public void toStream(QBModel model, OutputStream stream) throws IOException {
         DataOutputStream dataStream = new DataOutputStream(stream);
-        serialize(model, dataStream);
+        toStream(model, dataStream);
     }
 
-    public void serialize(QBModel mesh, DataOutputStream stream) throws IOException {
+    public void toStream(QBModel mesh, DataOutputStream stream) throws IOException {
         this.model = mesh;
         serializeHeader(stream);
         for (QBMatrix matrix : mesh)

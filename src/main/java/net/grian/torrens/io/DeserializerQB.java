@@ -38,7 +38,7 @@ public class DeserializerQB implements Deserializer<QBModel> {
     }
 
     @Override
-    public QBModel deserialize(InputStream stream) throws IOException {
+    public QBModel fromStream(InputStream stream) throws IOException {
         //logger.info("deserializing qb...");
         DataInputStream dataStream = new DataInputStream(stream);
 

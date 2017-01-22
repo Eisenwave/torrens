@@ -1,7 +1,6 @@
 package net.grian.torrens.io;
 
 import net.grian.spatium.geo.AxisAlignedBB;
-import net.grian.torrens.io.SerializerModelJSON;
 import net.grian.torrens.object.MCElement;
 import net.grian.torrens.object.Texture;
 import net.grian.torrens.object.MCModel;
@@ -22,7 +21,7 @@ public class SerializerModelJSONTest {
         File out = new File("D:\\Users\\Jan\\Desktop\\SERVER\\SERVERS\\TEST\\plugins\\VoxelVert\\files\\SerializerModelJSONTest.json");
         if (!out.exists() && !out.createNewFile()) throw new IOException("failed to create "+out);
 
-        new SerializerModelJSON().serialize(model, out);
+        new SerializerModelJSON().toFile(model, out);
     }
 
 }

@@ -1,7 +1,10 @@
 package net.grian.torrens.object;
 
+import net.grian.spatium.Spatium;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Data representation of a Wavefront Object Model.
@@ -99,15 +102,19 @@ public class OBJModel {
      * @param vertex the vertex
      */
     public void addVertex(Vertex3f vertex) {
+        Objects.requireNonNull(vertex);
         vertices.add(vertex);
     }
 
     /**
-     * Adds a normal vertex to this model.
+     * Adds a normal vertex to this model. This must be a unit vector.
      *
      * @param vertex the vertex
      */
     public void addNormal(Vertex3f vertex) {
+        final float x = vertex.getX(), y = vertex.getY(), z = vertex.getZ();
+        if (!Spatium.equals(1, x*x + y*y + z*z))
+            throw new IllegalArgumentException("normal is not a unit vector");
         normals.add(vertex);
     }
 
@@ -117,6 +124,7 @@ public class OBJModel {
      * @param vertex the vertex
      */
     public void addTexture(Vertex2f vertex) {
+        Objects.requireNonNull(vertex);
         textures.add(vertex);
     }
 
@@ -126,7 +134,20 @@ public class OBJModel {
      * @param face the face
      */
     public void addFace(OBJFace face) {
+        OBJTriplet[] triplets = face.getShape();
+        for (int i = 0; i<triplets.length; i++)
+            validate(triplets[i], i);
+
         faces.add(face);
+    }
+
+    private void validate(OBJTriplet triplet, int index) {
+        if (triplet.getVertexIndex() > getVertexCount())
+            throw new IndexOutOfBoundsException("v"+index+": "+triplet.getVertexIndex());
+        if (triplet.getNormalIndex() > getNormalCount())
+            throw new IndexOutOfBoundsException("vn"+index+": "+triplet.getNormalIndex());
+        if (triplet.getTextureIndex() > getTextureVertexCount())
+            throw new IndexOutOfBoundsException("vt"+index+": "+triplet.getTextureIndex());
     }
 
 }

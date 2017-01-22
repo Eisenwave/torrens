@@ -16,7 +16,7 @@ import java.io.OutputStream;
 public class SerializerPNG implements Serializer<RenderedImage> {
 
     @Override
-    public void serialize(RenderedImage image, OutputStream stream) throws IOException {
+    public void toStream(RenderedImage image, OutputStream stream) throws IOException {
         ImageIO.write(image, "png", stream);
     }
 

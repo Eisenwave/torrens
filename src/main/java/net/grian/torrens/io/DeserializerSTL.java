@@ -19,14 +19,14 @@ import java.io.InputStream;
 public class DeserializerSTL implements Deserializer<STLModel> {
 
     @Override
-    public STLModel deserialize(InputStream stream) throws IOException {
+    public STLModel fromStream(InputStream stream) throws IOException {
         DataInputStream dataStream = new DataInputStream(stream);
-        STLModel result = deserialize(dataStream);
+        STLModel result = toStream(dataStream);
         dataStream.close();
         return result;
     }
 
-    public STLModel deserialize(DataInputStream stream) throws IOException {
+    public STLModel toStream(DataInputStream stream) throws IOException {
         String header = deserializeHeader(stream);
         STLModel model = new STLModel(header);
 

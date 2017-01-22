@@ -9,12 +9,12 @@ import java.io.*;
  *     interface specifically for readable files.
  * </p>
  * <p>
- *     The only method to be implemented is {@link #deserialize(Reader)} which reads an object from a generic reader.
+ *     The only method to be implemented is {@link #fromReader(Reader)} which reads an object from a generic reader.
  * </p>
  *
  * @param <T> the type of object which is to be parsed
  */
-public interface Parser<T> extends Deserializer<T> {
+public interface TextDeserializer<T> extends Deserializer<T> {
 
     /**
      * Deserializes an object from a {@link Reader}.
@@ -23,7 +23,7 @@ public interface Parser<T> extends Deserializer<T> {
      * @return the deserialized object
      * @throws IOException if the deserialization fails
      */
-    abstract T deserialize(Reader reader) throws IOException;
+    abstract T fromReader(Reader reader) throws IOException;
 
     /**
      * Deserializes an object from a {@link String} using a {@link StringReader}.
@@ -32,24 +32,23 @@ public interface Parser<T> extends Deserializer<T> {
      * @return the deserialized object
      * @throws IOException if the deserialization fails
      */
-    default T deserialize(String str) throws IOException {
-        Reader reader = new StringReader(str);
-        T result = deserialize(reader);
+    default T fromString(String str) throws IOException {
+        return fromReader(new StringReader(str));
+    }
+
+    @Override
+    default T fromStream(InputStream stream) throws IOException {
+        Reader reader = new InputStreamReader(stream);
+        T result = fromReader(reader);
         reader.close();
         return result;
     }
 
     @Override
-    default T deserialize(InputStream stream) throws IOException {
-        return deserialize(new InputStreamReader(stream));
-    }
-
-    @Override
-    default T deserialize(File file) throws IOException {
-        Reader reader = new FileReader(file);
-        T result = deserialize(reader);
-        reader.close();
-        return result;
+    default T fromFile(File file) throws IOException {
+        try (Reader reader = new FileReader(file)) {
+            return fromReader(reader);
+        }
     }
 
 

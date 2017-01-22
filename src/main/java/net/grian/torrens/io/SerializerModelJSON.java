@@ -33,7 +33,7 @@ public class SerializerModelJSON implements Serializer<MCModel> {
     private MCModel model;
 
     @Override
-    public void serialize(MCModel model, OutputStream stream) throws IOException {
+    public void toStream(MCModel model, OutputStream stream) throws IOException {
         serialize(model, new OutputStreamWriter(stream));
     }
 

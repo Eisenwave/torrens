@@ -3,16 +3,16 @@ package net.grian.torrens.object;
 import java.util.Arrays;
 
 /**
- * An immutable pair of floating point coordinates.
+ * An immutable pair of integer coordinates.
  */
-public class Vertex2f {
+public class Vertex2i {
 
     @SuppressWarnings("unused")
-    public final static Vertex2f ZERO = new Vertex2f(0, 0);
+    public final static Vertex2i ZERO = new Vertex2i(0, 0);
 
-    private final float x, y;
+    private final int x, y;
 
-    public Vertex2f(float x, float y) {
+    public Vertex2i(int x, int y) {
         this.x = x;
         this.y = y;
     }
@@ -22,7 +22,7 @@ public class Vertex2f {
      *
      * @return vertex x-coordinate
      */
-    public float getX() {
+    public int getX() {
         return x;
     }
 
@@ -31,17 +31,17 @@ public class Vertex2f {
      *
      * @return vertex y-coordinate
      */
-    public float getY() {
+    public int getY() {
         return y;
     }
 
-    public float[] toArray() {
-        return new float[] {x, y};
+    public int[] toArray() {
+        return new int[] {x, y};
     }
 
     @Override
     public String toString() {
-        return Vertex2f.class.getSimpleName()+"["+x+","+y+"]";
+        return Vertex2i.class.getSimpleName()+"["+x+","+y+"]";
     }
 
     @Override
@@ -51,10 +51,10 @@ public class Vertex2f {
 
     @Override
     public boolean equals(Object obj) {
-        return obj instanceof Vertex2f && equals((Vertex2f) obj);
+        return obj instanceof Vertex2i && equals((Vertex2i) obj);
     }
 
-    public boolean equals(Vertex2f vertex) {
+    public boolean equals(Vertex2i vertex) {
         return this.x == vertex.x && this.y == vertex.y;
     }
 

@@ -19,13 +19,13 @@ import java.io.OutputStream;
 public class SerializerSTL implements Serializer<STLModel> {
 
     @Override
-    public void serialize(STLModel model, OutputStream stream) throws IOException {
+    public void toStream(STLModel model, OutputStream stream) throws IOException {
         DataOutputStream dataStream = new DataOutputStream(stream);
-        serialize(model, dataStream);
+        toStream(model, dataStream);
         dataStream.close();
     }
 
-    public void serialize(STLModel model, DataOutputStream stream) throws IOException {
+    public void toStream(STLModel model, DataOutputStream stream) throws IOException {
         serializeHeader(model, stream);
 
         for (STLModel.STLTriangle triangle : model.getTriangles()) {

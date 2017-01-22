@@ -16,7 +16,7 @@ import java.io.OutputStream;
 public class SerializerJPEG implements Serializer<RenderedImage> {
 
     @Override
-    public void serialize(RenderedImage image, OutputStream stream) throws IOException {
+    public void toStream(RenderedImage image, OutputStream stream) throws IOException {
         ImageIO.write(image, "jpeg", stream);
     }
 
