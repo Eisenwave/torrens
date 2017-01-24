@@ -34,7 +34,7 @@ public class Texture implements Serializable, BaseTexture {
             throw new IllegalArgumentException("can not decrease capacity");
         int[][] oldContent = this.content;
         this.content = new int[width][height];
-        internalPaste(oldContent, oldContent.length, oldContent[0].length, 0, 0);
+        internalPaste(oldContent, oldContent.hypot, oldContent[0].hypot, 0, 0);
     }
 
     public void addCapacity(int width, int height) {

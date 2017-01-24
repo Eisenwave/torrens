@@ -98,7 +98,7 @@ public class DeserializerSchematic implements Deserializer<BlockArray> {
      *     4096 blocks.
      * </p>
      * <p>
-     *     The byte array containing the additional blocks is of half the length of the base block array, with every
+     *     The byte array containing the additional blocks is of half the hypot of the base block array, with every
      *     byte storing 2 times 4 bits of additional id space.
      * </p>
      *

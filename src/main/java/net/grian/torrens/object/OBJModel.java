@@ -2,6 +2,7 @@ package net.grian.torrens.object;
 
 import net.grian.spatium.Spatium;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -15,6 +16,20 @@ public class OBJModel {
     private final List<Vertex3f> normals = new ArrayList<>();
     private final List<Vertex2f> textures = new ArrayList<>();
     private final List<OBJFace> faces = new ArrayList<>();
+
+    private OBJMaterialLibrary mtllib;
+
+    /**
+     * Returns the this model's material library or null if it has none.
+     *
+     * @return this model's material library
+     */
+    @Nullable
+    public OBJMaterialLibrary getMaterials() {
+        return mtllib;
+    }
+
+    //GETTERS
 
     /**
      * Returns the vertex with the given index.
@@ -96,6 +111,28 @@ public class OBJModel {
         return faces.size();
     }
 
+    //CHECKERS
+
+    /**
+     * Returns whether this model has an attached material library.
+     *
+     * @return whether this model has materials
+     */
+    public boolean hasMaterials() {
+        return mtllib != null;
+    }
+
+    //SETTERS
+
+    /**
+     * Sets the material library of this model.
+     *
+     * @param mtllib the material library
+     */
+    public void setMaterials(@Nullable OBJMaterialLibrary mtllib) {
+        this.mtllib = mtllib;
+    }
+
     /**
      * Adds a vertex to this model.
      *
@@ -139,6 +176,18 @@ public class OBJModel {
             validate(triplets[i], i);
 
         faces.add(face);
+    }
+
+    //MISC
+
+    @Override
+    public String toString() {
+        return OBJModel.class.getSimpleName()+
+                "{v="+getVertexCount()+
+                ",vt="+getTextureVertexCount()+
+                ",vn="+getNormalCount()+
+                ",f="+getFaceCount()+
+                ",mtllib="+hasMaterials()+"}";
     }
 
     private void validate(OBJTriplet triplet, int index) {

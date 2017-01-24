@@ -1,5 +1,9 @@
 package net.grian.torrens.object;
 
+import net.grian.spatium.function.Int2Consumer;
+import net.grian.spatium.function.Int2IntFunction;
+import net.grian.spatium.function.Int2Predicate;
+
 /**
  * Object dedicated to drawing in {@link BaseTexture} objects.
  */
@@ -14,46 +18,116 @@ public class TextureGraphics {
         this.height = texture.getHeight();
     }
 
+    public BaseTexture getContent() {
+        return texture;
+    }
+
+    public void draw(int x, int y, int rgb) {
+        if (x >= 0 && y >= 0 && x < width && y < height)
+            texture.set(x, y, rgb);
+    }
+
+    public void draw(float x, float y, int rgb) {
+        draw((int) x, (int) y, rgb);
+    }
+
     /**
      * Fills the texture with a single color.
      *
      * @param rgb the color
      */
-    public void fill(int rgb) {
-        for (int u = 0; u<width; u++)
-            for (int v = 0; v<height; v++)
-                texture.set(u, v, rgb);
+    public void drawAll(int rgb) {
+        drawRaw((x,y) -> rgb);
     }
 
-    public void drawRaster(int a, int b) {
-        for (int u = 0; u<width; u++)
-            for (int v = 0; v<height; v++)
-                texture.set(u, v, u%2 == v%2? a : b);
+    public void drawRaw(Int2IntFunction function) {
+        for (int x = 0; x<width; x++)
+            for (int y = 0; y<height; y++)
+                draw(x, y, function.apply(x, y));
     }
 
-    public void drawRaster(int a, int b, int tileSize) {
+    public void drawShape(Int2Predicate shape, int rgb) {
+        for (int x = 0; x<width; x++)
+            for (int y = 0; y<height; y++)
+                if (shape.test(x, y)) draw(x, y, rgb);
+    }
+
+    public void drawRaster(int rgb0, int rgb1) {
+        drawRaw(((x, y) -> (x%2 == y%2)? rgb0 : rgb1));
+    }
+
+    public void drawRaster(int rgb0, int rgb1, int tileSize) {
         if (tileSize < 1) return;
-        for (int u = 0; u<width; u++)
-            for (int v = 0; v<height; v++)
-                texture.set(u, v, u/tileSize%2 == v/tileSize%2? a : b);
+        drawRaw(((x, y) -> x/tileSize%2 == y/tileSize%2? rgb0 : rgb1));
     }
 
-    /**
-     * Draws a rectangle inside the texture.
-     *
-     * @param rgb the color
-     * @param minU the min u-coordinate
-     * @param minV the min v-coordinate
-     * @param maxU the max u-coordinate
-     * @param maxV the max v-coordinate
-     */
-    public void drawRectangle(int rgb, int minU, int minV, int maxU, int maxV) {
+    public void drawRectangle(int rgb, int x0, int y0, int x1, int y1) {
         final int
-                limU = Math.min(maxU+1, width),
-                limV = Math.min(maxV+1, height);
-        for (int u = Math.max(0,minU); u<limU; u++)
-            for (int v = Math.max(0,minV); v<limV; v++)
-                texture.set(u, v, rgb);
+                minX = Math.min(x0, x1), maxX = Math.max(x0, x1),
+                minY = Math.min(y0, y1), maxY = Math.max(y0, y1);
+
+        for (int x = minX; x<maxX; x++)
+            for (int y = minY; y<maxY; y++)
+                texture.set(x, y, rgb);
+    }
+
+    public void drawLine(int x0, int y0, int x1, int y1, int rgb) {
+        if (x0 == x1 && y0 == y1) {
+            draw(x0, y0, rgb);
+            return;
+        }
+
+        internalDrawLine(
+                Math.min(x0, x1), Math.min(y0, y1),
+                Math.max(x0, x1), Math.max(y0, y1), rgb);
+    }
+
+    private void internalDrawLine(int minX, int minY, int maxX, int maxY, int rgb) {
+        final int dx = maxX-minX, dy = maxY-minY;
+        int error = Math.max(dx, dy) / 2;
+
+        if (dx >= dy) for (int x=minX, y=minY; x<=maxX; x++) {
+            System.out.println(x+","+y);
+            draw(x, y, rgb);
+
+            error -= dy;
+            if (error < 0) {
+                error += dx;
+                y++;
+            }
+        }
+        else for (int x=minX, y=minY; y<=maxY; y++) {
+            System.out.println(x+", "+y);
+            draw(x, y, rgb);
+
+            error -= dx;
+            if (error < 0) {
+                error += dy;
+                x++;
+            }
+        }
+    }
+
+    /*
+    dx = x2 - x1
+    dy = y2 - y1
+    error = - Δx / 2;
+    setPixel( x1, y1 );
+    while( x < x2 ) {
+     error = error + dy;
+     if ( error >= 0 ) {
+      y = y + 1;
+     error = error - dx;
+    }
+     x = x + 1;
+     setPixel( x, y );
+    }
+     */
+
+    public void forEachPixel(Int2Consumer action) {
+        for (int x = 0; x<width; x++)
+            for (int y = 0; y<height; y++)
+                action.accept(x, y);
     }
 
 }

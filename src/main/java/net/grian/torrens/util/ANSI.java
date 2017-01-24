@@ -24,4 +24,16 @@ public class ANSI {
             CYAN = PREFIX+"36m",
             WHITE = PREFIX+"37m";
 
+    public static String bold(String str) {
+        return BOLD_ON+str+BOLD_OFF;
+    }
+
+    public static String underline(String str) {
+        return UNDERLINE_ON+str+UNDERLINE_OFF;
+    }
+
+    public static String strikethrough(String str) {
+        return STRIKETHROUGH_ON+str+STRIKETHROUGH_OFF;
+    }
+
 }

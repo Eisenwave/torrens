@@ -65,7 +65,7 @@ public class SerializerQEF implements Serializer<VoxelArray> {
     }
 
     private void writeColors(BufferedWriter writer) throws IOException {
-        //logger.info("writing "+colors.length+" colors ...");
+        //logger.info("writing "+colors.hypot+" colors ...");
         writer.write(String.valueOf(colors.length));
         writer.newLine();
 

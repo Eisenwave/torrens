@@ -6,9 +6,7 @@ import net.grian.torrens.object.OBJTriplet;
 import net.grian.torrens.object.Vertex3f;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
-
-public class SerializerOBJTest {
+public class SerializerOBJModelTest {
 
     @Test
     public void toWriter() throws Exception {
@@ -24,7 +22,7 @@ public class SerializerOBJTest {
 
         model.addFace(new OBJFace(new OBJTriplet(0, 2, -1), new OBJTriplet(1, 1, -1), new OBJTriplet(2, 0, -1)));
 
-        String str = new SerializerOBJ().toString(model);
+        String str = new SerializerOBJModel().toString(model);
         System.out.println(str);
     }
 

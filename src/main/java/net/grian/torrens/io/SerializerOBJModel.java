@@ -11,7 +11,8 @@ import java.io.Writer;
  *     A serializer for <b>Wavefront (.obj)</b> files.
  * </p>
  */
-public class SerializerOBJ implements TextSerializer<OBJModel> {
+@SuppressWarnings("SpellCheckingInspection")
+public class SerializerOBJModel implements TextSerializer<OBJModel> {
 
     private OBJModel model;
 
@@ -22,15 +23,26 @@ public class SerializerOBJ implements TextSerializer<OBJModel> {
         }
     }
 
+    @SuppressWarnings("ConstantConditions")
     public void toWriter(OBJModel object, BufferedWriter writer) throws IOException {
         this.model = object;
+        final OBJMaterialLibrary materials = object.getMaterials();
 
         writeHeader(writer);
+        if (materials != null)
+            writer.newLine(); writer.write("mtllib "+materials.getName()+".mtl");
+
         writeVertices(writer);
 
         writer.newLine(); writer.write("s off");
-
+        if (materials != null)
+            writeUseMaterial(materials, writer);
         writeFaces(writer);
+    }
+
+    private void writeUseMaterial(OBJMaterialLibrary materials, BufferedWriter writer) throws IOException {
+        OBJMaterial material = materials.iterator().next();
+        writer.newLine(); writer.write("usemtl "+material.getName());
     }
 
     private void writeVertices(BufferedWriter writer) throws IOException {
