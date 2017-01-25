@@ -8,6 +8,8 @@ import net.grian.spatium.voxel.VoxelArray;
 import net.grian.torrens.error.FileSyntaxException;
 import net.grian.torrens.error.FileVersionException;
 
+import javax.annotation.Nullable;
+
 /**
  * <p>
  *     A parser for <b>Qubicle Exchange Format (.qef)</b> files.
@@ -18,6 +20,7 @@ import net.grian.torrens.error.FileVersionException;
  */
 public class DeserializerQEF implements TextDeserializer<VoxelArray> {
 
+    @Nullable
     private final Logger logger;
 
     private VoxelArray voxels;
@@ -28,7 +31,7 @@ public class DeserializerQEF implements TextDeserializer<VoxelArray> {
     }
 
     public DeserializerQEF() {
-        this(Logger.getGlobal());
+        this(null);
     }
 
     @Override
@@ -54,20 +57,23 @@ public class DeserializerQEF implements TextDeserializer<VoxelArray> {
         if (num == 1 || num == 3) return; //header lines
 
         if (num == 2) {
-            if (line.equals("Version 0.2"))
-                logger.info("parsing file of version '"+line+"'");
+            if (line.equals("Version 0.2")) {
+                if (logger != null) logger.info("parsing file of version '" + line + "'");
+            }
             else
                 throw new FileVersionException("version '"+line+"' not supported");
         }
 
         else if (num == 4) {
             parseDimensions(line);
-            logger.info("parsing qef of dimensions "+voxels.getSizeX()+"x"+voxels.getSizeY()+"x"+voxels.getSizeZ());
+            if (logger != null)
+                logger.info("parsing qef of dimensions "+voxels.getSizeX()+"x"+voxels.getSizeY()+"x"+voxels.getSizeZ());
         }
 
         else if (num == 5) {
             parseColorCount(line);
-            logger.info("parsing "+colors.length+" colors ...");
+            if (logger != null)
+                logger.info("parsing "+colors.length+" colors ...");
         }
 
         else if (num < 6 + colors.length) {

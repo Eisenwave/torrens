@@ -129,43 +129,35 @@ public class OBJMaterial {
         this.transFilter = rgb;
     }
 
-    @Nullable
-    public void setAmbientMap(String ambientMap) {
+    public void setAmbientMap(@Nullable String ambientMap) {
         this.ambientMap = ambientMap;
     }
 
-    @Nullable
-    public void setDiffuseMap(String diffuseMap) {
+    public void setDiffuseMap(@Nullable String diffuseMap) {
         this.diffuseMap = diffuseMap;
     }
 
-    @Nullable
-    public void setSpecularColorMap(String specularColorMap) {
+    public void setSpecularColorMap(@Nullable String specularColorMap) {
         this.specularColorMap = specularColorMap;
     }
 
-    @Nullable
-    public void setSpecularHighlightMap(String specularHighlightMap) {
+    public void setSpecularHighlightMap(@Nullable String specularHighlightMap) {
         this.specularHighlightMap = specularHighlightMap;
     }
 
-    @Nullable
-    public void setAlphaMap(String alphaMap) {
+    public void setAlphaMap(@Nullable String alphaMap) {
         this.alphaMap = alphaMap;
     }
 
-    @Nullable
-    public void setBumpMap(String bumpMap) {
+    public void setBumpMap(@Nullable String bumpMap) {
         this.bumpMap = bumpMap;
     }
 
-    @Nullable
-    public void setDisplacementMap(String displacementMap) {
+    public void setDisplacementMap(@Nullable String displacementMap) {
         this.displacementMap = displacementMap;
     }
 
-    @Nullable
-    public void setDecalMap(String decalMap) {
+    public void setDecalMap(@Nullable String decalMap) {
         this.decalMap = decalMap;
     }
 

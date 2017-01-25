@@ -4,8 +4,6 @@ import net.grian.spatium.util.ColorMath;
 import net.grian.torrens.util.ANSI;
 import org.junit.Test;
 
-import java.awt.*;
-
 import static org.junit.Assert.*;
 
 public class TextureGraphicsTest {

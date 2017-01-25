@@ -1,7 +1,6 @@
 package net.grian.torrens.object;
 
 import net.grian.spatium.geo.BlockSelection;
-import net.grian.spatium.voxel.VoxelArray;
 
 import java.io.Serializable;
 import java.util.ArrayList;

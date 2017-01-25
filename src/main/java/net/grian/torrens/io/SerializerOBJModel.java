@@ -23,14 +23,14 @@ public class SerializerOBJModel implements TextSerializer<OBJModel> {
         }
     }
 
-    @SuppressWarnings("ConstantConditions")
     public void toWriter(OBJModel object, BufferedWriter writer) throws IOException {
         this.model = object;
         final OBJMaterialLibrary materials = object.getMaterials();
 
         writeHeader(writer);
-        if (materials != null)
+        if (materials != null) {
             writer.newLine(); writer.write("mtllib "+materials.getName()+".mtl");
+        }
 
         writeVertices(writer);
 

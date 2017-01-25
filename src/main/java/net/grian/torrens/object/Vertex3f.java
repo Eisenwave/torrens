@@ -53,6 +53,43 @@ public class Vertex3f {
         return z;
     }
 
+    public Vertex3f plus(float x, float y, float z) {
+        return new Vertex3f(this.x+x, this.y+y, this.z+z);
+    }
+
+    public Vertex3f minus(float x, float y, float z) {
+        return new Vertex3f(this.x-x, this.y-y, this.z-z);
+    }
+
+    public Vertex3f divided(float x, float y, float z) {
+        return new Vertex3f(this.x/x, this.y/y, this.z/z);
+    }
+
+    public Vertex3f divided(float divisor) {
+        return divided(divisor, divisor, divisor);
+    }
+
+    public Vertex3f multiplied(float x, float y, float z) {
+        return new Vertex3f(this.x*x, this.y*y, this.z*z);
+    }
+
+    public Vertex3f multiplied(float factor) {
+        return multiplied(factor, factor, factor);
+    }
+
+    public Vertex3f normalized() {
+        return withLength(1);
+    }
+
+    public float getLength() {
+        return (float) Math.sqrt(x*x + y*y + z*z);
+    }
+
+    public Vertex3f withLength(float length) {
+        double factor = length / Math.sqrt(x*x + y*y + z*z);
+        return new Vertex3f((float) (x*factor), (float) (y*factor), (float) (z*factor));
+    }
+
     public float[] toArray() {
         return new float[] {x, y, z};
     }

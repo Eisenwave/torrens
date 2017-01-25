@@ -22,11 +22,35 @@ public class TextureGraphics {
         return texture;
     }
 
+    /**
+     * <p>
+     *     Gives the given pixel a given rgb value (ARGB integer).
+     * </p>
+     * <p>
+     *     Should the pixel coordinates be outside the texture boundaries, nothing is drawn and the input is ignored.
+     * </p>
+     *
+     * @param x the pixel x-coordinate
+     * @param y the pixel y-coordinate
+     * @param rgb the ARGB value
+     */
     public void draw(int x, int y, int rgb) {
         if (x >= 0 && y >= 0 && x < width && y < height)
             texture.set(x, y, rgb);
     }
 
+    /**
+     * <p>
+     *     Gives the given pixel a given rgb value (ARGB integer).
+     * </p>
+     * <p>
+     *     Should the pixel coordinates be outside the texture boundaries, nothing is drawn and the input is ignored.
+     * </p>
+     *
+     * @param x the pixel x-coordinate
+     * @param y the pixel y-coordinate
+     * @param rgb the ARGB value
+     */
     public void draw(float x, float y, int rgb) {
         draw((int) x, (int) y, rgb);
     }
@@ -40,22 +64,45 @@ public class TextureGraphics {
         drawRaw((x,y) -> rgb);
     }
 
+    /**
+     * Directly draws a function into the texture for every pixel.
+     *
+     * @param function the function
+     */
     public void drawRaw(Int2IntFunction function) {
         for (int x = 0; x<width; x++)
             for (int y = 0; y<height; y++)
                 draw(x, y, function.apply(x, y));
     }
 
+    /**
+     * Draws a shape with given rgb value into the texture.
+     *
+     * @param shape the shape
+     * @param rgb the rgb value
+     */
     public void drawShape(Int2Predicate shape, int rgb) {
         for (int x = 0; x<width; x++)
             for (int y = 0; y<height; y++)
                 if (shape.test(x, y)) draw(x, y, rgb);
     }
 
+    /**
+     * Draws a two-colored raster into the texture.
+     *
+     * @param rgb0 the first rgb value
+     * @param rgb1 the second rgb value
+     */
     public void drawRaster(int rgb0, int rgb1) {
         drawRaw(((x, y) -> (x%2 == y%2)? rgb0 : rgb1));
     }
 
+    /**
+     * Draws a two-colored raster into the texture.
+     *
+     * @param rgb0 the first rgb value
+     * @param rgb1 the second rgb value
+     */
     public void drawRaster(int rgb0, int rgb1, int tileSize) {
         if (tileSize < 1) return;
         drawRaw(((x, y) -> x/tileSize%2 == y/tileSize%2? rgb0 : rgb1));
@@ -87,7 +134,6 @@ public class TextureGraphics {
         int error = Math.max(dx, dy) / 2;
 
         if (dx >= dy) for (int x=minX, y=minY; x<=maxX; x++) {
-            System.out.println(x+","+y);
             draw(x, y, rgb);
 
             error -= dy;
@@ -97,7 +143,6 @@ public class TextureGraphics {
             }
         }
         else for (int x=minX, y=minY; y<=maxY; y++) {
-            System.out.println(x+", "+y);
             draw(x, y, rgb);
 
             error -= dx;
@@ -107,22 +152,6 @@ public class TextureGraphics {
             }
         }
     }
-
-    /*
-    dx = x2 - x1
-    dy = y2 - y1
-    error = - Δx / 2;
-    setPixel( x1, y1 );
-    while( x < x2 ) {
-     error = error + dy;
-     if ( error >= 0 ) {
-      y = y + 1;
-     error = error - dx;
-    }
-     x = x + 1;
-     setPixel( x, y );
-    }
-     */
 
     public void forEachPixel(Int2Consumer action) {
         for (int x = 0; x<width; x++)

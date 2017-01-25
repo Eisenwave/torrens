@@ -31,7 +31,7 @@ public class SerializerQEF implements Serializer<VoxelArray> {
     }
 
     public SerializerQEF() {
-        this(Logger.getGlobal());
+        this(null);
     }
 
     @Override
@@ -39,9 +39,10 @@ public class SerializerQEF implements Serializer<VoxelArray> {
         Writer streamWriter = new OutputStreamWriter(stream);
         BufferedWriter writer = new BufferedWriter(streamWriter);
 
-        //logger.info("serializing voxel array ("+array.size()+" voxels) as QEF ...");
+        if (logger != null)
+            logger.info("serializing voxel array ("+array.size()+" voxels) as QEF ...");
 
-        writeMeta(writer);
+        writeHeader(writer);
         writeDimensions(array, writer);
 
         rewriteArray(array);
@@ -52,7 +53,7 @@ public class SerializerQEF implements Serializer<VoxelArray> {
         writer.close();
     }
 
-    private void writeMeta(BufferedWriter writer) throws IOException {
+    private void writeHeader(BufferedWriter writer) throws IOException {
         writer.write("Qubicle Exchange Format"); writer.newLine();
         writer.write("Version 0.2"); writer.newLine();
         writer.write("www.minddesk.com"); writer.newLine();
@@ -60,12 +61,14 @@ public class SerializerQEF implements Serializer<VoxelArray> {
 
     private void writeDimensions(VoxelArray array, BufferedWriter writer) throws IOException {
         String dimensions = array.getSizeX()+" "+array.getSizeY()+" "+array.getSizeZ();
-        //logger.info("dimensions = "+dimensions);
+        if (logger != null)
+            logger.info("dimensions = "+dimensions);
         writer.write(dimensions); writer.newLine();
     }
 
     private void writeColors(BufferedWriter writer) throws IOException {
-        //logger.info("writing "+colors.hypot+" colors ...");
+        if (logger != null)
+            logger.info("writing "+colors.length+" colors ...");
         writer.write(String.valueOf(colors.length));
         writer.newLine();
 
@@ -78,7 +81,8 @@ public class SerializerQEF implements Serializer<VoxelArray> {
     }
 
     private void writeVoxels(BufferedWriter writer) throws IOException {
-        //logger.info("writing "+compressedArray.size()+" voxels to file ...");
+        if (logger != null)
+            logger.info("writing "+compressedArray.size()+" voxels to file ...");
         for (VoxelArray.Voxel voxel : compressedArray) {
             final int color = (voxel.getRGB() & 0xFFFFFF) -1;
             writer.write(voxel.getX()+" "+voxel.getY()+" "+voxel.getZ()+" "+color);

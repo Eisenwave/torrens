@@ -8,7 +8,6 @@ import net.grian.torrens.nbt.*;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Map;
 import java.util.zip.GZIPInputStream;
 
 /**
@@ -35,13 +34,13 @@ public class DeserializerSchematic implements Deserializer<BlockArray> {
         BlockArray result = new BlockArray(sizeX, sizeY, sizeZ);
 
         short[] blocks = readBlocks();
-        byte[] datas = readBytes("Data");
-        if (blocks.length != datas.length)
+        byte[] data = readBytes("Data");
+        if (blocks.length != data.length)
             throw new FileSyntaxException("block and data array lengths do not match");
 
         for (int x = 0; x < sizeX; ++x) for (int y = 0; y < sizeY; ++y) for (int z = 0; z < sizeZ; ++z) {
             final int index = y*sizeX*sizeZ + z*sizeX + x;
-            result.setBlock(x, y, z, blocks[index], datas[index]);
+            result.setBlock(x, y, z, blocks[index], data[index]);
         }
 
         return result;
