@@ -5,20 +5,24 @@ import net.grian.spatium.function.Int2IntFunction;
 import net.grian.spatium.function.Int2Predicate;
 
 /**
- * Object dedicated to drawing in {@link BaseTexture} objects.
+ * Object dedicated to drawing in {@link Texture} objects.
  */
-public class TextureGraphics {
+public class TextureCanvas {
 
-    private final BaseTexture texture;
+    private final Texture texture;
     private final int width, height;
 
-    public TextureGraphics(BaseTexture texture) {
+    public TextureCanvas(Texture texture) {
         this.texture = texture;
         this.width = texture.getWidth();
         this.height = texture.getHeight();
     }
 
-    public BaseTexture getContent() {
+    public TextureCanvas(int width, int height) {
+        this(new Texture(width, height));
+    }
+
+    public Texture getContent() {
         return texture;
     }
 

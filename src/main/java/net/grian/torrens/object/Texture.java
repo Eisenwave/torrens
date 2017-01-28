@@ -48,8 +48,8 @@ public class Texture implements Serializable, BaseTexture {
      *
      * @return the texture graphics
      */
-    public TextureGraphics getGraphics() {
-        return new TextureGraphics(this);
+    public TextureCanvas getGraphics() {
+        return new TextureCanvas(this);
     }
 
     public void paste(BaseTexture texture, final int u, final int v) {
