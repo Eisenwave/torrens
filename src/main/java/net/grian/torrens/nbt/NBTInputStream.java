@@ -1,6 +1,6 @@
 package net.grian.torrens.nbt;
 
-import java.io.Closeable;
+import javax.annotation.Nullable;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -19,21 +19,19 @@ import java.util.Map;
  * found at <a href="http://www.minecraft.net/docs/NBT.txt">
  * http://www.minecraft.net/docs/NBT.txt</a>.</p>
  */
-public final class NBTInputStream implements Closeable {
+public final class NBTInputStream extends DataInputStream {
 
     private final static Charset UTF_8 = Charset.forName("UTF-8");
-
-    private final DataInputStream is;
 
     /**
      * Creates a new {@code NBTInputStream}, which will source its data from the specified input stream.
      * 
-     * @param is the input stream
+     * @param in the input stream
      */
-    public NBTInputStream(InputStream is) {
-        this.is = new DataInputStream(is);
+    public NBTInputStream(InputStream in) {
+        super(in);
     }
-
+    
     /**
      * <p>
      *     Reads a tag and its name from the stream.
@@ -42,18 +40,26 @@ public final class NBTInputStream implements Closeable {
      *     Should the tag be of type {@link NBTType#COMPOUND} or {@link NBTType#LIST} will the full content (all
      *     elements in the compounds or list) be read.
      * </p>
+     * <p>
+     *     Null may be returned if the id of the tag can not be read due to the stream ending (expected end).
+     *     If however the stream ends while reading either the tag name or the tag payload, an {@link IOException} is
+     *     thrown (unexpected end).
+     * </p>
      *
      * @return the tag that was read
      * @throws IOException if an I/O error occurs
      */
+    @Nullable
     public NBTNamedTag readNamedTag() throws IOException {
         return readNamedTag(0);
     }
 
     private NBTNamedTag readNamedTag(int depth) throws IOException {
-        NBTType type = NBTType.fromId(is.readByte() & 0xFF);
+        int id = read();
+        if (id == -1) return null;
+        NBTType type = NBTType.fromId(id);
 
-        String name = type!= NBTType.END? readUTF() : "";
+        String name = type!= NBTType.END? readString() : "";
 
         return new NBTNamedTag(name, readTag(type, depth));
     }
@@ -63,11 +69,11 @@ public final class NBTInputStream implements Closeable {
      *     Reads the payload of a tag given the type.
      * </p>
      * <p>
-     *     This method accepts a depth parameter which is necessary for recursive reading of compounds and lists.
+     *     This method accepts a depth parameter which in necessary for recursive reading of compounds and lists.
      * </p>
      * <p>
      *     The depth parameter indicates what depth the currently called function has, starting with 0 if this method
-     *     is being called initially.
+     *     in being called initially.
      * </p>
      * <p>
      *     Should this method be called while reading a compound or list, the depth will be 1. Should these compounds
@@ -82,12 +88,12 @@ public final class NBTInputStream implements Closeable {
     private NBTTag readTag(NBTType type, int depth) throws IOException {
         switch (type) {
             case END: return readTagEnd(depth);
-            case BYTE: return new TagByte(is.readByte());
-            case SHORT: return new TagShort(is.readShort());
-            case INT: return new TagInt(is.readInt());
-            case LONG: return new TagLong(is.readLong());
-            case FLOAT: return new TagFloat(is.readFloat());
-            case DOUBLE: return new TagDouble(is.readDouble());
+            case BYTE: return new TagByte(readByte());
+            case SHORT: return new TagShort(readShort());
+            case INT: return new TagInt(readInt());
+            case LONG: return new TagLong(readLong());
+            case FLOAT: return new TagFloat(readFloat());
+            case DOUBLE: return new TagDouble(readDouble());
             case BYTE_ARRAY: return readTagByteArray();
             case STRING: return readTagString();
             case LIST: return readTagList(depth);
@@ -104,19 +110,19 @@ public final class NBTInputStream implements Closeable {
     }
 
     private TagByteArray readTagByteArray() throws IOException {
-        int length = is.readInt();
+        int length = readInt();
         byte[] bytes = new byte[length];
-        is.readFully(bytes);
+        readFully(bytes);
         return new TagByteArray(bytes);
     }
 
     private TagString readTagString() throws IOException {
-        return new TagString(readUTF());
+        return new TagString(readString());
     }
 
     private TagList<?> readTagList(int depth) throws IOException {
-        NBTType elementType = NBTType.fromId(is.readByte());
-        final int length = is.readInt();
+        NBTType elementType = NBTType.fromId(readByte());
+        final int length = readInt();
 
         List<NBTTag> tagList = new ArrayList<>();
         for (int i = 0; i < length; ++i) {
@@ -133,6 +139,8 @@ public final class NBTInputStream implements Closeable {
         Map<String, NBTTag> tagMap = new HashMap<>();
         while (true) {
             NBTNamedTag namedTag = readNamedTag(depth + 1);
+            if (namedTag == null) throw new IOException("NBT ends inside a list");
+            
             NBTTag tag = namedTag.getTag();
             if (tag instanceof TagEnd) break;
             else tagMap.put(namedTag.getName(), tag);
@@ -142,25 +150,20 @@ public final class NBTInputStream implements Closeable {
     }
 
     private TagIntArray readTagIntArray() throws IOException {
-        final int length = is.readInt();
+        final int length = readInt();
         int[] data = new int[length];
         for (int i = 0; i < length; i++)
-            data[i] = is.readInt();
+            data[i] = readInt();
 
         return new TagIntArray(data);
     }
-
-    private String readUTF() throws IOException {
-        int length = is.readShort();
+    
+    private String readString() throws IOException {
+        int length = readUnsignedShort();
         byte[] bytes = new byte[length];
-        is.readFully(bytes);
+        readFully(bytes);
 
         return new String(bytes, UTF_8);
-    }
-
-    @Override
-    public void close() throws IOException {
-        is.close();
     }
 
 }

@@ -64,10 +64,9 @@ public interface Deserializer<T> {
      * @throws IOException if the deserialization fails
      */
     public default T fromResource(Class<?> clazz, String resPath) throws IOException {
-        InputStream stream = Resources.getStream(clazz, resPath);
-        T result = fromStream(stream);
-        stream.close();
-        return result;
+        try (InputStream stream = Resources.getStream(clazz, resPath)) {
+            return fromStream(stream);
+        }
     }
 
     /**
