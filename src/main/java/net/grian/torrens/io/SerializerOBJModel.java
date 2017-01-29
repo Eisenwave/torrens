@@ -41,8 +41,11 @@ public class SerializerOBJModel implements TextSerializer<OBJModel> {
     }
 
     private void writeUseMaterial(OBJMaterialLibrary materials, BufferedWriter writer) throws IOException {
-        OBJMaterial material = materials.iterator().next();
-        writer.newLine(); writer.write("usemtl "+material.getName());
+        if (!materials.isEmpty()) {
+            OBJMaterial material = materials.iterator().next();
+            writer.newLine();
+            writer.write("usemtl "+material.getName());
+        }
     }
 
     private void writeVertices(BufferedWriter writer) throws IOException {

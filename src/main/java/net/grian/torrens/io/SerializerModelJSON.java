@@ -24,7 +24,7 @@ import java.text.DecimalFormat;
  *     No version restrictions exist.
  * </p>
  */
-public class SerializerModelJSON implements Serializer<MCModel> {
+public class SerializerModelJSON implements TextSerializer<MCModel> {
 
     public final static String
             COMMENT = "Designed on Grian Network - http://grian.net",
@@ -33,15 +33,11 @@ public class SerializerModelJSON implements Serializer<MCModel> {
     private MCModel model;
 
     @Override
-    public void toStream(MCModel model, OutputStream stream) throws IOException {
-        serialize(model, new OutputStreamWriter(stream));
+    public void toWriter(MCModel model, Writer writer) throws IOException {
+        toWriter(model, new JsonWriter(writer));
     }
 
-    public void serialize(MCModel model, Writer writer) throws IOException {
-        serialize(model, new JsonWriter(writer));
-    }
-
-    public void serialize(MCModel model, JsonWriter writer) throws IOException {
+    public void toWriter(MCModel model, JsonWriter writer) throws IOException {
         this.model = model;
         writer.setIndent(INDENT);
         writeRoot(writer);

@@ -37,8 +37,12 @@ public class OBJMaterialLibrary implements Iterable<OBJMaterial> {
         maps.put(Objects.requireNonNull(name), Objects.requireNonNull(map));
     }
 
-    public void addMaterial(@Nonnull String name, @Nonnull OBJMaterial material) {
-        materials.put(Objects.requireNonNull(name), Objects.requireNonNull(material));
+    public void addMaterial(@Nonnull OBJMaterial material) {
+        materials.put(material.getName(), material);
+    }
+    
+    public boolean isEmpty() {
+        return materials.isEmpty();
     }
 
     public void removeMap(@Nonnull String name) {

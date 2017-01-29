@@ -87,7 +87,7 @@ public class SerializerQB implements Serializer<QBModel> {
     }
 
     private int asColor(int argb) {
-        byte[] bytes = IOMath.asBytes(argb);
+        byte[] bytes = IOMath.toBytes(argb);
 
         if (colorFormat == COLOR_FORMAT_RGBA)
             return ((bytes[1]&0xFF)<<24) | ((bytes[2]&0xFF)<<16) | ((bytes[3]&0xFF)<<8) | (bytes[0]&0xFF);

@@ -94,12 +94,12 @@ public class DeserializerQB implements Deserializer<QBModel> {
         String name = new String(nameBytes);
 
         final int
-                sizeX = readLittleInt(stream),
-                sizeY = readLittleInt(stream),
-                sizeZ = readLittleInt(stream),
-                posX  = readLittleInt(stream),
-                posY  = readLittleInt(stream),
-                posZ  = readLittleInt(stream);
+            sizeX = readLittleInt(stream),
+            sizeY = readLittleInt(stream),
+            sizeZ = readLittleInt(stream),
+            posX  = readLittleInt(stream),
+            posY  = readLittleInt(stream),
+            posZ  = readLittleInt(stream);
 
         logger.info("deserializing matrix: "+sizeX+" x "+sizeY+" x "+sizeZ+" at "+posX+", "+posY+", "+posZ);
 
