@@ -1,6 +1,7 @@
 package net.grian.torrens.io;
 
 import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.awt.image.RenderedImage;
 import java.io.IOException;
 import java.io.InputStream;
@@ -19,10 +20,10 @@ import java.io.InputStream;
  *     No version restrictions exist.
  * </p>
  */
-public class DeserializerImage implements Deserializer<RenderedImage> {
+public class DeserializerImage implements Deserializer<BufferedImage> {
 
     @Override
-    public RenderedImage fromStream(InputStream stream) throws IOException {
+    public BufferedImage fromStream(InputStream stream) throws IOException {
         return ImageIO.read(stream);
     }
 

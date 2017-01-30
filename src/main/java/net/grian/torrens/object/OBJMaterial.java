@@ -10,24 +10,24 @@ public class OBJMaterial {
     private final String name;
 
     private int
-            ambientColor = ColorMath.SOLID_WHITE,
-            diffuseColor = ColorMath.SOLID_WHITE,
-            specularColor = ColorMath.SOLID_WHITE,
-            transFilter = ColorMath.SOLID_WHITE;
-
+        Ka = ColorMath.SOLID_WHITE,
+        Kd = ColorMath.SOLID_WHITE,
+        Ks = ColorMath.SOLID_WHITE,
+        Tf = ColorMath.SOLID_WHITE;
+    private float
+        d = 1F;
+    private byte
+        illum = 0;
     private String
-    ambientMap,
-    diffuseMap,
-    specularColorMap,
-    specularHighlightMap,
-    alphaMap,
-    bumpMap,
-    displacementMap,
-    decalMap;
-
-
-    private float dissolution = 1F;
-    private byte illum = 0;
+        map_Ka,
+        map_Kd,
+        map_Ks,
+        map_Ns,
+        map_d,
+        bump,
+        disp,
+        decal;
+    
 
     public OBJMaterial(OBJMaterialLibrary library, String name) {
         this.library = library;
@@ -46,128 +46,140 @@ public class OBJMaterial {
     public String getName() {
         return name;
     }
+    
+    //SIMPLE GETTERS
 
     public int getAmbientColor() {
-        return ambientColor;
+        return Ka;
     }
 
     public int getDiffuseColor() {
-        return diffuseColor;
+        return Kd;
     }
 
     public int getSpecularColor() {
-        return specularColor;
+        return Ks;
     }
 
     public int getTransmissionFilter() {
-        return transFilter;
+        return Tf;
     }
+    
+    public float getDissolution() {
+        return d;
+    }
+    
+    public byte getIlluminationModel() {
+        return illum;
+    }
+    
+    //MAP GETTERS
 
     @Nullable
     public String getAmbientMap() {
-        return ambientMap;
+        return map_Ka;
     }
 
     @Nullable
     public String getDiffuseMap() {
-        return diffuseMap;
+        return map_Kd;
     }
 
     @Nullable
     public String getSpecularColorMap() {
-        return specularColorMap;
+        return map_Ks;
     }
 
     @Nullable
     public String getSpecularHighlightMap() {
-        return specularHighlightMap;
+        return map_Ns;
     }
 
     @Nullable
-    public String getAlphaMap() {
-        return alphaMap;
+    public String getDissolutionMap() {
+        return map_d;
     }
 
     @Nullable
     public String getBumpMap() {
-        return bumpMap;
+        return bump;
     }
 
     @Nullable
     public String getDisplacementMap() {
-        return displacementMap;
+        return disp;
     }
 
     @Nullable
     public String getDecalMap() {
-        return decalMap;
+        return decal;
     }
 
-    public float getDissolution() {
-        return dissolution;
-    }
-
-    public byte getIlluminationModel() {
-        return illum;
-    }
-
-    // SETTERS
+    //SIMPLE SETTERS
 
     public void setAmbientColor(int rgb) {
-        this.ambientColor = rgb;
+        this.Ka = rgb;
     }
 
     public void setDiffuseColor(int rgb) {
-        this.diffuseColor = rgb;
+        this.Kd = rgb;
     }
 
     public void setSpecularColor(int rgb) {
-        this.specularColor = rgb;
+        this.Ks = rgb;
     }
-
+    
     public void setTransmissionFilter(int rgb) {
-        this.transFilter = rgb;
+        this.Tf = rgb;
     }
-
-    public void setAmbientMap(@Nullable String ambientMap) {
-        this.ambientMap = ambientMap;
-    }
-
-    public void setDiffuseMap(@Nullable String diffuseMap) {
-        this.diffuseMap = diffuseMap;
-    }
-
-    public void setSpecularColorMap(@Nullable String specularColorMap) {
-        this.specularColorMap = specularColorMap;
-    }
-
-    public void setSpecularHighlightMap(@Nullable String specularHighlightMap) {
-        this.specularHighlightMap = specularHighlightMap;
-    }
-
-    public void setAlphaMap(@Nullable String alphaMap) {
-        this.alphaMap = alphaMap;
-    }
-
-    public void setBumpMap(@Nullable String bumpMap) {
-        this.bumpMap = bumpMap;
-    }
-
-    public void setDisplacementMap(@Nullable String displacementMap) {
-        this.displacementMap = displacementMap;
-    }
-
-    public void setDecalMap(@Nullable String decalMap) {
-        this.decalMap = decalMap;
-    }
-
+    
     public void setDissolution(float dissolution) {
-        this.dissolution = dissolution;
+        this.d = dissolution;
     }
-
+    
     public void setIlluminationModel(int illum) {
         if (illum < 0) throw new IllegalArgumentException("illum must be positive");
         this.illum = (byte) illum;
     }
 
+    //MAP SETTERS
+    
+    public void setAmbientMap(@Nullable String ambientMap) {
+        this.map_Ka = ambientMap;
+    }
+
+    public void setDiffuseMap(@Nullable String diffuseMap) {
+        this.map_Kd = diffuseMap;
+    }
+    
+    public void setSpecularColorMap(@Nullable String specularColorMap) {
+        this.map_Ks = specularColorMap;
+    }
+
+    public void setSpecularHighlightMap(@Nullable String specularHighlightMap) {
+        this.map_Ns = specularHighlightMap;
+    }
+    
+    public void setDissolutionMap(@Nullable String alphaMap) {
+        this.map_d = alphaMap;
+    }
+
+    public void setBumpMap(@Nullable String bumpMap) {
+        this.bump = bumpMap;
+    }
+
+    public void setDisplacementMap(@Nullable String displacementMap) {
+        this.disp = displacementMap;
+    }
+
+    public void setDecalMap(@Nullable String decalMap) {
+        this.decal = decalMap;
+    }
+    
+    //MISC
+    
+    @Override
+    public String toString() {
+        return OBJMaterial.class.getSimpleName()+"{name="+getName()+"}";
+    }
 }

@@ -38,7 +38,7 @@ public class SerializerOBJMaterials implements TextSerializer<OBJMaterialLibrary
         writeNonnullString("map_Ka", material.getAmbientMap(), writer);
         writeNonnullString("map_Kd", material.getDiffuseMap(), writer);
         writeNonnullString("map_Ks", material.getSpecularColorMap(), writer);
-        writeNonnullString("map_d", material.getDiffuseMap(), writer);
+        writeNonnullString("map_d", material.getDissolutionMap(), writer);
         writeNonnullString("disp", material.getDisplacementMap(), writer);
         writeNonnullString("decal", material.getDecalMap(), writer);
         writeNonnullString("bump", material.getBumpMap(), writer);

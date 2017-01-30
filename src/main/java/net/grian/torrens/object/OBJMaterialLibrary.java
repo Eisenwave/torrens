@@ -9,13 +9,13 @@ import java.util.Objects;
 
 public class OBJMaterialLibrary implements Iterable<OBJMaterial> {
 
-    private final String name;
+    private String name;
 
     private final Map<String, Texture> maps = new HashMap<>();
     private final Map<String, OBJMaterial> materials = new HashMap<>();
 
     public OBJMaterialLibrary(String name) {
-        this.name = Objects.requireNonNull(name);
+        setName(name);
     }
 
     @Nonnull
@@ -32,7 +32,11 @@ public class OBJMaterialLibrary implements Iterable<OBJMaterial> {
     public OBJMaterial getMaterial(String name) {
         return materials.get(name);
     }
-
+    
+    public void setName(@Nonnull String name) {
+        this.name = Objects.requireNonNull(name);
+    }
+    
     public void addMap(@Nonnull String name, @Nonnull Texture map) {
         maps.put(Objects.requireNonNull(name), Objects.requireNonNull(map));
     }
@@ -57,5 +61,23 @@ public class OBJMaterialLibrary implements Iterable<OBJMaterial> {
     public Iterator<OBJMaterial> iterator() {
         return materials.values().iterator();
     }
-
+    
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder(OBJMaterialLibrary.class.getSimpleName());
+        builder
+            .append("{name=")
+            .append(name)
+            .append(",materials=[");
+        
+        Iterator<OBJMaterial> iter = iterator();
+        boolean hasNext = iter.hasNext();
+        while (hasNext) {
+            builder.append(iter.next().toString());
+            if (hasNext = iter.hasNext())
+                builder.append(",");
+        }
+        
+        return builder.append("]}").toString();
+    }
 }
