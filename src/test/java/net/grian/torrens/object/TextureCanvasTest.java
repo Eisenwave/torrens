@@ -1,6 +1,8 @@
 package net.grian.torrens.object;
 
 import net.grian.spatium.util.ColorMath;
+import net.grian.torrens.img.Texture;
+import net.grian.torrens.img.TextureCanvas;
 import net.grian.torrens.util.ANSI;
 import org.junit.Test;
 

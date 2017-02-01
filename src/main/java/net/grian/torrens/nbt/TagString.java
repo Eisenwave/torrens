@@ -29,5 +29,9 @@ public final class TagString extends NBTTag {
     public NBTType getType() {
         return NBTType.STRING;
     }
-
+    
+    @Override
+    public String toString() {
+        return getType()+"(\""+getValue()+"\")";
+    }
 }

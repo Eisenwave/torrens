@@ -1,5 +1,6 @@
 package net.grian.torrens.nbt;
 
+import java.util.Arrays;
 import java.util.Objects;
 
 /**
@@ -14,10 +15,9 @@ public final class TagIntArray extends NBTTag {
      *
      * @param value the value of the tag
      */
-    public TagIntArray(int[] value) {
+    public TagIntArray(int... value) {
         super();
-        Objects.requireNonNull(value);
-        this.value = value;
+        this.value = Objects.requireNonNull(value);
     }
 
     @Override
@@ -29,18 +29,10 @@ public final class TagIntArray extends NBTTag {
     public NBTType getType() {
         return NBTType.INT_ARRAY;
     }
-
+    
     @Override
     public String toString() {
-        StringBuilder hex = new StringBuilder();
-        for (int b : value) {
-            String hexDigits = Integer.toHexString(b).toUpperCase();
-            if (hexDigits.length() == 1)
-                hex.append("0");
-            hex.append(hexDigits).append(" ");
-        }
-
-        return getType().getName()+"(" + hex + ")";
+        return getType()+"("+ Arrays.toString(getValue())+")";
     }
 
 }

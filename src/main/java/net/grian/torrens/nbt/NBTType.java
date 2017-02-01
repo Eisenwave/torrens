@@ -84,5 +84,10 @@ public enum NBTType {
     public boolean isNumeric() {
         return numeric;
     }
-
+    
+    @Override
+    public String toString() {
+        return getName();
+    }
+    
 }

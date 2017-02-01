@@ -6,6 +6,10 @@ import java.util.*;
  * The {@code TAG_Compound} tag.
  */
 public final class TagCompound extends NBTTag {
+    
+    public static NBTCompoundBuilder builder() {
+        return new NBTCompoundBuilder();
+    }
 
     private final Map<String, NBTTag> value;
 
@@ -141,19 +145,6 @@ public final class TagCompound extends NBTTag {
     }
 
     /**
-     * Returns a number named with the given key.
-     *
-     * @param key the key
-     * @return a double
-     * @throws NoSuchElementException if there is no number with given name
-     */
-    public Number getNumber(String key) {
-        NBTTag tag = value.get(key);
-        if (!(tag instanceof NBTTagNumeric)) throw new NoSuchElementException(key);
-        return ((NBTTagNumeric) tag).getValue();
-    }
-
-    /**
      * Returns a byte array named with the given key.
      *
      * @param key the key
@@ -198,10 +189,10 @@ public final class TagCompound extends NBTTag {
      * @return a list
      * @throws NoSuchElementException if there is no list with given name
      */
-    public TagList<?> getTagList(String key) {
+    public TagList getTagList(String key) {
         NBTTag tag = value.get(key);
         if (!(tag instanceof TagList)) throw new NoSuchElementException(key);
-        return (TagList<?>) tag;
+        return (TagList) tag;
     }
 
     /**
@@ -243,18 +234,21 @@ public final class TagCompound extends NBTTag {
 
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder();
-        builder
-                .append(getType().getName())
-                .append(": ")
-                .append(value.size())
-                .append(" entries\r\n{\r\n");
+        StringBuilder builder = new StringBuilder(getType().toString());
+        builder.append("{");
 
-        for (Map.Entry<String, NBTTag> entry : value.entrySet())
+        Iterator<Map.Entry<String, NBTTag>> iter = value.entrySet().iterator();
+        boolean hasNext = iter.hasNext();
+        while (hasNext) {
+            Map.Entry<String, NBTTag> next = iter.next();
             builder
-                    .append("   ")
-                    .append(entry.getValue().toString().replaceAll("\r\n", "\r\n   "))
-                    .append("\r\n");
+                .append('\"')
+                .append(next.getKey())
+                .append("\": ")
+                .append(next.getValue());
+            if (hasNext = iter.hasNext())
+                builder.append(", ");
+        }
 
         builder.append("}");
         return builder.toString();

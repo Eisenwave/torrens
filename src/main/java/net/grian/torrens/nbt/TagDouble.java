@@ -4,7 +4,7 @@ package net.grian.torrens.nbt;
  * The {@code TAG_Double} tag.
  * 
  */
-public final class TagDouble extends NBTTagNumeric {
+public final class TagDouble extends NBTTag {
 
     private final double value;
 

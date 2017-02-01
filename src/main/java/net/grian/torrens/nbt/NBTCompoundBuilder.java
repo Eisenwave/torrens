@@ -9,33 +9,7 @@ import java.util.Objects;
  */
 public class NBTCompoundBuilder {
 
-    /**
-     * Create a new builder instance.
-     *
-     * @return a new builder
-     */
-    public static NBTCompoundBuilder create() {
-        return new NBTCompoundBuilder();
-    }
-
-    private final Map<String, NBTTag> entries;
-
-    /**
-     * Create a new instance.
-     */
-    private NBTCompoundBuilder() {
-        this.entries = new HashMap<>();
-    }
-
-    /**
-     * Create a new instance and use the given map (which will be modified).
-     *
-     * @param value the value
-     */
-    private NBTCompoundBuilder(Map<String, NBTTag> value) {
-        Objects.requireNonNull(value);
-        this.entries = value;
-    }
+    private final Map<String, NBTTag> entries = new HashMap<>();
 
     /**
      * Put the given key and tag into the compound tag.

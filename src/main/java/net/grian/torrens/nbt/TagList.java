@@ -5,10 +5,14 @@ import java.util.*;
 /**
  * The {@code TAG_List} tag.
  */
-public final class TagList<E extends NBTTag> extends NBTTag implements Iterable<E> {
+public final class TagList extends NBTTag implements Iterable<NBTTag> {
 
+    public static NBTListBuilder builder(NBTType type) {
+        return new NBTListBuilder(type);
+    }
+    
     private final NBTType type;
-    private final List<E> value;
+    private final List<NBTTag> value;
 
     /**
      * Creates the tag with an empty name.
@@ -16,14 +20,23 @@ public final class TagList<E extends NBTTag> extends NBTTag implements Iterable<
      * @param type the type of tag
      * @param value the value of the tag
      */
-    public TagList(NBTType type, List<? extends E> value) {
-        Objects.requireNonNull(type);
-        this.type = type;
+    public TagList(NBTType type, List<? extends NBTTag> value) {
+        this.type = Objects.requireNonNull(type);
         this.value = Collections.unmodifiableList(value);
+    }
+    
+    /**
+     * Creates the tag with an empty name.
+     *
+     * @param type the type of tag
+     * @param value the value of the tag
+     */
+    public TagList(NBTType type, NBTTag... value) {
+        this(type, Arrays.asList(value));
     }
 
     @Override
-    public List<E> getValue() {
+    public List<NBTTag> getValue() {
         return value;
     }
 
@@ -52,33 +65,29 @@ public final class TagList<E extends NBTTag> extends NBTTag implements Iterable<
      * @return a byte
      * @throws NoSuchElementException if there is no tag with given index
      */
-    public E get(int index) {
+    public NBTTag get(int index) {
         return value.get(index);
     }
 
     @Override
-    public Iterator<E> iterator() {
+    public Iterator<NBTTag> iterator() {
         return value.iterator();
     }
 
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder();
-        builder
-                .append(type.getName())
-                .append(": ")
-                .append(value.size())
-                .append(" entries of type ")
-                .append(type.getName())
-                .append("\r\n{\r\n");
+        StringBuilder builder = new StringBuilder(getType().toString());
+        builder.append("[");
         
-        for (NBTTag t : value)
-            builder
-                    .append("   ")
-                    .append(t.toString().replaceAll("\r\n", "\r\n   "))
-                    .append("\r\n");
+        Iterator<NBTTag> iter = iterator();
+        boolean hasNext = iter.hasNext();
+        while (hasNext) {
+            builder.append(iter.next());
+            if (hasNext = iter.hasNext())
+                builder.append(", ");
+        }
 
-        return builder.append("}").toString();
+        return builder.append("]").toString();
     }
 
 }

@@ -9,12 +9,7 @@ import java.util.Map;
 import java.util.Objects;
 
 /**
- * This class writes <strong>NBT</strong>, or <strong>Named Binary NBTTag</strong>
- * {@code NBTTag} objects to an underlying {@code OutputStream}.
- * 
- * <p>The NBT format was created by Markus Persson, and the specification may be
- * found at <a href="http://www.minecraft.net/docs/NBT.txt">
- * http://www.minecraft.net/docs/NBT.txt</a>.</p>
+ * An NBTInputStream extends {@link DataOutputStream} by allowing to write named tags.
  */
 public final class NBTOutputStream extends DataOutputStream {
 
@@ -119,7 +114,7 @@ public final class NBTOutputStream extends DataOutputStream {
      * @param tag the tag.
      * @throws IOException if an I/O error occurs
      */
-    private void writeTagList(TagList<?> tag) throws IOException {
+    private void writeTagList(TagList tag) throws IOException {
         NBTType type = tag.getElementType();
         List<? extends NBTTag> tags = tag.getValue();
         int size = tags.size();

@@ -3,7 +3,7 @@ package net.grian.torrens.nbt;
 /**
  * The {@code TAG_Int} tag.
  */
-public final class TagInt extends NBTTagNumeric {
+public final class TagInt extends NBTTag {
 
     private final int value;
 
@@ -30,5 +30,5 @@ public final class TagInt extends NBTTagNumeric {
     public NBTType getType() {
         return NBTType.INT;
     }
-
+    
 }

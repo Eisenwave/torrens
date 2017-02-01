@@ -11,13 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * This class reads <b>NBT</b>, or <b>Named Binary Tag</b>
- * streams, and produces an object graph of subclasses of the {@code NBTTag}
- * object.
- * 
- * <p>The NBT format was created by Markus Persson, and the specification may be
- * found at <a href="http://www.minecraft.net/docs/NBT.txt">
- * http://www.minecraft.net/docs/NBT.txt</a>.</p>
+ * An NBTInputStream extends {@link DataInputStream} by allowing to read named tags.
  */
 public final class NBTInputStream extends DataInputStream {
 
@@ -120,7 +114,7 @@ public final class NBTInputStream extends DataInputStream {
         return new TagString(readString());
     }
 
-    private TagList<?> readTagList(int depth) throws IOException {
+    private TagList readTagList(int depth) throws IOException {
         NBTType elementType = NBTType.fromId(readByte());
         final int length = readInt();
 
@@ -132,7 +126,7 @@ public final class NBTInputStream extends DataInputStream {
             tagList.add(tag);
         }
 
-        return new TagList<>(elementType, tagList);
+        return new TagList(elementType, tagList);
     }
 
     private TagCompound readTagCompound(int depth) throws IOException {

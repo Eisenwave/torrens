@@ -12,15 +12,6 @@ public class NBTListBuilder {
      *
      * @return a new builder
      */
-    public static NBTListBuilder create(NBTType type) {
-        return new NBTListBuilder(type);
-    }
-
-    /**
-     * Create a new builder instance.
-     *
-     * @return a new builder
-     */
     @SafeVarargs
     public static <T extends NBTTag> NBTListBuilder createWith(T ... entries) {
         Objects.requireNonNull(entries);
@@ -36,17 +27,15 @@ public class NBTListBuilder {
     }
 
     private final NBTType type;
-    private final List<NBTTag> entries;
+    private final List<NBTTag> entries = new ArrayList<>();
 
     /**
      * Create a new instance.
      *
      * @param type of tag contained in this list
      */
-    private NBTListBuilder(NBTType type) {
-        Objects.requireNonNull(type);
-        this.type = type;
-        this.entries = new ArrayList<>();
+    public NBTListBuilder(NBTType type) {
+        this.type = Objects.requireNonNull(type);
     }
 
     /**
@@ -80,8 +69,8 @@ public class NBTListBuilder {
      *
      * @return the new list tag
      */
-    public TagList<?> build() {
-        return new TagList<>(type, new ArrayList<>(entries));
+    public TagList build() {
+        return new TagList(type, new ArrayList<>(entries));
     }
 
 }

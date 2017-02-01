@@ -21,6 +21,6 @@ public abstract class NBTTag {
 
     @Override
     public String toString() {
-        return getType().getName()+"("+getValue()+")";
+        return getType()+"("+getValue()+")";
     }
 }

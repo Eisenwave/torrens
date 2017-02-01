@@ -38,10 +38,9 @@ public interface TextDeserializer<T> extends Deserializer<T> {
 
     @Override
     default T fromStream(InputStream stream) throws IOException {
-        Reader reader = new InputStreamReader(stream);
-        T result = fromReader(reader);
-        reader.close();
-        return result;
+        try (Reader reader = new InputStreamReader(stream)) {
+            return fromReader(reader);
+        }
     }
 
     @Override
