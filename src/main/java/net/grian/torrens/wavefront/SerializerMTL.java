@@ -2,8 +2,6 @@ package net.grian.torrens.wavefront;
 
 import net.grian.spatium.util.ColorMath;
 import net.grian.torrens.io.TextSerializer;
-import net.grian.torrens.wavefront.MTLMaterial;
-import net.grian.torrens.wavefront.MTLLibrary;
 
 import java.io.BufferedWriter;
 import java.io.IOException;

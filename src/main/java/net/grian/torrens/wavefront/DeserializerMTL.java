@@ -1,8 +1,6 @@
 package net.grian.torrens.wavefront;
 
 import net.grian.spatium.util.ColorMath;
-import net.grian.torrens.convert.Converter;
-import net.grian.torrens.img.ConverterImageToTexture;
 import net.grian.torrens.error.FileSyntaxException;
 import net.grian.torrens.img.DeserializerImage;
 import net.grian.torrens.io.TextDeserializer;
@@ -19,8 +17,6 @@ import java.util.Objects;
 import java.util.logging.Logger;
 
 public class DeserializerMTL implements TextDeserializer<Void> {
-    
-    private final static Converter<BufferedImage, Texture> IMAGE_TO_TEXTURE = new ConverterImageToTexture();
     
     private final Logger logger;
     
@@ -196,7 +192,7 @@ public class DeserializerMTL implements TextDeserializer<Void> {
         }
     
         BufferedImage image = new DeserializerImage().fromFile(file);
-        return IMAGE_TO_TEXTURE.invoke(image, file);
+        return new Texture(image);
     }
     
     private static int deserializeColor(String[] args) throws IllegalArgumentException {
