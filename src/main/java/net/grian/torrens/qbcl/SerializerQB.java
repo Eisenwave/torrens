@@ -4,9 +4,11 @@ import net.grian.spatium.util.IOMath;
 import net.grian.spatium.voxel.VoxelArray;
 import net.grian.torrens.io.Serializer;
 
+import javax.annotation.Nullable;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.logging.Logger;
 
 /**
  * <p>
@@ -31,9 +33,30 @@ public class SerializerQB implements Serializer<QBModel> {
             CODEFLAG = 2,
             NEXTSLICEFLAG = 6;
 
+    @Nullable
+    private final Logger logger;
+    
     private QBModel model;
 
     private int colorFormat;
+    
+    public SerializerQB(Logger logger) {
+        this.logger = logger;
+    }
+    
+    public SerializerQB() {
+        this(null);
+    }
+    
+    private void debug(String msg) {
+        if (logger != null)
+            logger.fine(msg);
+    }
+    
+    private void debug(QBMatrix matrix) {
+        if (logger != null)
+            logger.fine("serializing "+matrix+" ...");
+    }
 
     @Override
     public void toStream(QBModel model, OutputStream stream) throws IOException {
@@ -58,26 +81,27 @@ public class SerializerQB implements Serializer<QBModel> {
     }
 
     private void serializeMatrix(QBMatrix matrix, DataOutputStream stream) throws IOException {
+        debug(matrix);
         byte[] name = matrix.getName().getBytes();
         stream.write(name.length);
         stream.write(name);
 
         VoxelArray array = matrix.getVoxels();
-        writeLittleInt(stream, array.getSizeX());
+        writeLittleInt(stream, array.getSizeX()); //matrix dims
         writeLittleInt(stream, array.getSizeY());
         writeLittleInt(stream, array.getSizeZ());
-        writeLittleInt(stream, matrix.getMinX());
+        writeLittleInt(stream, matrix.getMinX()); //matrix pos
         writeLittleInt(stream, matrix.getMinY());
         writeLittleInt(stream, matrix.getMinZ());
-
+        
         serializeUncompressed(array, stream);
     }
 
     private void serializeUncompressed(VoxelArray array, DataOutputStream stream) throws IOException {
         final int
-                limX = array.getSizeX(),
-                limY = array.getSizeY(),
-                limZ = array.getSizeZ();
+            limX = array.getSizeX(),
+            limY = array.getSizeY(),
+            limZ = array.getSizeZ();
 
         for (int z = 0; z<limZ; z++)
             for (int y = 0; y<limY; y++)

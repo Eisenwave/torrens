@@ -159,13 +159,27 @@ public class Texture implements Serializable, BaseTexture, Iterable<Texture.Pixe
      *
      * @return a new image
      */
-    public BufferedImage toImage() {
-        BufferedImage result = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+    public BufferedImage toImage(boolean alpha) {
+        int type = alpha? BufferedImage.TYPE_INT_ARGB : BufferedImage.TYPE_INT_RGB;
+        BufferedImage result = new BufferedImage(width, height, type);
+        
+        int[] rgbArray = new int[width * height];
         for (int x = 0; x<width; x++)
             for (int y = 0; y<height; y++)
-                result.setRGB(x, y, get(x, y));
+                rgbArray[x + y*width] = content[x][y];
         
+        result.setRGB(0, 0, width, height, rgbArray, 0, width);
         return result;
+    }
+    
+    /**
+     * Converts this texture to a {@link BufferedImage} with the default color model
+     * ({@link BufferedImage#TYPE_INT_ARGB}).
+     *
+     * @return a new image
+     */
+    public BufferedImage toImage() {
+        return toImage(true);
     }
     
     //ITERATION

@@ -38,7 +38,9 @@ public interface Deserializer<T> {
      */
     public default T fromFile(File file) throws IOException {
         try (InputStream stream = new FileInputStream(file)) {
-            return fromStream(stream);
+            try (BufferedInputStream buffStream = new BufferedInputStream(stream)) {
+                return fromStream(buffStream);
+            }
         }
     }
 

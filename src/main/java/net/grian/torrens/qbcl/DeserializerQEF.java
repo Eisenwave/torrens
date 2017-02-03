@@ -34,21 +34,25 @@ public class DeserializerQEF implements TextDeserializer<VoxelArray> {
     public DeserializerQEF() {
         this(null);
     }
+    
+    private void debug(String msg) {
+        if (logger != null)
+            logger.fine(msg);
+    }
 
     @Override
     public VoxelArray fromReader(Reader reader) throws IOException {
         BufferedReader buffReader = new BufferedReader(reader);
-        //logger.info("parsing qef ...");
-
         String line;
 
         int num = 0;
         while ((line = buffReader.readLine()) != null)
             parseLine(++num, line);
-        //logger.info("completed parsing qef ("+voxels.size()+"/"+voxels.getVolume()+" voxels)");
 
         if (num < 5)
-            throw new IOException("less than 5 lines read, QEF incomplete");
+            throw new FileSyntaxException("less than 5 lines read, QEF incomplete");
+    
+        debug("completed parsing qef ("+voxels.size()+"/"+voxels.getVolume()+" voxels)");
 
         buffReader.close();
         return voxels;
@@ -59,7 +63,7 @@ public class DeserializerQEF implements TextDeserializer<VoxelArray> {
 
         if (num == 2) {
             if (line.equals("Version 0.2")) {
-                if (logger != null) logger.info("parsing file of version '" + line + "'");
+                debug("parsing file of version '" + line + "'");
             }
             else
                 throw new FileVersionException("version '"+line+"' not supported");
@@ -67,14 +71,12 @@ public class DeserializerQEF implements TextDeserializer<VoxelArray> {
 
         else if (num == 4) {
             parseDimensions(line);
-            if (logger != null)
-                logger.info("parsing qef of dimensions "+voxels.getSizeX()+"x"+voxels.getSizeY()+"x"+voxels.getSizeZ());
+            debug("parsing qef of dimensions "+voxels.getSizeX()+"x"+voxels.getSizeY()+"x"+voxels.getSizeZ());
         }
 
         else if (num == 5) {
             parseColorCount(line);
-            if (logger != null)
-                logger.info("parsing "+colors.length+" colors ...");
+            debug("parsing "+colors.length+" colors ...");
         }
 
         else if (num < 6 + colors.length) {

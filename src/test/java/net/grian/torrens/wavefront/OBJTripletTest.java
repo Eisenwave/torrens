@@ -1,6 +1,5 @@
 package net.grian.torrens.wavefront;
 
-import net.grian.torrens.wavefront.OBJTriplet;
 import org.junit.Test;
 
 import static org.junit.Assert.*;

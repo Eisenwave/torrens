@@ -37,7 +37,9 @@ public interface Serializer<T> {
      */
     public default void toFile(T object, File file) throws IOException {
         try (FileOutputStream stream = new FileOutputStream(file)) {
-            toStream(object, stream);
+            try (BufferedOutputStream buffStream = new BufferedOutputStream(stream)) {
+                toStream(object, buffStream);
+            }
         }
     }
 

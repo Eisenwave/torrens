@@ -4,9 +4,11 @@ import net.grian.spatium.util.IOMath;
 import net.grian.torrens.io.Serializer;
 import net.grian.torrens.object.Vertex3f;
 
+import javax.annotation.Nullable;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.logging.Logger;
 
 /**
  * <p>
@@ -17,15 +19,32 @@ import java.io.OutputStream;
  * </p>
  */
 public class SerializerSTL implements Serializer<STLModel> {
+    
+    @Nullable
+    private final Logger logger;
+    
+    public SerializerSTL(Logger logger) {
+        this.logger = logger;
+    }
+    
+    public SerializerSTL() {
+        this(null);
+    }
+    
+    private void debug(String msg) {
+        if (logger != null)
+            logger.fine(msg);
+    }
 
     @Override
     public void toStream(STLModel model, OutputStream stream) throws IOException {
-        DataOutputStream dataStream = new DataOutputStream(stream);
-        toStream(model, dataStream);
-        dataStream.close();
+        try (DataOutputStream dataStream = new DataOutputStream(stream)) {
+            toStream(model, dataStream);
+        }
     }
 
     public void toStream(STLModel model, DataOutputStream stream) throws IOException {
+        debug("serializing "+model+" ...");
         serializeHeader(model, stream);
 
         for (STLModel.STLTriangle triangle : model.getTriangles()) {

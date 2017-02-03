@@ -4,6 +4,7 @@ import net.grian.torrens.io.Serializer;
 
 import javax.imageio.ImageIO;
 import java.awt.image.RenderedImage;
+import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 
@@ -21,5 +22,10 @@ public class SerializerPNG implements Serializer<RenderedImage> {
     public void toStream(RenderedImage image, OutputStream stream) throws IOException {
         ImageIO.write(image, "png", stream);
     }
-
+    
+    @Override
+    public void toFile(RenderedImage image, File file) throws IOException {
+        ImageIO.write(image, "png", file);
+    }
+    
 }

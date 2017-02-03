@@ -12,7 +12,7 @@ public class DeserializerOBJTest {
     public void readsDebugOBJ() throws Exception {
         OBJModel model = new OBJModel();
         File unneeded = new File("");
-        Logger logger = Logger.getLogger("voxelver.debug");
+        Logger logger = Logger.getLogger("voxelvert.debug");
         logger.setLevel(Level.FINE);
         
         new DeserializerOBJ(model, unneeded, logger).fromResource(getClass(), "debug.obj");

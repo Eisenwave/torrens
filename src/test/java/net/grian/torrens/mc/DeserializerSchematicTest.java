@@ -12,7 +12,7 @@ public class DeserializerSchematicTest {
     public final static BlockKey COAL_BLOCK = new BlockKey(173, 0);
 
     @Test
-    public void deserialize() throws Exception {
+    public void deserialize_bunny() throws Exception {
         BlockArray blocks = new DeserializerSchematic().fromResource(getClass(), "bunny.schematic");
         /*
         blocks.forEachPos((x,y,z) -> {
@@ -22,6 +22,12 @@ public class DeserializerSchematicTest {
         */
 
         assertEquals(COAL_BLOCK, blocks.getBlock(50, 30, 36));
+    }
+    
+    @Test
+    public void deserialize_farm() throws Exception {
+        BlockArray blocks = new DeserializerSchematic().fromResource(getClass(), "farm.schematic");
+        System.out.println(blocks);
     }
 
 }

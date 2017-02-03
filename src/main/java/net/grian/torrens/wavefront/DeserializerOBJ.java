@@ -23,6 +23,16 @@ public class DeserializerOBJ implements TextDeserializer<Void> {
     
     private OBJGroup group;
     
+    private void warning(String msg) {
+        if (logger != null)
+            logger.warning(msg);
+    }
+    
+    private void debug(String msg) {
+        if (logger != null)
+            logger.fine(msg);
+    }
+    
     public DeserializerOBJ(@Nonnull OBJModel model, @Nonnull File mtlDir, @Nullable Logger logger) {
         this.model = Objects.requireNonNull(model);
         this.mtlDir = Objects.requireNonNull(mtlDir);
@@ -69,7 +79,7 @@ public class DeserializerOBJ implements TextDeserializer<Void> {
                 case "vn": readVN(args); break;
                 case "f": readF(args); break;
                 case "g": readG(args); break;
-                default: if (logger != null) logger.fine(number+": unknown arg '"+args[0]+"'");
+                default: debug(number+": unknown arg '"+args[0]+"'");
             }
         } catch (Exception ex) {
             error(number, ex);
@@ -83,11 +93,11 @@ public class DeserializerOBJ implements TextDeserializer<Void> {
         
         File file = new File(mtlDir, path);
         if (!file.exists() || !file.isFile()) {
-            if (logger != null) logger.warning("invalid mtllib reference: "+file);
+            warning("invalid mtllib reference: "+file);
             return;
         }
         
-        if (logger != null) logger.info("loading mtllib from: "+file);
+        debug("loading mtllib from: "+file);
         new DeserializerMTL(library, mtlDir, logger).fromFile(file);
     }
     
@@ -133,12 +143,12 @@ public class DeserializerOBJ implements TextDeserializer<Void> {
     private void readUseMtl(String[] args) {
         MTLLibrary mtllib = model.getMaterials();
         if (mtllib == null) {
-            if (logger != null) logger.warning("usmtl call \""+args[1]+"\" but obj has no mtllib");
+            warning("usmtl call \""+args[1]+"\" but obj has no mtllib");
             return;
         }
         MTLMaterial material = mtllib.getMaterial(args[1]);
         if (material == null) {
-            if (logger != null) logger.warning("invalid usemtl reference in g \""+this.group.getName()+"\": "+args[1]);
+            warning("invalid usemtl reference in g \""+this.group.getName()+"\": "+args[1]);
             return;
         }
         

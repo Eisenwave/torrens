@@ -58,7 +58,14 @@ public class STLModel {
         if (header.startsWith("solid")) throw new IllegalArgumentException("header must not start with 'solid'");
         this.header = header;
     }
-
+    
+    //MISC
+    
+    @Override
+    public String toString() {
+        return STLModel.class.getSimpleName()+ "{triangles="+size()+"}";
+    }
+    
     public static class STLTriangle {
 
         private final Vertex3f normal, a, b, c;

@@ -7,6 +7,7 @@ import net.grian.torrens.error.FileSyntaxException;
 import net.grian.torrens.error.FileVersionException;
 import net.grian.torrens.io.Deserializer;
 
+import javax.annotation.Nullable;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -26,29 +27,28 @@ public class DeserializerQB implements Deserializer<QBModel> {
     private int colorFormat, numMatrices;
     private QBModel mesh;
 
+    @Nullable
     private final Logger logger;
 
     public DeserializerQB(Logger logger) {
         this.logger = logger;
     }
-
+    
     public DeserializerQB() {
-        this(Logger.getGlobal());
+        this(null);
+    }
+    
+    private void debug(String msg) {
+        if (logger != null)
+            logger.fine(msg);
     }
 
     @Override
     public QBModel fromStream(InputStream stream) throws IOException {
-        //logger.info("deserializing qb...");
+        debug("deserializing qb...");
         DataInputStream dataStream = new DataInputStream(stream);
 
         deserializeHeader(dataStream);
-        /*
-        logger.info("deserializing "+numMatrices+" matrices with"+
-                ": compression="+compressed+
-                ", colorFormat="+colorFormat+
-                ", visMaskEncoded="+visibilityMaskEncoded+
-                ", zLeft="+zLeft);
-        */
 
         mesh = new QBModel();
         for (int i = 0; i < numMatrices; i++)
@@ -83,6 +83,12 @@ public class DeserializerQB implements Deserializer<QBModel> {
         this.visibilityMaskEncoded = visEncodedInt == SerializerQB.VIS_MASK_ENCODED;
 
         this.numMatrices = readLittleInt(stream);
+    
+        debug("deserializing "+numMatrices+" matrices with"+
+            ": compression="+compressed+
+            ", colorFormat="+colorFormat+
+            ", visMaskEncoded="+visibilityMaskEncoded+
+            ", zLeft="+zLeft);
     }
 
     private void deserializeMatrix(DataInputStream stream) throws IOException {
@@ -99,8 +105,8 @@ public class DeserializerQB implements Deserializer<QBModel> {
             posX  = readLittleInt(stream),
             posY  = readLittleInt(stream),
             posZ  = readLittleInt(stream);
-
-        logger.info("deserializing matrix: "+sizeX+" x "+sizeY+" x "+sizeZ+" at "+posX+", "+posY+", "+posZ);
+    
+        debug("deserializing matrix: "+sizeX+"x"+sizeY+"x"+sizeZ+" at "+posX+", "+posY+", "+posZ);
 
         VoxelArray voxels = compressed?
                 readCompressed(sizeX, sizeY, sizeZ, stream) :
@@ -113,9 +119,9 @@ public class DeserializerQB implements Deserializer<QBModel> {
         VoxelArray matrix = new VoxelArray(sizeX, sizeY, sizeZ);
         final int maxZ = sizeZ-1;
 
-        for(int z = 0; z < sizeX; z++)
+        for(int z = 0; z < sizeZ; z++)
             for(int y = 0; y < sizeY; y++)
-                for(int x = 0; x < sizeZ; x++)
+                for(int x = 0; x < sizeX; x++)
                     matrix.setRGB(x, y, (zLeft? z : maxZ-z), asARGB(stream.readInt()));
 
         return matrix;
@@ -155,7 +161,7 @@ public class DeserializerQB implements Deserializer<QBModel> {
 
     private static int readLittleInt(InputStream stream) throws IOException {
         byte[] bytes = new byte[4];
-        if (stream.read(bytes) != 4) throw new IOException("incomplete int read");
+        if (stream.read(bytes) != 4) throw new IOException("end of stream reached");
         return ((bytes[3]&0xFF)<<24) | ((bytes[2]&0xFF)<<16) | ((bytes[1]&0xFF)<<8) | (bytes[0]&0xFF);
     }
 

@@ -34,14 +34,18 @@ public class SerializerQEF implements Serializer<VoxelArray> {
     public SerializerQEF() {
         this(null);
     }
+    
+    private void debug(String msg) {
+        if (logger != null)
+            logger.fine(msg);
+    }
 
     @Override
     public void toStream(VoxelArray array, OutputStream stream) throws IOException {
         Writer streamWriter = new OutputStreamWriter(stream);
         BufferedWriter writer = new BufferedWriter(streamWriter);
 
-        if (logger != null)
-            logger.info("serializing voxel array ("+array.size()+" voxels) as QEF ...");
+        debug("serializing voxel array ("+array.size()+" voxels) as QEF ...");
 
         writeHeader(writer);
         writeDimensions(array, writer);
@@ -62,14 +66,12 @@ public class SerializerQEF implements Serializer<VoxelArray> {
 
     private void writeDimensions(VoxelArray array, BufferedWriter writer) throws IOException {
         String dimensions = array.getSizeX()+" "+array.getSizeY()+" "+array.getSizeZ();
-        if (logger != null)
-            logger.info("dimensions = "+dimensions);
+        debug("dimensions = "+dimensions);
         writer.write(dimensions); writer.newLine();
     }
 
     private void writeColors(BufferedWriter writer) throws IOException {
-        if (logger != null)
-            logger.info("writing "+colors.length+" colors ...");
+        debug("writing "+colors.length+" colors ...");
         writer.write(String.valueOf(colors.length));
         writer.newLine();
 
@@ -82,8 +84,7 @@ public class SerializerQEF implements Serializer<VoxelArray> {
     }
 
     private void writeVoxels(BufferedWriter writer) throws IOException {
-        if (logger != null)
-            logger.info("writing "+compressedArray.size()+" voxels to file ...");
+        debug("writing "+compressedArray.size()+" voxels to file ...");
         for (VoxelArray.Voxel voxel : compressedArray) {
             final int color = (voxel.getRGB() & 0xFFFFFF) -1;
             writer.write(voxel.getX()+" "+voxel.getY()+" "+voxel.getZ()+" "+color);
