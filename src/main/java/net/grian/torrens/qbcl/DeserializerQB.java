@@ -6,12 +6,15 @@ import net.grian.spatium.voxel.VoxelArray;
 import net.grian.torrens.error.FileSyntaxException;
 import net.grian.torrens.error.FileVersionException;
 import net.grian.torrens.io.Deserializer;
+import net.grian.torrens.io.LittleDataInputStream;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.logging.Logger;
+
+import static net.grian.torrens.qbcl.SerializerQB.*;
 
 /**
  * <p>
@@ -30,7 +33,7 @@ public class DeserializerQB implements Deserializer<QBModel> {
     @Nullable
     private final Logger logger;
 
-    public DeserializerQB(Logger logger) {
+    public DeserializerQB(@Nullable Logger logger) {
         this.logger = logger;
     }
     
@@ -46,7 +49,7 @@ public class DeserializerQB implements Deserializer<QBModel> {
     @Override
     public QBModel fromStream(InputStream stream) throws IOException {
         debug("deserializing qb...");
-        DataInputStream dataStream = new DataInputStream(stream);
+        LittleDataInputStream dataStream = new LittleDataInputStream(stream);
 
         deserializeHeader(dataStream);
 
@@ -54,35 +57,37 @@ public class DeserializerQB implements Deserializer<QBModel> {
         for (int i = 0; i < numMatrices; i++)
             deserializeMatrix(dataStream);
 
-        //logger.info("deserialized matrices");
+        debug("deserialized matrices");
+        dataStream.close();
+        
         return mesh;
     }
 
-    private void deserializeHeader(DataInputStream stream) throws IOException {
+    private void deserializeHeader(LittleDataInputStream stream) throws IOException {
         int version = stream.readInt(); //big endian
-        if (version != SerializerQB.CURRENT_VERSION)
-            throw new FileVersionException(version+" != current ("+SerializerQB.CURRENT_VERSION+")");
+        if (version != CURRENT_VERSION)
+            throw new FileVersionException(version+" != current ("+CURRENT_VERSION+")");
 
         this.colorFormat = stream.readInt();
-        if (colorFormat != SerializerQB.COLOR_FORMAT_RGBA && colorFormat != SerializerQB.COLOR_FORMAT_BGRA)
+        if (colorFormat != COLOR_FORMAT_RGBA && colorFormat != COLOR_FORMAT_BGRA)
             throw new FileSyntaxException("unknown color format: "+colorFormat);
 
         int zAxisOrientation = stream.readInt();
-        if (zAxisOrientation != SerializerQB.Z_ORIENT_LEFT && zAxisOrientation != SerializerQB.Z_ORIENT_RIGHT)
+        if (zAxisOrientation != Z_ORIENT_LEFT && zAxisOrientation != Z_ORIENT_RIGHT)
             throw new FileSyntaxException("unknown z axis orientation: "+zAxisOrientation);
-        this.zLeft = zAxisOrientation==SerializerQB.Z_ORIENT_LEFT;
+        this.zLeft = zAxisOrientation==Z_ORIENT_LEFT;
 
-        int compressedInt = readLittleInt(stream);
-        if (compressedInt != SerializerQB.UNCOMPRESSED && compressedInt != SerializerQB.COMPRESSED)
+        int compressedInt = stream.readLittleInt();
+        if (compressedInt != UNCOMPRESSED && compressedInt != COMPRESSED)
             throw new FileSyntaxException("unknown compression: "+compressedInt);
-        this.compressed = compressedInt == SerializerQB.COMPRESSED;
+        this.compressed = compressedInt == COMPRESSED;
 
-        int visEncodedInt = readLittleInt(stream);
-        if (visEncodedInt != SerializerQB.VIS_MASK_UNENCODED && visEncodedInt != SerializerQB.VIS_MASK_ENCODED)
+        int visEncodedInt = stream.readLittleInt();
+        if (visEncodedInt != VIS_MASK_UNENCODED && visEncodedInt != VIS_MASK_ENCODED)
             throw new FileSyntaxException("unknown vis mask encoding: "+visEncodedInt);
-        this.visibilityMaskEncoded = visEncodedInt == SerializerQB.VIS_MASK_ENCODED;
+        this.visibilityMaskEncoded = visEncodedInt == VIS_MASK_ENCODED;
 
-        this.numMatrices = readLittleInt(stream);
+        this.numMatrices = stream.readLittleInt();
     
         debug("deserializing "+numMatrices+" matrices with"+
             ": compression="+compressed+
@@ -91,7 +96,7 @@ public class DeserializerQB implements Deserializer<QBModel> {
             ", zLeft="+zLeft);
     }
 
-    private void deserializeMatrix(DataInputStream stream) throws IOException {
+    private void deserializeMatrix(LittleDataInputStream stream) throws IOException {
         // read matrix name
         byte nameLength = stream.readByte();
         byte[] nameBytes = new byte[nameLength];
@@ -99,14 +104,14 @@ public class DeserializerQB implements Deserializer<QBModel> {
         String name = new String(nameBytes);
 
         final int
-            sizeX = readLittleInt(stream),
-            sizeY = readLittleInt(stream),
-            sizeZ = readLittleInt(stream),
-            posX  = readLittleInt(stream),
-            posY  = readLittleInt(stream),
-            posZ  = readLittleInt(stream);
+            sizeX = stream.readLittleInt(),
+            sizeY = stream.readLittleInt(),
+            sizeZ = stream.readLittleInt(),
+            posX  = stream.readLittleInt(),
+            posY  = stream.readLittleInt(),
+            posZ  = stream.readLittleInt();
     
-        debug("deserializing matrix: "+sizeX+"x"+sizeY+"x"+sizeZ+" at "+posX+", "+posY+", "+posZ);
+        debug("reading matrix: "+sizeX+"x"+sizeY+"x"+sizeZ+" at "+posX+", "+posY+", "+posZ);
 
         VoxelArray voxels = compressed?
                 readCompressed(sizeX, sizeY, sizeZ, stream) :
@@ -127,7 +132,7 @@ public class DeserializerQB implements Deserializer<QBModel> {
         return matrix;
     }
 
-    private VoxelArray readCompressed(int sizeX, int sizeY, int sizeZ, DataInputStream stream) throws IOException {
+    private VoxelArray readCompressed(int sizeX, int sizeY, int sizeZ, LittleDataInputStream stream) throws IOException {
         VoxelArray voxels = new VoxelArray(sizeX, sizeY, sizeZ);
         final int maxZ = sizeZ-1;
 
@@ -135,11 +140,11 @@ public class DeserializerQB implements Deserializer<QBModel> {
             int index = 0;
 
             while (true) {
-                int data = readLittleInt(stream);
+                int data = stream.readLittleInt();
 
-                if (data == SerializerQB.NEXTSLICEFLAG) break;
-                else if (data == SerializerQB.CODEFLAG) {
-                    int count = readLittleInt(stream);
+                if (data == NEXTSLICEFLAG) break;
+                else if (data == CODEFLAG) {
+                    int count = stream.readLittleInt();
                     data = stream.readInt();
 
                     for(int i = 0; i < count; i++) {
@@ -159,12 +164,6 @@ public class DeserializerQB implements Deserializer<QBModel> {
         return voxels;
     }
 
-    private static int readLittleInt(InputStream stream) throws IOException {
-        byte[] bytes = new byte[4];
-        if (stream.read(bytes) != 4) throw new IOException("end of stream reached");
-        return ((bytes[3]&0xFF)<<24) | ((bytes[2]&0xFF)<<16) | ((bytes[1]&0xFF)<<8) | (bytes[0]&0xFF);
-    }
-
     /**
      * Converts a color integer using the qb's color format.
      *
@@ -175,13 +174,13 @@ public class DeserializerQB implements Deserializer<QBModel> {
         int argb;
 
         switch (colorFormat) {
-            case 0: argb = ColorMath.fromRGB( //RGBA
+            case COLOR_FORMAT_RGBA: argb = ColorMath.fromRGB( //RGBA
                     (color >> 24) & 0xFF,
                     (color >> 16) & 0xFF,
                     (color >> 8) & 0xFF,
                     color & 0xFF);
                 break;
-            case 1: argb = ColorMath.fromRGB( //BGRA
+            case COLOR_FORMAT_BGRA: argb = ColorMath.fromRGB( //BGRA
                     color & 0xFF,
                     (color >> 24) & 0xFF,
                     (color >> 16) & 0xFF,

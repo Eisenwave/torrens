@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 /**
- * Output stream which extends {@link DataOutputStream} to provide methods for reading little endian data.
+ * Output stream which extends {@link DataOutputStream} to provide methods for writing little endian data.
  *
  * @author Headaxe
  * @see LittleDataInputStream

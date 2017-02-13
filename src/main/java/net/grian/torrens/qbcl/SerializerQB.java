@@ -28,8 +28,8 @@ public class SerializerQB implements Serializer<QBModel> {
             Z_ORIENT_RIGHT = 1,
             UNCOMPRESSED = 0,
             COMPRESSED = 1,
-            VIS_MASK_ENCODED = 0,
-            VIS_MASK_UNENCODED = 1,
+            VIS_MASK_ENCODED = 1,
+            VIS_MASK_UNENCODED = 0,
             CODEFLAG = 2,
             NEXTSLICEFLAG = 6;
 
