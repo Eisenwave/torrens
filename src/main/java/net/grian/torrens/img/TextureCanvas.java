@@ -1,9 +1,10 @@
 package net.grian.torrens.img;
 
+import net.grian.spatium.array.IntArray2;
+import net.grian.spatium.enums.CardinalDirection;
 import net.grian.spatium.function.Int2Consumer;
 import net.grian.spatium.function.Int2IntFunction;
 import net.grian.spatium.function.Int2Predicate;
-import net.grian.torrens.img.Texture;
 
 /**
  * Object dedicated to drawing in {@link Texture} objects.
@@ -26,7 +27,20 @@ public class TextureCanvas {
     public Texture getContent() {
         return texture;
     }
-
+    
+    
+    public int getWidth() {
+        return width;
+    }
+    
+    public int getHeight() {
+        return height;
+    }
+    
+    public int getRGB(int x, int y) {
+        return texture.get(x, y);
+    }
+    
     /**
      * <p>
      *     Gives the given pixel a given rgb value (ARGB integer).
@@ -69,6 +83,14 @@ public class TextureCanvas {
         drawRaw((x,y) -> rgb);
     }
 
+    public void drawIf(Int2Predicate condition, int rgb) {
+        forEachPixel((x, y) -> {if (condition.test(x, y)) draw(x, y, rgb);});
+    }
+    
+    public void drawIfElse(Int2Predicate condition, int rgbTrue, int rgbFalse) {
+        drawRaw((x, y) -> condition.test(x,y)? rgbTrue : rgbFalse);
+    }
+    
     /**
      * Directly draws a function into the texture for every pixel.
      *
@@ -115,8 +137,8 @@ public class TextureCanvas {
 
     public void drawRectangle(int rgb, int x0, int y0, int x1, int y1) {
         final int
-                minX = Math.min(x0, x1), maxX = Math.max(x0, x1),
-                minY = Math.min(y0, y1), maxY = Math.max(y0, y1);
+            minX = Math.min(x0, x1), maxX = Math.max(x0, x1),
+            minY = Math.min(y0, y1), maxY = Math.max(y0, y1);
 
         for (int x = minX; x<maxX; x++)
             for (int y = minY; y<maxY; y++)
@@ -130,8 +152,8 @@ public class TextureCanvas {
         }
 
         internalDrawLine(
-                Math.min(x0, x1), Math.min(y0, y1),
-                Math.max(x0, x1), Math.max(y0, y1), rgb);
+            Math.min(x0, x1), Math.min(y0, y1),
+            Math.max(x0, x1), Math.max(y0, y1), rgb);
     }
 
     private void internalDrawLine(int minX, int minY, int maxX, int maxY, int rgb) {
@@ -157,11 +179,156 @@ public class TextureCanvas {
             }
         }
     }
-
+    
+    private final static int
+        N = 1 << CardinalDirection.NORTH.ordinal(),
+        E = 1 << CardinalDirection.EAST.ordinal(),
+        S = 1 << CardinalDirection.SOUTH.ordinal(),
+        W = 1 << CardinalDirection.WEST.ordinal(),
+        NESW = N|E|S|W,
+        F = 1 << 5;
+    
+    public void floodFill(int ox, int oy, Int2Predicate fillCond, int rgb) {
+        IntArray2 mask = new IntArray2(width, height);
+        forEachPixel((x, y) -> { //predefine all unfillable pixels
+            if (!fillCond.test(x, y))
+                mask.set(x, y, F);
+        });
+        
+        final int xmax = width-1, ymax = height-1;
+        internalFloodFill(mask, 0, ox, oy, xmax, ymax, rgb, 1);
+    }
+    
+    public static int max_stack = 0;
+    
+    private void internalFloodFill(IntArray2 mask, int o, int x, int y, int xmax, int ymax, int rgb, int stack) {
+        if (stack > max_stack) max_stack = stack;
+        int here = mask.get(x, y);
+        //pixel is either empty unfillable or already processed
+        if (here >= 0b1111) return;
+        
+        //write into the mask that the pixel is processed
+        mask.set(x, y, here | NESW);
+        
+        //draw the pixel
+        draw(x, y, rgb);
+        
+        //not coming from north && north is unoccupied
+        if (y != ymax && o != N) internalFloodFill(mask, S, x, y+1, xmax, ymax, rgb, stack+1);
+        if (x != xmax && o != E) internalFloodFill(mask, W, x+1, y, xmax, ymax, rgb, stack+1);
+        if (y != 0    && o != S) internalFloodFill(mask, N, x, y-1, xmax, ymax, rgb, stack+1);
+        if (x != 0    && o != W) internalFloodFill(mask, E, x-1, y, xmax, ymax, rgb, stack+1);
+    }
+    
+    private void ffFinalize(IntArray2 mask, int x, int y) {
+        int val = mask.get(x, y);
+        if ((val & F) != 0)
+            mask.set(x, y, val | NESW);
+    }
+    
+    public void edgeFloodFill2(Int2Predicate fillCond, int rgb) {
+        IntArray2 mask = new IntArray2(width, height);
+        forEachPixel((x, y) -> { //predefine all barriers
+            if (!fillCond.test(x, y)) mask.set(x, y, -1);
+        });
+        
+        /*
+        forEachEdgePixel((x,y) -> {
+            internalFloodFill(mask, 0, x, y);
+        });
+        */
+    }
+    
+    public void edgeFloodFill(Int2Predicate fillCond, int rgb) {
+        final int xmax = width-1, ymax = height-1;
+        IntArray2 mask = new IntArray2(width, height);
+        
+        forEachEdgePixel((x, y) -> {
+            int here = mask.get(x, y);
+            //"if pos is not occupied in north yet and north of pos is fillable, expand north"
+            
+            //"if pos is not occupied in north yet and north of pos is fillable, expand north"
+            if (y != ymax && (here & N) == 0 && fillCond.test(x, y+1))
+                spreadMaskSafely(mask, x, y+1, xmax, ymax);
+            
+            if (x != xmax && (here & E) == 0 && fillCond.test(x+1, y))
+                spreadMaskSafely(mask, x+1, y, xmax, ymax);
+            
+            if (y != 0 && (here & S) == 0 && fillCond.test(x, y-1))
+                spreadMaskSafely(mask, x, y-1, xmax, ymax);
+            
+            if (x != 0 && (here & W) == 0 && fillCond.test(x-1, y))
+                spreadMaskSafely(mask, x-1, y, xmax, ymax);
+        });
+        
+        for (int x = 1; x<xmax; x++) {
+            for (int y = 1; y<ymax; y++) {
+                int here = mask.get(x, y);
+                if (here == 0) continue;
+                
+                //"if pos is not occupied in north yet and north of pos is fillable, expand north"
+                if ((here & N) == 0 && fillCond.test(x, y+1))
+                    spreadMask(mask, x, y+1);
+                if ((here & E) == 0 && fillCond.test(x+1, y))
+                    spreadMask(mask, x+1, y);
+                if ((here & S) == 0 && fillCond.test(x, y-1))
+                    spreadMask(mask, x, y-1);
+                if ((here & W) == 0 && fillCond.test(x-1, y))
+                    spreadMask(mask, x-1, y);
+            }
+        }
+        
+        drawIf((x,y) -> mask.get(x,y) != 0, rgb);
+    }
+    
+    public void spreadMaskSafely(IntArray2 mask, int x, int y, int xmax, int ymax) {
+        //signalize to surrounding 4 pixels that dir is blocked
+        if (y < ymax) mask.set(x, y+1, mask.get(x, y+1) | S);
+        if (x < xmax) mask.set(x+1, y, mask.get(x+1, y) | W);
+        if (y > 0)    mask.set(x, y-1, mask.get(x, y-1) | N);
+        if (x > 0)    mask.set(x-1, y, mask.get(x-1, y) | E);
+    }
+    
+    public void spreadMask(IntArray2 mask, int x, int y) {
+        //signalize to surrounding 4 pixels that dir is blocked
+        mask.set(x, y+1, mask.get(x, y+1) | S);
+        mask.set(x+1, y, mask.get(x+1, y) | W);
+        mask.set(x, y-1, mask.get(x, y-1) | N);
+        mask.set(x-1, y, mask.get(x-1, y) | E);
+    }
+    
+    /**
+     * Performs an action for every pixel in this canvas.
+     *
+     * @param action the action
+     */
     public void forEachPixel(Int2Consumer action) {
         for (int x = 0; x<width; x++)
             for (int y = 0; y<height; y++)
                 action.accept(x, y);
+    }
+    
+    /**
+     * <p>
+     *     Performs an action for every pixel that is on the edge of this canvas.
+     * </p>
+     * <p>
+     *     This is guaranteed to perform the action exactly once for every edge pixel.
+     * </p>
+     *
+     * @param action the action
+     */
+    public void forEachEdgePixel(Int2Consumer action) {
+        final int xmax = width-1, ymax = height-1;
+        
+        for (int x = 0; x<width; x++) {
+            action.accept(x, 0);
+            action.accept(x, ymax);
+        }
+        for (int y = 1; y<ymax; y++) {
+            action.accept(0, y);
+            action.accept(xmax, y);
+        }
     }
 
 }
