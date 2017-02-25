@@ -1,7 +1,7 @@
 package net.grian.torrens.wavefront;
 
 import net.grian.spatium.Spatium;
-import net.grian.spatium.geo3.AxisAlignedBB3;
+import net.grian.spatium.geo3.AxisAlignedBB;
 import net.grian.torrens.object.Vertex2f;
 import net.grian.torrens.object.Vertex3f;
 
@@ -123,7 +123,7 @@ public class OBJModel {
         return Collections.unmodifiableSet(groups);
     }
     
-    public AxisAlignedBB3 getBoundaries() {
+    public AxisAlignedBB getBoundaries() {
         float
             minX = 0, minY = 0, minZ = 0,
             maxX = 0, maxY = 0, maxZ = 0;
@@ -139,7 +139,7 @@ public class OBJModel {
             else if (z > maxZ) maxZ = z;
         }
         
-        return AxisAlignedBB3.fromPoints(minX, minY, minZ, maxX, maxY, maxZ);
+        return AxisAlignedBB.fromPoints(minX, minY, minZ, maxX, maxY, maxZ);
     }
 
     //CHECKERS

@@ -1,14 +1,14 @@
 package net.grian.torrens.mc;
 
 import net.grian.spatium.enums.Direction;
-import net.grian.spatium.geo3.AxisAlignedBB3;
+import net.grian.spatium.geo3.AxisAlignedBB;
 
 /**
  * A Minecraft model element.
  */
 public class MCElement {
 
-    private AxisAlignedBB3 shape;
+    private AxisAlignedBB shape;
     private final MCUV[] uv = new MCUV[Direction.values().length];
 
     /**
@@ -16,7 +16,7 @@ public class MCElement {
      *
      * @param shape the element shape
      */
-    public MCElement(AxisAlignedBB3 shape) {
+    public MCElement(AxisAlignedBB shape) {
         setShape(shape);
     }
 
@@ -35,7 +35,7 @@ public class MCElement {
      *
      * @return the element shape
      */
-    public AxisAlignedBB3 getShape() {
+    public AxisAlignedBB getShape() {
         return shape;
     }
 
@@ -69,7 +69,7 @@ public class MCElement {
      *
      * @param shape the shape
      */
-    public void setShape(AxisAlignedBB3 shape) {
+    public void setShape(AxisAlignedBB shape) {
         this.shape = shape.clone();
     }
 

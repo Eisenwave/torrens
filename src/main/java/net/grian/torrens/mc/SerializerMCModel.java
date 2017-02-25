@@ -2,7 +2,7 @@ package net.grian.torrens.mc;
 
 import com.google.gson.stream.JsonWriter;
 import net.grian.spatium.enums.Direction;
-import net.grian.spatium.geo3.AxisAlignedBB3;
+import net.grian.spatium.geo3.AxisAlignedBB;
 import net.grian.spatium.geo3.Vector3;
 import net.grian.torrens.io.TextSerializer;
 import net.grian.torrens.img.Texture;
@@ -66,7 +66,7 @@ public class SerializerMCModel implements TextSerializer<MCModel> {
 
     private void writeElement(MCElement element, JsonWriter writer) throws IOException {
         writer.beginObject();
-        AxisAlignedBB3 bounds = element.getShape();
+        AxisAlignedBB bounds = element.getShape();
 
         writer.name("from");
         writeVector(bounds.getMin(), writer);
