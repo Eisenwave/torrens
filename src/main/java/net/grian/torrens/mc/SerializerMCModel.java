@@ -2,6 +2,7 @@ package net.grian.torrens.mc;
 
 import com.google.gson.stream.JsonWriter;
 import net.grian.spatium.enums.Direction;
+import net.grian.spatium.enums.Face;
 import net.grian.spatium.geo3.AxisAlignedBB;
 import net.grian.spatium.geo3.Vector3;
 import net.grian.torrens.io.TextSerializer;
@@ -77,7 +78,8 @@ public class SerializerMCModel implements TextSerializer<MCModel> {
         writer.name("faces").beginObject();
         for (Direction dir : Direction.values()) {
             if (element.hasUV(dir)) {
-                writer.name(dir.face().name().toLowerCase());
+                String name = dir.face().name();
+                writer.name(name.toLowerCase());
                 writeUV(element, dir, writer);
             }
         }
