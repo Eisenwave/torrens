@@ -1,8 +1,6 @@
 package net.grian.torrens.nbt;
 
 import net.grian.torrens.io.Deserializer;
-import net.grian.torrens.nbt.NBTInputStream;
-import net.grian.torrens.nbt.NBTNamedTag;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -12,9 +10,22 @@ import java.util.zip.GZIPInputStream;
 
 public class DeserializerNBT implements Deserializer<NBTNamedTag[]> {
     
+    private final boolean compress;
+    
+    public DeserializerNBT(boolean compress) {
+        this.compress = compress;
+    }
+    
+    public DeserializerNBT() {
+        this(true);
+    }
+    
     @Override
     public NBTNamedTag[] fromStream(InputStream stream) throws IOException {
-        try (NBTInputStream nbtStream = new NBTInputStream(new GZIPInputStream(stream))) {
+        try (NBTInputStream nbtStream = compress?
+            new NBTInputStream(new GZIPInputStream(stream)) :
+            new NBTInputStream(stream)) {
+            
             return fromStream(nbtStream);
         }
     }

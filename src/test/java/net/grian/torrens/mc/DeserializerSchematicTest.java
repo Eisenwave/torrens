@@ -24,7 +24,6 @@ public class DeserializerSchematicTest {
         assertEquals(COAL_BLOCK, blocks.getBlock(50, 30, 36));
     }
     
-    @Test
     public void deserialize_farm() throws Exception {
         BlockArray blocks = new DeserializerSchematic().fromResource(getClass(), "farm.schematic");
         System.out.println(blocks);

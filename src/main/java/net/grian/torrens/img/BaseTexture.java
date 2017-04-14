@@ -8,20 +8,21 @@ public interface BaseTexture extends BaseRectangle {
     /**
      * Returns the rgb value at given u, v coordinates.
      *
-     * @param u the u-coordinate
-     * @param v the v-coordinate
+     * @param x the x-coordinate
+     * @param y the y-coordinate
      * @return the rgb value at the coordinates
      * @throws IndexOutOfBoundsException if the index is out of bounds
      */
-    public abstract int get(int u, int v);
+    abstract int get(int x, int y);
 
     /**
      * Sets the rgb value at given u, v coordinates.
      *
-     * @param u the u-coordinate
-     * @param v the v-coordinate
+     * @param x the x-coordinate
+     * @param y the y-coordinate
      * @throws IndexOutOfBoundsException if the index is out of bounds
      */
-    public abstract void set(int u, int v, int rgb);
+    abstract void set(int x, int y, int rgb);
+    
 
 }

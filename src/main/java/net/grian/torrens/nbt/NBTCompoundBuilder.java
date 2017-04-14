@@ -1,6 +1,6 @@
 package net.grian.torrens.nbt;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
 
@@ -9,7 +9,7 @@ import java.util.Objects;
  */
 public class NBTCompoundBuilder {
 
-    private final Map<String, NBTTag> entries = new HashMap<>();
+    private final Map<String, NBTTag> entries = new LinkedHashMap<>();
 
     /**
      * Put the given key and tag into the compound tag.
@@ -152,7 +152,7 @@ public class NBTCompoundBuilder {
      * @return the new compound tag
      */
     public TagCompound build() {
-        return new TagCompound(new HashMap<>(entries));
+        return new TagCompound(entries);
     }
 
 }

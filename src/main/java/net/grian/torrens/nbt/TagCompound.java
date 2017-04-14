@@ -6,10 +6,6 @@ import java.util.*;
  * The {@code TAG_Compound} tag.
  */
 public final class TagCompound extends NBTTag {
-    
-    public static NBTCompoundBuilder builder() {
-        return new NBTCompoundBuilder();
-    }
 
     private final Map<String, NBTTag> value;
 
@@ -19,7 +15,7 @@ public final class TagCompound extends NBTTag {
      * @param value the value of the tag
      */
     public TagCompound(Map<String, NBTTag> value) {
-        this.value = Collections.unmodifiableMap(value);
+        this.value = new LinkedHashMap<>(value);
     }
 
     @Override
@@ -179,7 +175,7 @@ public final class TagCompound extends NBTTag {
      */
     @SuppressWarnings("unchecked")
     public List<NBTTag> getList(String key) {
-        return (List<NBTTag>) getTagList(key).getValue();
+        return getTagList(key).getValue();
     }
 
     /**
