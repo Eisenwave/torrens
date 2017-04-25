@@ -31,7 +31,7 @@ public class Textures {
         final int
             w0 = texture.getWidth(),
             h0 = texture.getHeight();
-        Texture result = new Texture(w1, h1);
+        Texture result = Texture.alloc(w1, h1);
     
         for (int x1 = 0; x1 < w1; x1++) for (int y1 = 0; y1 < h1; y1++) {
             final int rgb = texture.get(
@@ -47,7 +47,7 @@ public class Textures {
         final int
             w0 = texture.getWidth(),
             h0 = texture.getHeight();
-        Texture result = new Texture(w1, h1);
+        Texture result = Texture.alloc(w1, h1);
         
         for (int x1 = 0; x1 < w1; x1++) for (int y1 = 0; y1 < h1; y1++) {
             

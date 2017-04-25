@@ -21,7 +21,7 @@ public class TextureCanvas {
     }
 
     public TextureCanvas(int width, int height) {
-        this(new Texture(width, height));
+        this(Texture.alloc(width, height));
     }
 
     public Texture getContent() {

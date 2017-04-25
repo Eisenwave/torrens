@@ -192,7 +192,7 @@ public class DeserializerMTL implements TextDeserializer<Void> {
         }
     
         BufferedImage image = new DeserializerImage().fromFile(file);
-        return new Texture(image);
+        return Texture.copy(image);
     }
     
     private static int deserializeColor(String[] args) throws IllegalArgumentException {

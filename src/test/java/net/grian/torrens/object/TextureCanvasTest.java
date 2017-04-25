@@ -12,7 +12,7 @@ public class TextureCanvasTest {
 
     @Test
     public void drawLine_fillsDiagonal() throws Exception {
-        TextureCanvas graphics = new Texture(64, 64).getGraphics();
+        TextureCanvas graphics = Texture.alloc(64, 64).getGraphics();
         graphics.drawLine(0, 0, 63, 63, ColorMath.DEBUG1);
 
         for (int x = 0; x<64; x++) {
@@ -27,7 +27,7 @@ public class TextureCanvasTest {
 
     @Test
     public void drawLine_Print() throws Exception {
-        TextureCanvas graphics = new Texture(256, 256).getGraphics();
+        TextureCanvas graphics = Texture.alloc(256, 256).getGraphics();
         graphics.drawLine(0, 0, 127, 888, ColorMath.DEBUG1);
     }
 

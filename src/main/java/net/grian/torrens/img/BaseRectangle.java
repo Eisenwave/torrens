@@ -24,5 +24,14 @@ public interface BaseRectangle {
     public default int getArea() {
         return getWidth() * getHeight();
     }
+    
+    /**
+     * Returns the aspect ratio <b>R</b> of this rectangle: <code>R = width / height</code>
+     *
+     * @return the aspect ratio
+     */
+    default float getAspectRatio() {
+        return getWidth() / (float) getHeight();
+    }
 
 }
