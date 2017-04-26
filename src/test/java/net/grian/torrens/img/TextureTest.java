@@ -63,7 +63,7 @@ public class TextureTest {
         Texture t = noiseSquare(64);
         int avg = t.averageRGB(false);
         int gray = ColorMath.fromRGB(127, 127, 127);
-        assertTrue(ColorMath.componentDiff(avg, gray, false) < 32);
+        assertTrue(ColorMath.componentDifference(avg, gray, false) < 32);
     }
     
 }
