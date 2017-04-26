@@ -247,7 +247,7 @@ public class Texture implements Serializable, BaseTexture, Iterable<Texture.Pixe
         
         long diff = 0;
         for (int x = 0; x < width; x++) for (int y = 0; y < height; y++) {
-            diff += ColorMath.componentDiff(
+            diff += ColorMath.componentDifference(
                 this.get(x, y),
                 texture.get(x, y),
                 alpha
