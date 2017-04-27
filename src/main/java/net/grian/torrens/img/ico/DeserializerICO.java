@@ -78,7 +78,7 @@ public class DeserializerICO implements Deserializer<BufferedImage[]> {
         byte[] bytes = new byte[entry.data];
         stream.read(bytes);
         
-        if (isPNG(bytes)) {
+        if (FileConstants.isPNG(bytes)) {
             return ImageIO.read(new ByteArrayInputStream(bytes));
         }
     
@@ -99,21 +99,6 @@ public class DeserializerICO implements Deserializer<BufferedImage[]> {
         bmpReader.setInput(imgStream, true, true); */
         
         return ImageIO.read(new ByteArrayInputStream(bytes));
-    }
-    
-    /**
-     * Verifies whether a byte array can be a PNG.
-     *
-     * @param bytes the bytes
-     * @return whether the file can be a PNG
-     */
-    @Contract(pure = true)
-    public static boolean isPNG(byte[] bytes) {
-        return
-            (bytes[0]&0xFF) == 0x89 && //high bit to detect systems with no 8-bit support
-            bytes[1] == 0x50 && // ASCII P
-            bytes[2] == 0x4E && // ASCII N
-            bytes[3] == 0x47;   // ASCII G
     }
     
     private final static byte[] BF_TYPE = {0x42, 0x4D}; // ASCII BM

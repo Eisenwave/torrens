@@ -5,6 +5,7 @@ import net.grian.spatium.util.ColorMath;
 import net.grian.spatium.util.RGBValue;
 import org.jetbrains.annotations.NotNull;
 
+import java.awt.*;
 import java.awt.image.*;
 import java.io.Serializable;
 import java.util.Arrays;
@@ -318,6 +319,41 @@ public class Texture implements Serializable, BaseTexture, Iterable<Texture.Pixe
      */
     public int averageRGB(boolean transparency) {
         return averageRGB(0, 0, width-1, height-1, transparency);
+    }
+    
+    /**
+     * Returns the average hue, saturation and brightness of this image.
+     *
+     * @return the average HSB
+     */
+    public float[] averageHSB() {
+        double[] sum = {0, 0, 0};
+        double sumSat = 0;
+        final int pixels = width * height;
+        
+        for (int i = 0; i < pixels; i++) {
+            final int rgb = content[i];
+            float[] hsb = Color.RGBtoHSB(
+                ColorMath.red(rgb),
+                ColorMath.green(rgb),
+                ColorMath.blue(rgb),
+                null);
+            double sat = hsb[1];
+            sumSat += sat;
+            
+            sum[0] += hsb[0] * sat;
+            sum[1] += hsb[1];
+            sum[2] += hsb[2];
+        }
+        
+        sum[0] /= sumSat;
+        sum[1] /= pixels;
+        sum[2] /= pixels;
+        
+        return new float[] {
+            (float) sum[0],
+            (float) sum[1],
+            (float) sum[2]};
     }
     
     // CHECKERS

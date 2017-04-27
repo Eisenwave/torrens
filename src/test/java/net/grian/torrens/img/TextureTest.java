@@ -3,7 +3,9 @@ package net.grian.torrens.img;
 import net.grian.spatium.util.ColorMath;
 import org.junit.Test;
 
+import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.Arrays;
 
 import static org.junit.Assert.*;
 
@@ -56,6 +58,23 @@ public class TextureTest {
             assertEquals(argb, texture.get(x, y));
             assertEquals(argb, wrapper.getRGB(x, y));
         }
+    }
+    
+    @Test
+    public void average_RGB_HSB() throws Exception {
+        BufferedImage img = new DeserializerImage().fromResource(getClass(), "subway.png");
+        Texture t = Texture.wrapOrCopy(img);
+        
+        final int rgb = t.averageRGB(false);
+        final float[] hsb = t.averageHSB();
+    
+        final int rgb2 = ColorMath.fromHSB(hsb[0], hsb[1], hsb[2]);
+        final float[] hsb2 = ColorMath.hsb(rgb);
+    
+        System.out.println(new Color(rgb));
+        System.out.println(new Color(rgb2));
+        System.out.println(Arrays.toString(hsb));
+        System.out.println(Arrays.toString(hsb2));
     }
     
     @Test
