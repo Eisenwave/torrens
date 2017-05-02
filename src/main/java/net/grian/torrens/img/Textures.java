@@ -1,13 +1,27 @@
 package net.grian.torrens.img;
 
 import net.grian.spatium.util.ColorMath;
+import net.grian.torrens.img.trans.TSAreaAverage;
+import net.grian.torrens.img.trans.TSNearestNeighbour;
+import net.grian.torrens.img.trans.TextureScale;
 import net.grian.torrens.object.Vertex2f;
+import org.jetbrains.annotations.Contract;
 
 public class Textures {
     
     public final static int
         SCALE_AREA_AVG = 0,
         SCALE_NEAREST_NB = 1;
+    
+    private final static int
+        TYPE_IDENTITY = 0,
+        TYPE_UPSCALE = 1,
+        TYPE_DOWNSCALE = 2,
+        TYPE_MIXED = 3;
+    
+    private final static TextureScale
+        NEAREST_NB = new TSNearestNeighbour(),
+        AREA_AVG = new TSAreaAverage();
     
     /**
      * Scales a texture to a given width and height.
@@ -17,54 +31,47 @@ public class Textures {
      * @param height the new height
      */
     public static Texture scale(Texture texture, int width, int height, int mode) {
-        switch (mode) {
-            case SCALE_NEAREST_NB:
-                return scaleNearestNb(texture, width, height);
-            case SCALE_AREA_AVG:
-                return scaleAreaAvg(texture, width, height);
-            default:
-                throw new IllegalArgumentException("unknown downscale mode: " + mode);
-        }
-    }
-    
-    private static Texture scaleNearestNb(Texture texture, int w1, int h1) {
         final int
             w0 = texture.getWidth(),
-            h0 = texture.getHeight();
-        Texture result = Texture.alloc(w1, h1);
+            h0 = texture.getHeight(),
+            type = type(w0, h0, width, height);
+        
+        if (type == TYPE_IDENTITY)
+            return texture.clone();
     
-        for (int x1 = 0; x1 < w1; x1++) for (int y1 = 0; y1 < h1; y1++) {
-            final int rgb = texture.get(
-                x1 * w0 / w1,
-                y1 * h0 / h1);
-            result.set(x1, y1, rgb);
+        if (mode == SCALE_NEAREST_NB || type == TYPE_UPSCALE)
+            return NEAREST_NB.apply(texture, width, height);
+        
+        if (type == TYPE_DOWNSCALE && mode == SCALE_AREA_AVG)
+            return AREA_AVG.apply(texture, width, height);
+        
+        if (mode == SCALE_AREA_AVG) {
+            Texture t0 = width > w0?
+                NEAREST_NB.applyX(texture, width) :
+                AREA_AVG.applyX(texture, width);
+    
+            return height > h0?
+                NEAREST_NB.applyY(t0, height) :
+                AREA_AVG.applyY(t0, height);
         }
         
-        return result;
+        throw new IllegalArgumentException("unknown scale mode: " + mode);
     }
     
-    private static Texture scaleAreaAvg(Texture texture, int w1, int h1) {
-        final int
-            w0 = texture.getWidth(),
-            h0 = texture.getHeight();
-        Texture result = Texture.alloc(w1, h1);
-        
-        for (int x1 = 0; x1 < w1; x1++) for (int y1 = 0; y1 < h1; y1++) {
-            
-            final int
-                minX = x1 * w0 / w1,
-                minY = y1 * h0 / h1,
-                limX = (x1+1) * w0 / w1,
-                limY = (y1+1) * h0 / h1,
-                //if the new width or height are smaller, max(X|Y) < min(X|Y)
-                //in this scenario the algorithm essentially uses nearest nb on one or multiple axes
-                maxX = Math.max(minX, limX-1),
-                maxY = Math.max(minY, limY-1);
-            
-            result.set(x1, y1, texture.averageRGB(minX, minY, maxX, maxY, true));
+    @Contract(pure = true)
+    private static int type(int w0, int h0, int w1, int h1) {
+        if (w1 > w0) {
+            if (h1 > h0) return TYPE_UPSCALE;
+            else return TYPE_MIXED;
         }
-        
-        return result;
+        else if (w1 < w0) {
+            if (h1 < h0) return TYPE_DOWNSCALE;
+            else return TYPE_MIXED;
+        }
+        else {
+            if (h1 == h0) return TYPE_IDENTITY;
+            else return TYPE_MIXED;
+        }
     }
     
     /**

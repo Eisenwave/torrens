@@ -356,6 +356,24 @@ public class Texture implements Serializable, BaseTexture, Iterable<Texture.Pixe
             (float) sum[2]};
     }
     
+    public void flipX() {
+        final int
+            lim = width/2,
+            max = width-1;
+        
+        for (int x = 0; x < lim; x++) for (int y = 0; y < height; y++)
+            swap(x, y, max-x, y);
+    }
+    
+    public void flipY() {
+        final int
+            lim = height/2,
+            max = height-1;
+        
+        for (int x = 0; x < width; x++) for (int y = 0; y < lim; y++)
+            swap(x, y, x, max-y);
+    }
+    
     // CHECKERS
     
     /**
@@ -453,6 +471,21 @@ public class Texture implements Serializable, BaseTexture, Iterable<Texture.Pixe
         
         result.setRGB(0, 0, width, height, get(0, 0, width, height), 0, width);
         return result;
+    }
+    
+    /**
+     * <p>
+     *     Returns the content of this texture, a top-to-bottom ARGB int-array.
+     * </p>
+     * <p>
+     *     Note that the texture may be wrapping an array but not using it in its entirety, the used length may be
+     *     calculated using <code>width * height</code>.
+     * </p>
+     *
+     * @return the content of this texture
+     */
+    public int[] getContent() {
+        return content;
     }
     
     public WritableRaster getRaster() {

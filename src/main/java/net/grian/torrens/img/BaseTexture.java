@@ -1,6 +1,7 @@
 package net.grian.torrens.img;
 
 import net.grian.spatium.function.Int2Consumer;
+import net.grian.spatium.util.ColorMath;
 
 import java.awt.*;
 
@@ -58,7 +59,7 @@ public interface BaseTexture extends BaseRectangle {
         
         boolean opaque = true;
         for (int x = 0; x < limX; x++) for (int y = 0; y < limY; y++) {
-            final int trans = 0;//TODO ColorMath.getTransparency(get(x,y));
+            final int trans = ColorMath.getTransparency(get(x,y));
             if (trans == Transparency.TRANSLUCENT)
                 return trans;
             
@@ -79,6 +80,15 @@ public interface BaseTexture extends BaseRectangle {
      * @throws IndexOutOfBoundsException if the index is out of bounds
      */
     abstract void set(int x, int y, int rgb);
+    
+    /**
+     * Swaps the rgb values of two pixels.
+     */
+    default void swap(int x0, int y0, int x1, int y1) {
+        int swap = get(x0, y0);
+        set(x0, y0, get(x1, y1));
+        set(x1, y1, swap);
+    }
     
     // ITERATION
     
