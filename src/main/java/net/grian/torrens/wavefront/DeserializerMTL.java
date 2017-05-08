@@ -16,7 +16,7 @@ import java.io.Reader;
 import java.util.Objects;
 import java.util.logging.Logger;
 
-public class DeserializerMTL implements TextDeserializer<Void> {
+public class DeserializerMTL implements TextDeserializer<MTLLibrary> {
     
     private final Logger logger;
     
@@ -36,19 +36,19 @@ public class DeserializerMTL implements TextDeserializer<Void> {
     }
     
     @Override
-    public Void fromReader(Reader reader) throws IOException {
+    public MTLLibrary fromReader(Reader reader) throws IOException {
         try (BufferedReader buffReader = new BufferedReader(reader)) {
             return fromReader(buffReader);
         }
     }
     
-    public Void fromReader(BufferedReader reader) throws IOException {
+    public MTLLibrary fromReader(BufferedReader reader) throws IOException {
         int number = 0;
         String content;
         while ((content = reader.readLine()) != null)
             readLine(++number, content);
         
-        return null;
+        return mtllib;
     }
     
     private void readLine(int number, String line) throws FileSyntaxException {

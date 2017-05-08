@@ -1,5 +1,6 @@
 package net.grian.torrens.img;
 
+import net.grian.torrens.error.FileFormatException;
 import net.grian.torrens.io.Serializer;
 
 import javax.imageio.ImageIO;
@@ -20,12 +21,14 @@ public class SerializerPNG implements Serializer<RenderedImage> {
 
     @Override
     public void toStream(RenderedImage image, OutputStream stream) throws IOException {
-        ImageIO.write(image, "png", stream);
+        if (!ImageIO.write(image, "png", stream))
+            throw new FileFormatException("can not write png's");
     }
     
     @Override
     public void toFile(RenderedImage image, File file) throws IOException {
-        ImageIO.write(image, "png", file);
+        if (!ImageIO.write(image, "png", file))
+            throw new FileFormatException("can not write png's");
     }
     
 }

@@ -13,19 +13,39 @@ import java.io.IOException;
 
 import static org.junit.Assert.*;
 
-public class SerializerBMP32Test {
+public class ARGBSerializerBMPTest {
     
     private final static File DEBUG_FILE = new File("F:/Porn/SerializerBMP32Test.bmp");
     
     @Test
     public void toStream() throws Exception {
         BufferedImage img = new DeserializerImage().fromResource(getClass(), "subway.png");
-        byte[] bytes = new SerializerBMP32().toBytes(Texture.wrapOrCopy(img));
+        Texture texture = Texture.wrapOrCopy(img);
+        
+        long now = System.currentTimeMillis();
+        byte[] bytes = new ARGBSerializerBMP(false).toBytes(texture);
+        long time = System.currentTimeMillis() - now;
+        System.out.println("serialized "+texture+" in "+time+"ms");
+        
         assertTrue(isBMP(bytes));
         readBMP(bytes);
         
-        if (DEBUG_FILE.exists())
+        
+        if (DEBUG_FILE.exists()) {
+            long now2 = System.currentTimeMillis();
             new SerializerByteArray().toFile(bytes, DEBUG_FILE);
+            long time2 = System.currentTimeMillis() - now2;
+            System.out.println("wrote bytes to file in "+time2+"ms");
+        }
+    }
+    
+    @Test
+    public void dataOf() throws Exception {
+        assertEquals(4, ARGBSerializerBMP.lineLengthOf(1, 4));
+        assertEquals(4, ARGBSerializerBMP.lineLengthOf(1, 3));
+        
+        for (int x = 0; x < 128; x++)
+            assertTrue(ARGBSerializerBMP.lineLengthOf(x, 3) % 4 == 0);
     }
     
     private static void readBMP(byte[] bytes) throws IOException {

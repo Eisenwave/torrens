@@ -13,7 +13,7 @@ import java.io.Reader;
 import java.util.Objects;
 import java.util.logging.Logger;
 
-public class DeserializerOBJ implements TextDeserializer<Void> {
+public class DeserializerOBJ implements TextDeserializer<OBJModel> {
     
     @Nullable
     private final Logger logger;
@@ -45,13 +45,13 @@ public class DeserializerOBJ implements TextDeserializer<Void> {
     }
     
     @Override
-    public Void fromReader(Reader reader) throws IOException {
+    public OBJModel fromReader(Reader reader) throws IOException {
         try (BufferedReader buffReader = new BufferedReader(reader)) {
             return fromReader(buffReader);
         }
     }
     
-    public Void fromReader(BufferedReader reader) throws IOException {
+    public OBJModel fromReader(BufferedReader reader) throws IOException {
         this.group = model.getDefaultGroup();
         
         int number = 0;
@@ -59,7 +59,7 @@ public class DeserializerOBJ implements TextDeserializer<Void> {
         while ((content = reader.readLine()) != null)
             readLine(++number, content);
     
-        return null;
+        return model;
     }
     
     private void readLine(int number, String line) throws FileSyntaxException {

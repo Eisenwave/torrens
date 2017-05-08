@@ -1,7 +1,7 @@
 package net.grian.torrens.img.ico;
 
 import net.grian.torrens.error.FileSyntaxException;
-import net.grian.torrens.img.SerializerBMP32;
+import net.grian.torrens.img.ARGBSerializerBMP;
 import net.grian.torrens.img.SerializerPNG;
 import net.grian.torrens.img.Texture;
 import net.grian.torrens.io.LittleDataOutputStream;
@@ -62,7 +62,7 @@ public class SerializerICO implements Serializer<BufferedImage[]> {
             IconDirEntry entry;
             
             if (format == TYPE_BMP) {
-                imgData = new SerializerBMP32(true, true).toBytes(Texture.wrapOrCopy(icon));
+                imgData = new ARGBSerializerBMP(true, true, true).toBytes(Texture.wrapOrCopy(icon));
                 entry = makeBMPEntry(imgData, width, height, 0);
                 
                 // windows icons require double height due to bullshit

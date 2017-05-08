@@ -1,6 +1,7 @@
 package net.grian.torrens.io;
 
 import net.grian.torrens.util.Resources;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.*;
 import java.net.URL;
@@ -27,6 +28,7 @@ public interface Deserializer<T> {
      * @return the deserialized object
      * @throws IOException if the deserialization fails
      */
+    @NotNull
     public abstract T fromStream(InputStream stream) throws IOException;
 
     /**
@@ -36,6 +38,7 @@ public interface Deserializer<T> {
      * @return the deserialized object
      * @throws IOException if the deserialization fails
      */
+    @NotNull
     public default T fromFile(File file) throws IOException {
         try (InputStream stream = new FileInputStream(file)) {
             try (BufferedInputStream buffStream = new BufferedInputStream(stream)) {
@@ -51,6 +54,7 @@ public interface Deserializer<T> {
      * @return the deserialized object
      * @throws IOException if the deserialization fails
      */
+    @NotNull
     public default T fromBytes(byte[] bytes) throws IOException {
         ByteArrayInputStream stream = new ByteArrayInputStream(bytes);
         return fromStream(stream);
@@ -65,6 +69,7 @@ public interface Deserializer<T> {
      * @return the deserialized object
      * @throws IOException if the deserialization fails
      */
+    @NotNull
     public default T fromResource(Class<?> clazz, String resPath) throws IOException {
         try (InputStream stream = Resources.getStream(clazz, resPath)) {
             return fromStream(stream);
@@ -78,6 +83,7 @@ public interface Deserializer<T> {
      * @return the deserialized object
      * @throws IOException if the deserialization fails
      */
+    @NotNull
     public default T fromURL(URL url) throws IOException {
         try (InputStream stream = url.openStream()) {
             return fromStream(stream);

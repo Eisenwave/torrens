@@ -1,11 +1,9 @@
 package net.grian.torrens.mc;
 
-import net.grian.torrens.img.BaseRectangle;
-
 /**
  * Minecraft model uv coordinates with a texture reference.
  */
-public class MCUV implements BaseRectangle {
+public class MCUV {
 
     private String texture;
     private int xmin, ymin, xmax, ymax, rotation;
@@ -98,17 +96,19 @@ public class MCUV implements BaseRectangle {
     public int getRotation() {
         return rotation;
     }
-
-    @Override
+    
     public int getWidth() {
         return Math.abs(xmax - xmin) + 1;
     }
-
-    @Override
+    
     public int getHeight() {
         return Math.abs(ymax - ymin) + 1;
     }
-
+    
+    public int getArea() {
+        return getWidth() * getHeight();
+    }
+    
     //SETTERS
 
     public void setTexture(String texture) {

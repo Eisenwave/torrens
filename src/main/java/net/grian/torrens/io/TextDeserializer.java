@@ -1,5 +1,7 @@
 package net.grian.torrens.io;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.*;
 
 /**
@@ -23,6 +25,7 @@ public interface TextDeserializer<T> extends Deserializer<T> {
      * @return the deserialized object
      * @throws IOException if the deserialization fails
      */
+    @NotNull
     abstract T fromReader(Reader reader) throws IOException;
 
     /**
@@ -32,17 +35,20 @@ public interface TextDeserializer<T> extends Deserializer<T> {
      * @return the deserialized object
      * @throws IOException if the deserialization fails
      */
+    @NotNull
     default T fromString(String str) throws IOException {
         return fromReader(new StringReader(str));
     }
-
+    
+    @NotNull
     @Override
     default T fromStream(InputStream stream) throws IOException {
         try (Reader reader = new InputStreamReader(stream)) {
             return fromReader(reader);
         }
     }
-
+    
+    @NotNull
     @Override
     default T fromFile(File file) throws IOException {
         try (Reader reader = new FileReader(file)) {

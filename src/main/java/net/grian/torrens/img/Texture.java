@@ -281,6 +281,8 @@ public class Texture implements Serializable, BaseTexture, Iterable<Texture.Pixe
         if (minY < 0 || minY >= height) throw new IllegalArgumentException("minY out of range ("+minX+")");
         if (maxX < 0 || maxX >= width) throw new IllegalArgumentException("maxX out of range ("+maxX+")");
         if (maxY < 0 || maxY >= height) throw new IllegalArgumentException("maxY out of range ("+maxY+")");
+        if (maxX < minX) throw new IllegalArgumentException("maxX < minX ("+maxX+" < "+minX+")");
+        if (maxY < minY) throw new IllegalArgumentException("maxY < minY ("+maxY+" < "+minY+")");
         
         long r = 0, g = 0, b = 0, a = 0;
         final int pixels = (maxX-minX+1) * (maxY-minY+1);

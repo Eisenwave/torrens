@@ -1,9 +1,9 @@
 package net.grian.torrens.img;
 
 import net.grian.spatium.util.ColorMath;
-import net.grian.torrens.img.trans.TSAreaAverage;
+import net.grian.torrens.img.trans.TSBox;
+import net.grian.torrens.img.trans.TSBilinear;
 import net.grian.torrens.img.trans.TSNearestNeighbour;
-import net.grian.torrens.img.trans.TextureScale;
 import net.grian.torrens.object.Vertex2f;
 import org.jetbrains.annotations.Contract;
 
@@ -11,17 +11,14 @@ public class Textures {
     
     public final static int
         SCALE_AREA_AVG = 0,
-        SCALE_NEAREST_NB = 1;
+        SCALE_NEAREST_NB = 1,
+        SCALE_BILINEAR = 2;
     
     private final static int
         TYPE_IDENTITY = 0,
         TYPE_UPSCALE = 1,
         TYPE_DOWNSCALE = 2,
         TYPE_MIXED = 3;
-    
-    private final static TextureScale
-        NEAREST_NB = new TSNearestNeighbour(),
-        AREA_AVG = new TSAreaAverage();
     
     /**
      * Scales a texture to a given width and height.
@@ -38,24 +35,30 @@ public class Textures {
         
         if (type == TYPE_IDENTITY)
             return texture.clone();
-    
-        if (mode == SCALE_NEAREST_NB || type == TYPE_UPSCALE)
-            return NEAREST_NB.apply(texture, width, height);
         
-        if (type == TYPE_DOWNSCALE && mode == SCALE_AREA_AVG)
-            return AREA_AVG.apply(texture, width, height);
         
-        if (mode == SCALE_AREA_AVG) {
-            Texture t0 = width > w0?
-                NEAREST_NB.applyX(texture, width) :
-                AREA_AVG.applyX(texture, width);
+        switch (mode) {
+            case SCALE_NEAREST_NB:
+                return new TSNearestNeighbour(texture, width, height).apply();
+            
+            case SCALE_BILINEAR:
+                return new TSBilinear(texture, width, height).apply();
+            
+            case SCALE_AREA_AVG:
+                if (type == TYPE_DOWNSCALE)
+                    return new TSBox(texture, width, height).apply();
     
-            return height > h0?
-                NEAREST_NB.applyY(t0, height) :
-                AREA_AVG.applyY(t0, height);
+                Texture t0 = width > w0?
+                    new TSNearestNeighbour(texture, width, height).applyX() :
+                    new TSBox(texture, width, height).applyX();
+    
+                return height > h0?
+                    new TSNearestNeighbour(t0, width, height).applyX() :
+                    new TSBox(t0, width, height).applyX();
+            
+            default:
+                throw new IllegalArgumentException("unknown scale mode: " + mode);
         }
-        
-        throw new IllegalArgumentException("unknown scale mode: " + mode);
     }
     
     @Contract(pure = true)
