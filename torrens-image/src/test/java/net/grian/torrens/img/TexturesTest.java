@@ -98,12 +98,12 @@ public class TexturesTest {
     }
     
     private static void title(String str) {
-        System.out.println("\n"+ANSI.BOLD_ON+str+ANSI.BOLD_OFF);
+        System.out.println("\n"+ANSI.BOLD+str+ANSI.BOLD_OFF);
     }
     
     private static void scale(Texture t, TextureScale method, int dims, int tests) {
         long millis = TestUtil.millisOf(() -> method.apply(t, dims, dims), tests);
-        System.out.println("scaled: "+t+" to "+dims+"x "+tests+" times in "+ ANSI.RED+ millis+"ms"+ANSI.RESET);
+        System.out.println("scaled: "+t+" to "+dims+"x "+tests+" times in "+ ANSI.FG_RED+ millis+"ms"+ANSI.RESET);
     }
     
 }

@@ -33,8 +33,8 @@ public class NBTIOTest {
         nbtOut.writeNamedTag("long", new NBTLong(64L));
         nbtOut.writeNamedTag("float", new NBTFloat(32F));
         nbtOut.writeNamedTag("double", new NBTDouble(64D));
-        nbtOut.writeNamedTag("bytes", new NBTByteArray((byte) 1, (byte) 2, (byte) 3));
-        nbtOut.writeNamedTag("ints", new NBTIntArray(1, 2, 3, 4, 5, 6));
+        nbtOut.writeNamedTag("bytes", new NBTByteArray(new byte[] {1, 2, 3}));
+        nbtOut.writeNamedTag("ints", new NBTIntArray(new int[] {1, 2, 3, 4, 5, 6}));
         nbtOut.writeNamedTag("list", new NBTList(NBTType.INT, new NBTInt(1), new NBTInt(2), new NBTInt(3)));
         nbtOut.writeNamedTag("compound", new NBTCompound(
             new NBTNamedTag("a", new NBTInt(1)),

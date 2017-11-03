@@ -1,8 +1,5 @@
 package net.grian.torrens.img;
 
-import net.grian.torrens.img.PixelCanvas;
-import net.grian.torrens.img.Texture;
-import net.grian.torrens.util.ANSI;
 import net.grian.torrens.util.ColorMath;
 import org.junit.Test;
 
@@ -20,7 +17,7 @@ public class PixelCanvasTest {
             try {
                 assertEquals(ColorMath.DEBUG1, graphics.getContent().get(x, x));
             } catch (AssertionError error) {
-                System.out.println(ANSI.bold("ERROR AT: x="+x+", y="+x));
+                System.err.println("ERROR AT: x="+x+", y="+x);
                 throw error;
             }
         }
