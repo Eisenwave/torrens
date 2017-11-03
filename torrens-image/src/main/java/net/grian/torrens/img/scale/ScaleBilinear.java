@@ -1,9 +1,9 @@
-package net.grian.torrens.util.img.scale;
+package net.grian.torrens.img.scale;
 
 import net.grian.spatium.util.FastMath;
 import net.grian.spatium.util.PrimMath;
 import net.grian.torrens.util.ConcurrentArrays;
-import net.grian.torrens.util.img.Texture;
+import net.grian.torrens.img.Texture;
 import net.grian.torrens.util.ColorMath;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;

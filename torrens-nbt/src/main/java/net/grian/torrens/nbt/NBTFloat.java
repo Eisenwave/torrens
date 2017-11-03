@@ -1,17 +1,19 @@
 package net.grian.torrens.nbt;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * The {@code TAG_Float} tag.
  */
-public final class TagFloat extends NBTTag {
+public final class NBTFloat extends NBTTag implements Cloneable {
 
-    private final float value;
+    private float value;
     
-    public TagFloat(float value) {
-        super();
+    public NBTFloat(float value) {
         this.value = value;
     }
-
+    
+    @NotNull
     @Override
     public Float getValue() {
         return value;
@@ -20,10 +22,27 @@ public final class TagFloat extends NBTTag {
     public float getFloatValue() {
         return value;
     }
-
+    
+    public void setFloatValue(float value) {
+        this.value = value;
+    }
+    
+    @NotNull
     @Override
     public NBTType getType() {
         return NBTType.FLOAT;
+    }
+    
+    // MISC
+    
+    @Override
+    public String toMSONString() {
+        return value+"f";
+    }
+    
+    @Override
+    public NBTFloat clone() {
+        return new NBTFloat(value);
     }
 
 }

@@ -1,4 +1,4 @@
-package net.grian.torrens.util.img.ico;
+package net.grian.torrens.img.ico;
 
 import net.grian.spatium.util.PrimArrays;
 import net.grian.torrens.error.FileSyntaxException;

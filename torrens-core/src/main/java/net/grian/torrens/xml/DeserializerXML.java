@@ -1,6 +1,6 @@
-package net.grian.torrens.util.xml;
+package net.grian.torrens.xml;
 
-import net.grian.torrens.util.io.Deserializer;
+import net.grian.torrens.io.Deserializer;
 import org.jetbrains.annotations.NotNull;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;

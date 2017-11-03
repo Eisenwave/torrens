@@ -1,4 +1,4 @@
-package net.grian.torrens.util.img.gif;
+package net.grian.torrens.img.gif;
 
 import javax.imageio.*;
 import javax.imageio.metadata.*;

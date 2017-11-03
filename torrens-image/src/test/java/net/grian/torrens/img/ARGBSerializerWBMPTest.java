@@ -1,4 +1,4 @@
-package net.grian.torrens.util.img;
+package net.grian.torrens.img;
 
 import net.grian.torrens.img.ARGBSerializerWBMP;
 import net.grian.torrens.img.Texture;

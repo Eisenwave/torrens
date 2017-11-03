@@ -1,8 +1,5 @@
-package net.grian.torrens.util.schematic;
+package net.grian.torrens.schematic;
 
-import net.grian.torrens.schematic.BlockArray;
-import net.grian.torrens.schematic.BlockKey;
-import net.grian.torrens.schematic.DeserializerSchematicBlocks;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -13,7 +10,7 @@ public class DeserializerSchematicBlocksTest {
 
     @Test
     public void deserialize_bunny() throws Exception {
-        BlockArray blocks = new DeserializerSchematicBlocks().fromResource(getClass(), "bunny.schematic");
+        BlockStructure blocks = new DeserializerSchematicBlocks().fromResource(getClass(), "bunny.schematic");
         //System.out.println(blocks);
         /*
         blocks.forEachPos((x,y,z) -> {
@@ -26,7 +23,7 @@ public class DeserializerSchematicBlocksTest {
     }
     
     public void deserialize_farm() throws Exception {
-        BlockArray blocks = new DeserializerSchematicBlocks().fromResource(getClass(), "farm.schematic");
+        BlockStructure blocks = new DeserializerSchematicBlocks().fromResource(getClass(), "farm.schematic");
         System.out.println(blocks);
     }
 

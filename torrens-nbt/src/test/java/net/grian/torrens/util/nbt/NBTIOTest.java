@@ -1,6 +1,9 @@
-package net.grian.torrens.nbt;
+package net.grian.torrens.util.nbt;
 
 import net.grian.torrens.io.SerializerByteArray;
+import net.grian.torrens.nbt.*;
+import net.grian.torrens.nbt.io.NBTInputStream;
+import net.grian.torrens.nbt.io.NBTOutputStream;
 import org.junit.Test;
 
 import java.io.ByteArrayInputStream;
@@ -24,18 +27,18 @@ public class NBTIOTest {
         ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
         NBTOutputStream nbtOut = new NBTOutputStream(byteOut);
         
-        nbtOut.writeNamedTag("byte", new TagByte((byte) 8));
-        nbtOut.writeNamedTag("short", new TagShort((short) 16));
-        nbtOut.writeNamedTag("int", new TagInt(2));
-        nbtOut.writeNamedTag("long", new TagLong(64L));
-        nbtOut.writeNamedTag("float", new TagFloat(32F));
-        nbtOut.writeNamedTag("double", new TagDouble(64D));
-        nbtOut.writeNamedTag("bytes", new TagByteArray((byte) 1, (byte) 2, (byte) 3));
-        nbtOut.writeNamedTag("ints", new TagIntArray(1, 2, 3, 4, 5, 6));
-        nbtOut.writeNamedTag("list", new TagList(NBTType.INT, new TagInt(1), new TagInt(2), new TagInt(3)));
-        nbtOut.writeNamedTag("compound", new TagCompound(
-            new NBTNamedTag("a", new TagInt(1)),
-            new NBTNamedTag("b", new TagFloat(2))
+        nbtOut.writeNamedTag("byte", new NBTByte((byte) 8));
+        nbtOut.writeNamedTag("short", new NBTShort((short) 16));
+        nbtOut.writeNamedTag("int", new NBTInt(2));
+        nbtOut.writeNamedTag("long", new NBTLong(64L));
+        nbtOut.writeNamedTag("float", new NBTFloat(32F));
+        nbtOut.writeNamedTag("double", new NBTDouble(64D));
+        nbtOut.writeNamedTag("bytes", new NBTByteArray((byte) 1, (byte) 2, (byte) 3));
+        nbtOut.writeNamedTag("ints", new NBTIntArray(1, 2, 3, 4, 5, 6));
+        nbtOut.writeNamedTag("list", new NBTList(NBTType.INT, new NBTInt(1), new NBTInt(2), new NBTInt(3)));
+        nbtOut.writeNamedTag("compound", new NBTCompound(
+            new NBTNamedTag("a", new NBTInt(1)),
+            new NBTNamedTag("b", new NBTFloat(2))
         ));
         
         byte[] bytes = byteOut.toByteArray();

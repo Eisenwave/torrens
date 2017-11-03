@@ -1,4 +1,4 @@
-package net.grian.torrens.util.object;
+package net.grian.torrens.object;
 
 import java.io.Serializable;
 import java.util.Arrays;

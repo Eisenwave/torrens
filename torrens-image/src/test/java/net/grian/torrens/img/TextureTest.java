@@ -1,8 +1,5 @@
-package net.grian.torrens.util.img;
+package net.grian.torrens.img;
 
-import net.grian.torrens.img.DeserializerImage;
-import net.grian.torrens.img.SerializerPNG;
-import net.grian.torrens.img.Texture;
 import net.grian.torrens.util.ColorMath;
 import org.junit.Test;
 
@@ -37,13 +34,13 @@ public class TextureTest {
         Texture a = Texture.wrap(back, width, height);
         Texture b = Texture.wrap(back, width, height);
         
-        Assert.assertTrue(a.equals(b));
+        assertTrue(a.equals(b));
         
         back[3] = ColorMath.fromRGB(16, 16, 16);
         assertEquals(back[3], a.get(1, 1));
         assertEquals(back[3], b.get(1, 1));
     
-        Assert.assertTrue(a.equals(b));
+        assertTrue(a.equals(b));
     }
     
     @Test
@@ -57,12 +54,12 @@ public class TextureTest {
             final int argb = ColorMath.random(true);
             
             assertNotEquals(argb, texture.get(x, y));
-            Assert.assertNotEquals(argb, wrapper.getRGB(x, y));
+            assertNotEquals(argb, wrapper.getRGB(x, y));
     
             wrapper.setRGB(x, y, argb);
             
             assertEquals(argb, texture.get(x, y));
-            Assert.assertEquals(argb, wrapper.getRGB(x, y));
+            assertEquals(argb, wrapper.getRGB(x, y));
         }
     }
     
@@ -88,7 +85,7 @@ public class TextureTest {
         Texture t = noiseSquare(64);
         int avg = t.averageRGB(false);
         int gray = ColorMath.fromRGB(127, 127, 127);
-        Assert.assertTrue(ColorMath.componentDiff(avg, gray, false) < 32);
+        assertTrue(ColorMath.componentDiff(avg, gray, false) < 32);
     }
     
     @Test

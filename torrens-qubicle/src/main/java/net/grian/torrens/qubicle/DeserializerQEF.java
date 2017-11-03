@@ -1,4 +1,4 @@
-package net.grian.torrens.util.qubicle;
+package net.grian.torrens.qubicle;
 
 import java.awt.*;
 import java.io.*;

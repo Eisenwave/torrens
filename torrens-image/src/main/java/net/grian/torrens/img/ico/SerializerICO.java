@@ -1,9 +1,9 @@
-package net.grian.torrens.util.img.ico;
+package net.grian.torrens.img.ico;
 
 import net.grian.torrens.error.FileSyntaxException;
-import net.grian.torrens.util.img.ARGBSerializerBMP;
-import net.grian.torrens.util.img.SerializerPNG;
-import net.grian.torrens.util.img.Texture;
+import net.grian.torrens.img.ARGBSerializerBMP;
+import net.grian.torrens.img.SerializerPNG;
+import net.grian.torrens.img.Texture;
 import net.grian.torrens.io.LittleDataOutputStream;
 import net.grian.torrens.io.Serializer;
 import net.grian.torrens.util.FileConstants;

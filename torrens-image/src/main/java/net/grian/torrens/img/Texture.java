@@ -1,6 +1,6 @@
-package net.grian.torrens.util.img;
+package net.grian.torrens.img;
 
-import net.grian.spatium.iter.Incrementer2;
+import net.grian.spatium.util.Incrementer2;
 import net.grian.torrens.util.RGBValue;
 import net.grian.torrens.util.ColorMath;
 import org.jetbrains.annotations.NotNull;

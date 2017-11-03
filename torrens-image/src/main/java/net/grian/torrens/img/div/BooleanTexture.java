@@ -1,4 +1,4 @@
-package net.grian.torrens.util.img.div;
+package net.grian.torrens.img.div;
 
 public interface BooleanTexture {
     

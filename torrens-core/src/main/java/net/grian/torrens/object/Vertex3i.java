@@ -1,4 +1,4 @@
-package net.grian.torrens.util.object;
+package net.grian.torrens.object;
 
 import java.io.Serializable;
 import java.util.Arrays;
@@ -23,7 +23,7 @@ public class Vertex3i implements Serializable {
         this(vertex.getX(), vertex.getY(), vertex.getZ());
     }
 
-    // GETTER
+    // GETTERS
     
     /**
      * Returns the vertex x-coordinate.
@@ -52,7 +52,7 @@ public class Vertex3i implements Serializable {
         return z;
     }
     
-    // CHECKERS
+    // PREDICATES
     
     @Override
     public boolean equals(Object obj) {
@@ -61,6 +61,24 @@ public class Vertex3i implements Serializable {
     
     public boolean equals(Vertex3i vertex) {
         return this.x == vertex.x && this.y == vertex.y && this.z == vertex.z;
+    }
+    
+    // OPERATIONS
+    
+    public Vertex3i plus(int x, int y, int z) {
+        return new Vertex3i(this.x+x, this.y+y, this.z+z);
+    }
+    
+    public Vertex3i plus(Vertex3i v) {
+        return plus(v.getX(), v.getY(), v.getZ());
+    }
+    
+    public Vertex3i minus(int x, int y, int z) {
+        return new Vertex3i(this.x-x, this.y-y, this.z-z);
+    }
+    
+    public Vertex3i minus(Vertex3i v) {
+        return minus(v.getX(), v.getY(), v.getZ());
     }
     
     // MISC
@@ -76,7 +94,7 @@ public class Vertex3i implements Serializable {
 
     @Override
     public String toString() {
-        return Vertex3i.class.getSimpleName()+"["+x+","+y+","+z+"]";
+        return String.format("[%s, %s, %s]", x, y, z);
     }
 
     @Override

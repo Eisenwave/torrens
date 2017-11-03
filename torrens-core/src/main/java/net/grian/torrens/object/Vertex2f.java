@@ -1,6 +1,4 @@
-package net.grian.torrens.util.object;
-
-import net.grian.spatium.geo2.Vector2;
+package net.grian.torrens.object;
 
 import java.io.Serializable;
 import java.util.Arrays;
@@ -18,10 +16,6 @@ public class Vertex2f implements Serializable {
     public Vertex2f(float x, float y) {
         this.x = x;
         this.y = y;
-    }
-    
-    public Vertex2f(Vector2 v) {
-        this((float) v.getX(), (float) v.getY());
     }
     
     // GETTERS
@@ -44,7 +38,7 @@ public class Vertex2f implements Serializable {
         return y;
     }
     
-    // CHECKERS
+    // PREDICATES
     
     @Override
     public boolean equals(Object obj) {
@@ -53,6 +47,14 @@ public class Vertex2f implements Serializable {
     
     public boolean equals(Vertex2f vertex) {
         return this.x == vertex.x && this.y == vertex.y;
+    }
+    
+    // OPERATIONS
+    
+    public Vertex2f midPoint(Vertex2f v) {
+        return new Vertex2f(
+            (this.x + v.x) * 0.5F,
+            (this.y + v.y) * 0.5F);
     }
     
     // MISC

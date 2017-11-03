@@ -1,4 +1,4 @@
-package net.grian.torrens.util.qubicle;
+package net.grian.torrens.qubicle;
 
 import net.grian.torrens.error.FileSyntaxException;
 import net.grian.torrens.error.FileVersionException;

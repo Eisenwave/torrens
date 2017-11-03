@@ -1,4 +1,4 @@
-package net.grian.torrens.util.img;
+package net.grian.torrens.img;
 
 import net.grian.spatium.array.IntArray2;
 import net.grian.spatium.enums.CardinalDirection;

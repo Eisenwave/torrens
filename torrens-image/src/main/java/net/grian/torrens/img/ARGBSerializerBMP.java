@@ -1,4 +1,4 @@
-package net.grian.torrens.util.img;
+package net.grian.torrens.img;
 
 import net.grian.torrens.io.LittleDataOutputStream;
 import net.grian.torrens.util.ColorMath;

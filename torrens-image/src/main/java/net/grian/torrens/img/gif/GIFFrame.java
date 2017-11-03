@@ -1,6 +1,6 @@
-package net.grian.torrens.util.img.gif;
+package net.grian.torrens.img.gif;
 
-import net.grian.torrens.util.img.Texture;
+import net.grian.torrens.img.Texture;
 import org.jetbrains.annotations.NotNull;
 
 public class GIFFrame {

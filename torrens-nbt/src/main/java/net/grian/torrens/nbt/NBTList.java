@@ -1,38 +1,55 @@
 package net.grian.torrens.nbt;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.*;
 
 /**
  * The {@code TAG_List} tag.
  */
-public final class TagList extends NBTTag implements Iterable<NBTTag> {
-
-    public static NBTListBuilder builder(NBTType type) {
-        return new NBTListBuilder(type);
-    }
+public final class NBTList extends NBTTag implements Iterable<NBTTag>, Cloneable {
     
-    private final NBTType type;
-    private final List<NBTTag> value;
+    @Nullable
+    private NBTType type;
+    
+    private final List<NBTTag> list = new ArrayList<>();
 
     /**
-     * Creates the tag with an empty name.
+     * Creates the list with a type and a series of elements.
      *
      * @param type the type of tag
      * @param value the value of the tag
      */
-    public TagList(NBTType type, List<? extends NBTTag> value) {
-        this.type = Objects.requireNonNull(type);
-        this.value = Collections.unmodifiableList(value);
+    public NBTList(@Nullable NBTType type, @NotNull List<? extends NBTTag> value) {
+        this.type = type;
+        value.forEach(this::add);
     }
     
     /**
-     * Creates the tag with an empty name.
+     * Creates the list with a type and a series of elements.
      *
      * @param type the type of tag
      * @param value the value of the tag
      */
-    public TagList(NBTType type, NBTTag... value) {
+    public NBTList(@Nullable NBTType type, @NotNull NBTTag... value) {
         this(type, Arrays.asList(value));
+    }
+    
+    /**
+     * Creates an empty list with a type.
+     *
+     * @param type the type of tag or null if the list has no type yet
+     */
+    public NBTList(@Nullable NBTType type) {
+        this.type = type;
+    }
+    
+    /**
+     * Creates an empty list without a type.
+     */
+    public NBTList() {
+        this(null);
     }
     
     // GETTERS
@@ -43,32 +60,25 @@ public final class TagList extends NBTTag implements Iterable<NBTTag> {
      * @return the size of this list
      */
     public int size() {
-        return value.size();
+        return list.size();
     }
     
-    /**
-     * Returns whether this list is empty.
-     *
-     * @return whether this list is empty
-     */
-    public boolean isEmpty() {
-        return value.isEmpty();
-    }
-
+    @NotNull
     @Override
     public List<NBTTag> getValue() {
-        return value;
+        return list;
     }
-
+    
+    @NotNull
     @Override
     public NBTType getType() {
         return NBTType.LIST;
     }
 
     /**
-     * Gets the type of item in this list.
+     * Gets the type of elements in this list.
      *
-     * @return The type of item in this list.
+     * @return The type of elements in this list.
      */
     public NBTType getElementType() {
         return type;
@@ -82,30 +92,84 @@ public final class TagList extends NBTTag implements Iterable<NBTTag> {
      * @throws NoSuchElementException if there is no tag with given index
      */
     public NBTTag get(int index) {
-        return value.get(index);
+        return list.get(index);
+    }
+    
+    // PREDICATES
+    
+    /**
+     * Returns whether this list is empty.
+     *
+     * @return whether this list is empty
+     */
+    public boolean isEmpty() {
+        return list.isEmpty();
     }
 
+    // MUTATORS
+    
+    /**
+     * Add the given tag.
+     *
+     * @param value the tag
+     */
+    public void add(@NotNull NBTTag value) {
+        if (this.type == null)
+            this.type = value.getType();
+        else if (this.type != value.getType())
+            throw new IllegalArgumentException(value.getType() + " is not of expected type " + type);
+        list.add(value);
+    }
+    
+    /**
+     * Add the given tag at the given index in the list.
+     *
+     * @param value the tag
+     */
+    public void add(int index, @NotNull NBTTag value) {
+        if (index < 0 || index >= list.size())
+            throw new IndexOutOfBoundsException(Integer.toString(index));
+        if (this.type == null)
+            this.type = value.getType();
+        else if (this.type != value.getType())
+            throw new IllegalArgumentException(value.getType() + " is not of expected type " + type);
+        list.add(index, value);
+    }
+    
+    /**
+     * Add all the tags in the given list.
+     *
+     * @param values a list of tags
+     */
+    public void addAll(@NotNull Collection<? extends NBTTag> values) {
+        values.forEach(this::add);
+    }
+    
     // MISC
     
     @Override
     public Iterator<NBTTag> iterator() {
-        return value.iterator();
+        return list.iterator();
     }
 
     @Override
-    public String toString() {
-        StringBuilder builder = new StringBuilder(getType().toString());
-        builder.append("[");
-        
+    public String toMSONString() {
+        StringBuilder builder = new StringBuilder("[");
         Iterator<NBTTag> iter = iterator();
-        boolean hasNext = iter.hasNext();
-        while (hasNext) {
-            builder.append(iter.next());
-            if (hasNext = iter.hasNext())
-                builder.append(", ");
+        
+        boolean first = true;
+        while (iter.hasNext()) {
+            if (first) first = false;
+            else builder.append(',');
+            builder.append(iter.next().toMSONString());
         }
-
+        
         return builder.append("]").toString();
+    }
+    
+    @Override
+    public NBTList clone() {
+        return new NBTList(type, list);
     }
 
 }

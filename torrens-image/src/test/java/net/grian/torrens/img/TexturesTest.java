@@ -1,4 +1,4 @@
-package net.grian.torrens.util.img;
+package net.grian.torrens.img;
 
 import net.grian.spatium.util.TestUtil;
 import net.grian.torrens.img.DeserializerImage;
@@ -15,6 +15,8 @@ import org.junit.Test;
 import java.awt.image.BufferedImage;
 import java.io.File;
 
+import static org.junit.Assert.*;
+
 public class TexturesTest {
     
     
@@ -22,7 +24,7 @@ public class TexturesTest {
     
     public void scale_performance() throws Exception {
         BufferedImage img = new DeserializerImage().fromResource(getClass(), "subway.png");
-        Assert.assertNotNull(img);
+        assertNotNull(img);
         Texture texture = Texture.wrapOrCopy(img);
     
         title("NEAREST NEIGHBOUR");

@@ -1,6 +1,4 @@
-package net.grian.torrens.util.object;
-
-import net.grian.spatium.geo3.Vector3;
+package net.grian.torrens.object;
 
 import java.io.Serializable;
 import java.util.Arrays;
@@ -19,10 +17,6 @@ public class Vertex3f implements Serializable {
         this.x = x;
         this.y = y;
         this.z = z;
-    }
-    
-    public Vertex3f(Vector3 v) {
-        this((float) v.getX(), (float) v.getY(), (float) v.getZ());
     }
 
     public Vertex3f(Vertex3f vertex) {
@@ -65,9 +59,17 @@ public class Vertex3f implements Serializable {
     public Vertex3f plus(float x, float y, float z) {
         return new Vertex3f(this.x+x, this.y+y, this.z+z);
     }
+    
+    public Vertex3f plus(Vertex3f v) {
+        return plus(v.x, v.y, v.z);
+    }
 
     public Vertex3f minus(float x, float y, float z) {
         return new Vertex3f(this.x-x, this.y-y, this.z-z);
+    }
+    
+    public Vertex3f minus(Vertex3f v) {
+        return minus(v.x, v.y, v.z);
     }
 
     public Vertex3f divided(float x, float y, float z) {
@@ -89,7 +91,22 @@ public class Vertex3f implements Serializable {
     public Vertex3f normalized() {
         return withLength(1);
     }
-
+    
+    public Vertex3f negative() {
+        return new Vertex3f(-x, -y, -z);
+    }
+    
+    public Vertex3f midPoint(Vertex3f v) {
+        return new Vertex3f(
+            (this.x + v.x) * 0.5F,
+            (this.y + v.y) * 0.5F,
+            (this.z + v.z) * 0.5F);
+    }
+    
+    public float getLengthSquared() {
+        return x*x + y*y + z*z;
+    }
+    
     public float getLength() {
         return (float) Math.sqrt(x*x + y*y + z*z);
     }
@@ -97,6 +114,17 @@ public class Vertex3f implements Serializable {
     public Vertex3f withLength(float length) {
         double factor = length / Math.sqrt(x*x + y*y + z*z);
         return new Vertex3f((float) (x*factor), (float) (y*factor), (float) (z*factor));
+    }
+    
+    public Vertex3f cross(float x, float y, float z) {
+        return new Vertex3f(
+            this.y * z - this.z * y,
+            this.z * x - this.x * z,
+            this.x * y - this.y * x);
+    }
+    
+    public Vertex3f cross(Vertex3f v) {
+        return cross(v.getX(), v.getY(), v.getZ());
     }
     
     // MISC
@@ -112,7 +140,7 @@ public class Vertex3f implements Serializable {
 
     @Override
     public String toString() {
-        return Vertex3f.class.getSimpleName()+"["+x+","+y+","+z+"]";
+        return String.format("[%.4f, %.4f, %.4f]", x, y, z);
     }
 
     @Override

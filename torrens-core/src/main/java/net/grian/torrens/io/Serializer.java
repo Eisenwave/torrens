@@ -1,6 +1,6 @@
-package net.grian.torrens.util.io;
+package net.grian.torrens.io;
 
-import net.grian.torrens.util.util.Resources;
+import net.grian.torrens.util.Resources;
 
 import java.io.*;
 
@@ -52,7 +52,8 @@ public interface Serializer<T> {
      */
     public default void toFile(T object, RandomAccessFile file) throws IOException {
         RandomAccessFileOutputStream stream = new RandomAccessFileOutputStream(file);
-        toStream(object, stream);
+        this.toStream(object, stream);
+        stream.flush();
     }
 
     /**
@@ -66,7 +67,8 @@ public interface Serializer<T> {
      */
     public default byte[] toBytes(T object, int capacity) throws IOException {
         ByteArrayOutputStream stream = new ByteArrayOutputStream(capacity);
-        toStream(object, stream);
+        this.toStream(object, stream);
+        stream.close();
         return stream.toByteArray();
     }
 
@@ -80,7 +82,8 @@ public interface Serializer<T> {
      */
     public default byte[] toBytes(T object) throws IOException {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        toStream(object, stream);
+        this.toStream(object, stream);
+        stream.close();
         return stream.toByteArray();
     }
 

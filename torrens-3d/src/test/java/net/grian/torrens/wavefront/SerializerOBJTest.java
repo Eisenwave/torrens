@@ -1,10 +1,6 @@
-package net.grian.torrens.util.wavefront;
+package net.grian.torrens.wavefront;
 
 import net.grian.torrens.object.Vertex3f;
-import net.grian.torrens.wavefront.OBJFace;
-import net.grian.torrens.wavefront.OBJModel;
-import net.grian.torrens.wavefront.OBJTriplet;
-import net.grian.torrens.wavefront.SerializerOBJ;
 import org.junit.Test;
 
 import static org.junit.Assert.*;

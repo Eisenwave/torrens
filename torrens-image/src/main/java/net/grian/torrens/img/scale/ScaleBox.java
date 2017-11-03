@@ -1,7 +1,7 @@
-package net.grian.torrens.util.img.scale;
+package net.grian.torrens.img.scale;
 
 import net.grian.torrens.util.ConcurrentArrays;
-import net.grian.torrens.util.img.Texture;
+import net.grian.torrens.img.Texture;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.atomic.AtomicInteger;

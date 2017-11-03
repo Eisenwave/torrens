@@ -6,7 +6,6 @@
         <artifactId>torrens</artifactId>
         <groupId>net.grian.torrens</groupId>
         <version>1.0</version>
-        <relativePath>../torrens/pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -15,15 +14,16 @@
 
     <dependencies>
         <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>net.grian.torrens</groupId>
-            <artifactId>torrens</artifactId>
-            <version>1.0</version>
-        </dependency><dependency>
-        <groupId>net.grian.torrens</groupId>
-        <artifactId>torrens-3d</artifactId>
-        <version>1.0</version>
-    </dependency>
+           <artifactId>torrens-3d</artifactId>
+           <version>1.0</version>
+        </dependency>
     </dependencies>
-
 
 </project>

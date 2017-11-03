@@ -1,4 +1,4 @@
-package net.grian.torrens.util.object;
+package net.grian.torrens.object;
 
 public class Rectangle4i {
     
@@ -10,6 +10,8 @@ public class Rectangle4i {
         this.maxX = Math.max(x0, x1);
         this.maxY = Math.max(y0, y1);
     }
+    
+    // GETTERS
     
     public int getMinX() {
         return minX;
@@ -33,6 +35,35 @@ public class Rectangle4i {
     
     public int getHeight() {
         return maxY - minY + 1;
+    }
+    
+    // PREDICATES
+    
+    public boolean equals(Rectangle4i rectangle) {
+        return this.minX == rectangle.minX && this.minY == rectangle.minY
+            && this.maxX == rectangle.maxX && this.maxY == rectangle.maxY;
+    }
+    
+    public boolean isSingularity() {
+        return minX == maxX && minY == maxY;
+    }
+    
+    // OPERATIONS
+    
+    public Rectangle4i translate(int x, int y) {
+        return new Rectangle4i(minX+x, minY+y, maxX+x, maxY+y);
+    }
+    
+    // MISC
+    
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof Rectangle4i && equals((Rectangle4i) obj);
+    }
+    
+    @Override
+    public String toString() {
+        return String.format("[%d, %d, %d, %d]", minX, minY, maxX, maxY);
     }
     
 }

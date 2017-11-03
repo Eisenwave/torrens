@@ -1,4 +1,4 @@
-package net.grian.torrens.util.img.ico;
+package net.grian.torrens.img.ico;
 
 final class ICODirEntry implements Comparable<ICODirEntry> {
     

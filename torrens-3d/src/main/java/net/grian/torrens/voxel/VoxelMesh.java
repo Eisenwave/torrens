@@ -1,7 +1,7 @@
-package net.grian.torrens.util.voxel;
+package net.grian.torrens.voxel;
 
-import net.grian.spatium.geo3.BlockSelection;
-import net.grian.spatium.geo3.BlockVector;
+import net.grian.torrens.object.BoundingBox6i;
+import net.grian.torrens.object.Vertex3i;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
@@ -64,16 +64,16 @@ public class VoxelMesh implements Serializable, Iterable<VoxelMesh.Element> {
         return list.toArray(new Element[list.size()]);
     }
     
-    public BlockSelection getBoundaries() {
+    public BoundingBox6i getBoundaries() {
         if (isEmpty()) throw new IllegalStateException("empty meshes have no boundaries");
         int
-                xmin = Integer.MAX_VALUE, ymin = Integer.MAX_VALUE, zmin = Integer.MAX_VALUE,
-                xmax = Integer.MIN_VALUE, ymax = Integer.MIN_VALUE, zmax = Integer.MIN_VALUE;
+            xmin = Integer.MAX_VALUE, ymin = Integer.MAX_VALUE, zmin = Integer.MAX_VALUE,
+            xmax = Integer.MIN_VALUE, ymax = Integer.MIN_VALUE, zmax = Integer.MIN_VALUE;
 
         for (Element element : list) {
             final int
-                    exmin = element.getMinX(), eymin = element.getMinY(), ezmin = element.getMinZ(),
-                    exmax = element.getMaxX(), eymax = element.getMaxY(), ezmax = element.getMaxZ();
+                exmin = element.getMinX(), eymin = element.getMinY(), ezmin = element.getMinZ(),
+                exmax = element.getMaxX(), eymax = element.getMaxY(), ezmax = element.getMaxZ();
 
             if (exmin < xmin) xmin = exmin;
             if (eymin < ymin) ymin = eymin;
@@ -83,17 +83,68 @@ public class VoxelMesh implements Serializable, Iterable<VoxelMesh.Element> {
             if (ezmax > zmax) zmax = ezmax;
         }
 
-        return BlockSelection.fromPoints(xmin, ymin, zmin, xmax, ymax, zmax);
+        return new BoundingBox6i(xmin, ymin, zmin, xmax, ymax, zmax);
+    }
+    
+    @SuppressWarnings("Duplicates")
+    public Vertex3i getMin() {
+        if (isEmpty()) throw new IllegalStateException("empty meshes have no minimum point");
+        int
+            x = Integer.MAX_VALUE,
+            y = Integer.MAX_VALUE,
+            z = Integer.MAX_VALUE;
+    
+        for (Element element : list) {
+            final int
+                ex = element.getMinX(),
+                ey = element.getMinY(),
+                ez = element.getMinZ();
+        
+            if (ex < x) x = ex;
+            if (ey < y) y = ey;
+            if (ez < z) z = ez;
+        }
+    
+        return new Vertex3i(x, y, z);
+    }
+    
+    public Vertex3i getMax() {
+        if (isEmpty()) throw new IllegalStateException("empty meshes have no maximum point");
+        int
+            x = Integer.MIN_VALUE,
+            y = Integer.MIN_VALUE,
+            z = Integer.MIN_VALUE;
+        
+        for (Element element : list) {
+            final int
+                ex = element.getMaxX(),
+                ey = element.getMaxY(),
+                ez = element.getMaxZ();
+            
+            if (ex > x) x = ex;
+            if (ey > y) y = ey;
+            if (ez > z) z = ez;
+        }
+        
+        return new Vertex3i(x, y, z);
     }
 
     public void add(int x, int y, int z, VoxelArray array) {
         this.list.add(new Element(x, y, z, array));
     }
 
-    // CHECKERS
+    // PREDICATES
 
     public boolean isEmpty() {
         return list.isEmpty();
+    }
+    
+    // ITERATION
+    
+    @NotNull
+    @Override
+    public Iterator<Element> iterator() {
+        return list.iterator();
     }
     
     // MISC
@@ -108,12 +159,8 @@ public class VoxelMesh implements Serializable, Iterable<VoxelMesh.Element> {
         return new VoxelMesh(this);
     }
 
-    @NotNull
-    @Override
-    public Iterator<Element> iterator() {
-        return list.iterator();
-    }
-
+    // CLASSES
+    
     public static class Element {
 
         private final int minX, minY, minZ, maxX, maxY, maxZ;
@@ -158,8 +205,8 @@ public class VoxelMesh implements Serializable, Iterable<VoxelMesh.Element> {
             return maxZ;
         }
 
-        public BlockVector getPosition() {
-            return BlockVector.fromXYZ(minX, minY, minZ);
+        public Vertex3i getPosition() {
+            return new Vertex3i(minX, minY, minZ);
         }
 
         /**
@@ -167,8 +214,8 @@ public class VoxelMesh implements Serializable, Iterable<VoxelMesh.Element> {
          *
          * @return the boundaries of the element
          */
-        public BlockSelection getBoundaries() {
-            return BlockSelection.fromPoints(minX, minY, minZ, maxX, maxY, maxZ);
+        public BoundingBox6i getBoundaries() {
+            return new BoundingBox6i(minX, minY, minZ, maxX, maxY, maxZ);
         }
 
         /**

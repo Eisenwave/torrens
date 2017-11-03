@@ -1,4 +1,4 @@
-package net.grian.torrens.util.qubicle;
+package net.grian.torrens.qubicle;
 
 import net.grian.torrens.io.TextSerializer;
 import net.grian.torrens.voxel.VoxelArray;

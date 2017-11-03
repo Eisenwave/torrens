@@ -8,18 +8,20 @@ import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TextDeserializerUTF8 implements TextDeserializer<String[]> {
+public class TextDeserializerPlain implements TextDeserializer<String[]> {
     
     @NotNull
     @Override
-    public String [] fromReader(Reader reader) throws IOException {
+    public String[] fromReader(Reader reader) throws IOException {
         BufferedReader buffReader = new BufferedReader(reader);
         List<String> result = new ArrayList<>();
         
-        String line = buffReader.readLine();
-        while ()
+        String line;
+        while ((line = buffReader.readLine()) != null) {
+            result.add(line);
+        }
         
-        return new String[0];
+        return result.toArray(new String[result.size()]);
     }
     
 }

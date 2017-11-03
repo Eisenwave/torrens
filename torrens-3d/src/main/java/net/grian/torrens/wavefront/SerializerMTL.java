@@ -1,4 +1,4 @@
-package net.grian.torrens.util.wavefront;
+package net.grian.torrens.wavefront;
 
 import net.grian.torrens.io.TextSerializer;
 import net.grian.torrens.util.ColorMath;

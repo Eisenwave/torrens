@@ -1,4 +1,4 @@
-package net.grian.torrens.util.img;
+package net.grian.torrens.img;
 
 import net.grian.spatium.function.Int2Consumer;
 import net.grian.torrens.util.ColorMath;

@@ -7,7 +7,7 @@ import org.jetbrains.annotations.*;
 import java.io.Serializable;
 import java.util.Arrays;
 
-public class BlockArray extends AbstractArray3 implements BlockStructure, Serializable, Cloneable {
+public class ArrayBlockStructure extends AbstractArray3 implements BlockStructure, Serializable, Cloneable {
 
     /** store block biomes */
     public final static int
@@ -23,9 +23,11 @@ public class BlockArray extends AbstractArray3 implements BlockStructure, Serial
 
     private final int flags;
 
-    public BlockArray(int x, int y, int z, int flags) {
+    public ArrayBlockStructure(int x, int y, int z, int flags) {
         super(x, y, z);
-        if (super.length == 0) throw new IllegalArgumentException("size 0 voxel array");
+        if (super.length == 0)
+            throw new IllegalArgumentException("size 0 voxel array");
+        
         
         this.flags = flags;
         this.arrayId = new byte[length];
@@ -34,7 +36,7 @@ public class BlockArray extends AbstractArray3 implements BlockStructure, Serial
         this.arrayLight = (flags & FLAG_LIGHT)  != 0? new byte[length] : null;
     }
 
-    public BlockArray(int x, int y, int z) {
+    public ArrayBlockStructure(int x, int y, int z) {
         this(x, y, z, 0);
     }
 
@@ -49,13 +51,13 @@ public class BlockArray extends AbstractArray3 implements BlockStructure, Serial
      * @param zmax the max z
      * @return a new sub array, copied out of this array
      */
-    public BlockArray copy(int xmin, int ymin, int zmin, int xmax, int ymax, int zmax) {
+    public ArrayBlockStructure copy(int xmin, int ymin, int zmin, int xmax, int ymax, int zmax) {
         if (xmin < 0 || ymin < 0 || zmin < 0)
             throw new IllegalArgumentException("min ("+xmin+","+ymin+","+zmin+") out of boundaries");
         if (xmax >= getSizeX() || ymax >= getSizeY() || zmax >= getSizeZ())
             throw new IllegalArgumentException("max ("+xmax+","+ymax+","+zmax+") out of boundaries");
 
-        BlockArray result = new BlockArray(xmax-xmin+1, ymax-ymin+1, zmax-zmin+1, getFlags());
+        ArrayBlockStructure result = new ArrayBlockStructure(xmax-xmin+1, ymax-ymin+1, zmax-zmin+1, getFlags());
         for (int x = xmin; x<=xmax; x++) for (int y = ymin; y<=ymax; y++) for (int z = zmin; z<=zmax; z++) {
             final int x2 = x-xmin, y2 = y-ymin, z2 = z-zmin;
             result.setBlock(x2, y2, z2, getId(x, y, z), getData(x, y, z));
@@ -137,10 +139,10 @@ public class BlockArray extends AbstractArray3 implements BlockStructure, Serial
     
     @Override
     public boolean equals(Object obj) {
-        return obj instanceof BlockArray && equals((BlockArray) obj);
+        return obj instanceof ArrayBlockStructure && equals((ArrayBlockStructure) obj);
     }
     
-    public boolean equals(BlockArray array) {
+    public boolean equals(ArrayBlockStructure array) {
         return
             this.getSizeX() == array.getSizeX() &&
             this.getSizeY() == array.getSizeY() &&
@@ -217,7 +219,7 @@ public class BlockArray extends AbstractArray3 implements BlockStructure, Serial
 
     @Override
     public String toString() {
-        return BlockArray.class.getSimpleName()+
+        return ArrayBlockStructure.class.getSimpleName()+
                 "{dims="+getSizeX()+"x"+getSizeY()+"x"+getSizeZ()+
                 ", volume="+getVolume()+
                 ", size="+size()+"," +
@@ -225,7 +227,7 @@ public class BlockArray extends AbstractArray3 implements BlockStructure, Serial
     }
 
     @Override
-    public BlockArray clone() {
+    public ArrayBlockStructure clone() {
         return copy(0, 0, 0, getSizeX()-1, getSizeY()-1, getSizeZ()-1);
     }
     

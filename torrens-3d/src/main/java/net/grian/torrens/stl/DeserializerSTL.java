@@ -1,4 +1,4 @@
-package net.grian.torrens.util.stl;
+package net.grian.torrens.stl;
 
 import net.grian.torrens.io.Deserializer;
 import net.grian.torrens.io.LittleDataInputStream;

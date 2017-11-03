@@ -1,17 +1,19 @@
 package net.grian.torrens.nbt;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * The {@code TAG_Int} tag.
  */
-public final class TagInt extends NBTTag {
+public final class NBTInt extends NBTTag implements Cloneable {
 
-    private final int value;
+    private int value;
     
-    public TagInt(int value) {
-        super();
+    public NBTInt(int value) {
         this.value = value;
     }
-
+    
+    @NotNull
     @Override
     public Integer getValue() {
         return value;
@@ -20,10 +22,27 @@ public final class TagInt extends NBTTag {
     public int getIntValue() {
         return value;
     }
-
+    
+    public void setIntValue(int value) {
+        this.value = value;
+    }
+    
+    @NotNull
     @Override
     public NBTType getType() {
         return NBTType.INT;
+    }
+    
+    // MISC
+    
+    @Override
+    public String toMSONString() {
+        return Integer.toString(value);
+    }
+    
+    @Override
+    public NBTInt clone() {
+        return new NBTInt(value);
     }
     
 }

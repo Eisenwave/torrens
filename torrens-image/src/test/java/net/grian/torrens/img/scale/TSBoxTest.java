@@ -1,7 +1,9 @@
-package net.grian.torrens.util.img.scale;
+package net.grian.torrens.img.scale;
 
 import net.grian.spatium.util.TestUtil;
-import net.grian.torrens.util.img.Texture;
+import net.grian.torrens.img.Texture;
+
+import static org.junit.Assert.*;
 
 public class TSBoxTest {
     
@@ -9,7 +11,7 @@ public class TSBoxTest {
         final int in = 4096, out = 64, tests = 100;
         
         Texture texture = Texture.alloc(in, in);
-        Assert.assertNotNull(texture);
+        assertNotNull(texture);
     
         long consecutive = TestUtil.millisOf(() -> {
             ScaleBox scale = new ScaleBox(1);

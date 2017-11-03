@@ -1,11 +1,11 @@
-package net.grian.torrens.util.voxel;
+package net.grian.torrens.voxel;
 
 import net.grian.spatium.array.AbstractArray3;
 import net.grian.spatium.enums.Direction;
 import net.grian.spatium.function.Int3Consumer;
-import net.grian.spatium.geo3.BlockSelection;
-import net.grian.spatium.geo3.BlockVector;
-import net.grian.spatium.iter.Incrementer3;
+import net.grian.spatium.util.Incrementer3;
+import net.grian.torrens.object.BoundingBox6i;
+import net.grian.torrens.object.Vertex3i;
 import net.grian.torrens.util.ColorMath;
 import net.grian.torrens.util.RGBValue;
 import org.jetbrains.annotations.NotNull;
@@ -102,8 +102,8 @@ public class VoxelArray extends AbstractArray3 implements BitArray3, Cloneable, 
      *
      * @return the array boundaries
      */
-    public BlockSelection getBoundaries() {
-        return BlockSelection.fromPoints(0, 0, 0, sizeX-1, sizeY-1, sizeZ-1);
+    public BoundingBox6i getBoundaries() {
+        return new BoundingBox6i(0, 0, 0, sizeX-1, sizeY-1, sizeZ-1);
     }
 
     /**
@@ -126,7 +126,7 @@ public class VoxelArray extends AbstractArray3 implements BitArray3, Cloneable, 
      * @return the voxel at the specified position
      */
     @NotNull
-    public Voxel getVoxel(BlockVector v) {
+    public Voxel getVoxel(Vertex3i v) {
         return getVoxel(v.getX(), v.getY(), v.getZ());
     }
 
@@ -150,7 +150,7 @@ public class VoxelArray extends AbstractArray3 implements BitArray3, Cloneable, 
      * @param v the voxel position
      * @return the color of the voxel at the position
      */
-    public int getRGB(BlockVector v) {
+    public int getRGB(Vertex3i v) {
         return getRGB(v.getX(), v.getY(), v.getZ());
     }
 
@@ -231,7 +231,7 @@ public class VoxelArray extends AbstractArray3 implements BitArray3, Cloneable, 
      * @return whether the array contains a voxel
      */
     @Override
-    public boolean contains(BlockVector pos) {
+    public boolean contains(Vertex3i pos) {
         return contains(pos.getX(), pos.getY(), pos.getZ());
     }
     
@@ -276,7 +276,7 @@ public class VoxelArray extends AbstractArray3 implements BitArray3, Cloneable, 
      * @param pos the position
      * @param rgb the voxel color
      */
-    public void setRGB(BlockVector pos, int rgb) {
+    public void setRGB(Vertex3i pos, int rgb) {
         setRGB(pos.getX(), pos.getY(), pos.getZ(), rgb);
     }
 
@@ -336,11 +336,11 @@ public class VoxelArray extends AbstractArray3 implements BitArray3, Cloneable, 
         }
     }
 
-    public void forEachPosition(Consumer<? super BlockVector> action) {
+    public void forEachPosition(Consumer<? super Vertex3i> action) {
         for (int x = 0; x < sizeX; x++)
             for (int y = 0; y < sizeY; y++)
                 for (int z = 0; z < sizeZ; z++)
-                    action.accept(BlockVector.fromXYZ(x, y, z));
+                    action.accept(new Vertex3i(x, y, z));
     }
     
     public void forEachPosition(Int3Consumer action) {
@@ -411,18 +411,15 @@ public class VoxelArray extends AbstractArray3 implements BitArray3, Cloneable, 
                 divZ = divX * divY;
         private int index = -1;
         
-        private boolean removed = false;
         private Voxel current;
 
         private ValidatingVoxelIterator() {
             skipToValid();
         }
-
+        
         @Override
         public Voxel next() {
             current = peek();
-            removed = false;
-            
             skip();
             skipToValid();
             return current;
@@ -446,11 +443,7 @@ public class VoxelArray extends AbstractArray3 implements BitArray3, Cloneable, 
     
         @Override
         public void remove() {
-            if (removed)
-                throw new IllegalStateException("can only remove voxel once");
-            
             current.remove();
-            removed = true;
         }
     
         private Voxel peek() throws NoSuchElementException {
@@ -491,7 +484,7 @@ public class VoxelArray extends AbstractArray3 implements BitArray3, Cloneable, 
             this(copyOf.x, copyOf.y, copyOf.z);
         }
 
-        private Voxel(BlockVector pos) {
+        private Voxel(Vertex3i pos) {
             this(pos.getX(), pos.getY(), pos.getZ());
         }
 
@@ -512,8 +505,8 @@ public class VoxelArray extends AbstractArray3 implements BitArray3, Cloneable, 
          *
          * @return the position of the voxel
          */
-        public BlockVector getPosition() {
-            return BlockVector.fromXYZ(x, y, z);
+        public Vertex3i getPosition() {
+            return new Vertex3i(x, y, z);
         }
 
         @Override

@@ -1,4 +1,4 @@
-package net.grian.torrens.util.io;
+package net.grian.torrens.io;
 
 import java.io.DataInputStream;
 import java.io.EOFException;

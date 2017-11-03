@@ -1,9 +1,6 @@
-package net.grian.torrens.util.img;
+package net.grian.torrens.img;
 
 import com.sun.imageio.plugins.bmp.BMPImageReader;
-import net.grian.torrens.img.ARGBSerializerBMP;
-import net.grian.torrens.img.DeserializerImage;
-import net.grian.torrens.img.Texture;
 import net.grian.torrens.io.SerializerByteArray;
 import org.junit.Test;
 
@@ -30,7 +27,7 @@ public class ARGBSerializerBMPTest {
         long time = System.currentTimeMillis() - now;
         System.out.println("serialized "+texture+" in "+time+"ms");
         
-        Assert.assertTrue(isBMP(bytes));
+        assertTrue(isBMP(bytes));
         readBMP(bytes);
         
         if (DEBUG_FILE.exists()) {
@@ -47,7 +44,7 @@ public class ARGBSerializerBMPTest {
         assertEquals(4, ARGBSerializerBMP.lineLengthOf(1, 3));
         
         for (int x = 0; x < 128; x++)
-            Assert.assertTrue(ARGBSerializerBMP.lineLengthOf(x, 3) % 4 == 0);
+            assertTrue(ARGBSerializerBMP.lineLengthOf(x, 3) % 4 == 0);
     }
     
     private static void readBMP(byte[] bytes) throws IOException {

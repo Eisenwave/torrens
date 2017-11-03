@@ -1,7 +1,7 @@
-package net.grian.torrens.util.img.gif;
+package net.grian.torrens.img.gif;
 
 import net.grian.torrens.error.FileSyntaxException;
-import net.grian.torrens.util.img.Texture;
+import net.grian.torrens.img.Texture;
 import net.grian.torrens.util.ColorMath;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

@@ -1,4 +1,4 @@
-package net.grian.torrens.util.wavefront;
+package net.grian.torrens.wavefront;
 
 import net.grian.torrens.img.Texture;
 import org.jetbrains.annotations.NotNull;
@@ -58,6 +58,15 @@ public class MTLLibrary implements Serializable, Iterable<MTLMaterial> {
         return materials.get(name);
     }
     
+    /**
+     * Returns the amount of materials in this library.
+     *
+     * @return the amount of materials
+     */
+    public int size() {
+        return materials.size();
+    }
+    
     // CHECKERS
     
     /**
@@ -69,7 +78,7 @@ public class MTLLibrary implements Serializable, Iterable<MTLMaterial> {
         return materials.isEmpty();
     }
     
-    // SETTERS
+    // MUTATORS
     
     /**
      * Sets the name of this library.

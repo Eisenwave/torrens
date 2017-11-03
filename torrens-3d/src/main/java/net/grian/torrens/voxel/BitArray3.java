@@ -1,6 +1,6 @@
-package net.grian.torrens.util.voxel;
+package net.grian.torrens.voxel;
 
-import net.grian.spatium.geo3.BlockVector;
+import net.grian.torrens.object.Vertex3i;
 
 /**
  * A common interface for all three-dimensional, array-like collections.
@@ -42,8 +42,8 @@ public interface BitArray3 {
      *
      * @return the dimensions
      */
-    default BlockVector getDimensions() {
-        return BlockVector.fromXYZ(getSizeX(), getSizeY(), getSizeZ());
+    default Vertex3i getDimensions() {
+        return new Vertex3i(getSizeX(), getSizeY(), getSizeZ());
     }
 
     /**
@@ -62,7 +62,7 @@ public interface BitArray3 {
      * @param pos the position
      * @return whether there is an element
      */
-    default boolean contains(BlockVector pos) {
+    default boolean contains(Vertex3i pos) {
         return contains(pos.getX(), pos.getY(), pos.getZ());
     }
 

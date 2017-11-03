@@ -1,4 +1,4 @@
-package net.grian.torrens.util.qubicle;
+package net.grian.torrens.qubicle;
 
 import net.grian.torrens.io.LittleDataOutputStream;
 import net.grian.torrens.io.Serializer;

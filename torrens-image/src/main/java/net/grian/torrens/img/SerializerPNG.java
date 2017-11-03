@@ -1,4 +1,4 @@
-package net.grian.torrens.util.img;
+package net.grian.torrens.img;
 
 import net.grian.torrens.error.FileFormatException;
 import net.grian.torrens.io.Serializer;

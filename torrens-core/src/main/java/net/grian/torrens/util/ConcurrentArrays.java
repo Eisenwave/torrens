@@ -1,4 +1,4 @@
-package net.grian.torrens.util.util;
+package net.grian.torrens.util;
 
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;

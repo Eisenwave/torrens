@@ -1,4 +1,4 @@
-package net.grian.torrens.util.error;
+package net.grian.torrens.error;
 
 import java.io.IOException;
 

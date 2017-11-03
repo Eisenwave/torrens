@@ -1,15 +1,14 @@
-package net.grian.torrens.nbt;
+package net.grian.torrens.nbt.io;
 
 import net.grian.torrens.io.Deserializer;
+import net.grian.torrens.nbt.NBTNamedTag;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.zip.GZIPInputStream;
 
-public class DeserializerNBT implements Deserializer<NBTNamedTag[]> {
+public class DeserializerNBT implements Deserializer<NBTNamedTag> {
     
     private final boolean compressed;
     
@@ -31,23 +30,15 @@ public class DeserializerNBT implements Deserializer<NBTNamedTag[]> {
     
     @NotNull
     @Override
-    public NBTNamedTag[] fromStream(InputStream stream) throws IOException {
+    public NBTNamedTag fromStream(InputStream stream) throws IOException {
         NBTInputStream nbtStream = compressed?
             new NBTInputStream(new GZIPInputStream(stream)) :
             new NBTInputStream(stream);
         
-        return fromStream(nbtStream);
-    }
-    
-    public NBTNamedTag[] fromStream(NBTInputStream stream) throws IOException {
-        List<NBTNamedTag> tags = new ArrayList<>();
-        
-        NBTNamedTag tag;
-        while ((tag = stream.readNamedTag()) != null) {
-            tags.add(tag);
-        }
-        
-        return tags.toArray(new NBTNamedTag[tags.size()]);
+        NBTNamedTag tag = nbtStream.readNamedTag();
+        if (tag == null)
+            throw new IOException("failed to read NBT tag due to EOS");
+        else return tag;
     }
     
 }

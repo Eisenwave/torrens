@@ -1,4 +1,4 @@
-package net.grian.torrens.util.wavefront;
+package net.grian.torrens.wavefront;
 
 import net.grian.torrens.io.TextSerializer;
 import net.grian.torrens.object.*;
@@ -30,7 +30,7 @@ public class SerializerOBJ implements TextSerializer<OBJModel> {
 
         writeHeader(writer);
         if (materials != null) {
-            writer.newLine(); writer.write("mtllib "+materials.getName()+".mtl");
+            writer.newLine(); writer.write("mtllib "+materials.getName());
         }
 
         writeVertices(writer);
@@ -52,15 +52,15 @@ public class SerializerOBJ implements TextSerializer<OBJModel> {
 
     private void writeVertices(BufferedWriter writer) throws IOException {
         final int limV = model.getVertexCount();
-        for (int i = 0; i<limV; i++)
+        for (int i = 1; i <= limV; i++)
             writeVertex("v", model.getVertex(i), writer);
 
         final int limVN = model.getNormalCount();
-        for (int i = 0; i<limVN; i++)
+        for (int i = 1; i <= limVN; i++)
             writeVertex("vn", model.getNormal(i), writer);
 
         final int limVT = model.getTextureVertexCount();
-        for (int i = 0; i<limVT; i++)
+        for (int i = 1; i <= limVT; i++)
             writeVertex("vt", model.getTexture(i), writer);
     }
 

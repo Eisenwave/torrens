@@ -1,4 +1,4 @@
-package net.grian.torrens.util.wavefront;
+package net.grian.torrens.wavefront;
 
 import net.grian.torrens.error.FileSyntaxException;
 import net.grian.torrens.io.TextDeserializer;
@@ -10,14 +10,12 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
-import java.util.Objects;
 import java.util.logging.Logger;
 
 public class DeserializerOBJ implements TextDeserializer<OBJModel> {
     
     @Nullable
     private final Logger logger;
-    
     @NotNull
     private final OBJModel model;
     @Nullable
@@ -36,9 +34,8 @@ public class DeserializerOBJ implements TextDeserializer<OBJModel> {
     }
     
     public DeserializerOBJ(@NotNull OBJModel model, @Nullable File mtlDir, @Nullable Logger logger) {
-        this.model = Objects.requireNonNull(model);
-        this.mtlDir = Objects.requireNonNull(mtlDir);
-        
+        this.model = model;
+        this.mtlDir = mtlDir;
         this.logger = logger;
     }
     
@@ -95,7 +92,7 @@ public class DeserializerOBJ implements TextDeserializer<OBJModel> {
         model.setMaterials(library);
         
         File file = new File(mtlDir, path);
-        if (!file.exists() || !file.isFile()) {
+        if (mtlDir == null || !file.exists() || !file.isFile()) {
             warning("invalid mtllib reference: "+file);
             return;
         }

@@ -1,6 +1,6 @@
-package net.grian.torrens.util.nbt;
+package net.grian.torrens.nbt;
 
-import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * A named tag consisting of a {@link String} for its name and a {@link NBTTag} for its value.
@@ -16,9 +16,7 @@ public class NBTNamedTag {
      * @param name the name
      * @param tag the tag
      */
-    public NBTNamedTag(String name, NBTTag tag) {
-        Objects.requireNonNull(name);
-        Objects.requireNonNull(tag);
+    public NBTNamedTag(@NotNull String name, @NotNull NBTTag tag) {
         this.name = name;
         this.tag = tag;
     }
@@ -28,6 +26,7 @@ public class NBTNamedTag {
      *
      * @return the name
      */
+    @NotNull
     public String getName() {
         return name;
     }
@@ -37,6 +36,7 @@ public class NBTNamedTag {
      *
      * @return the tag
      */
+    @NotNull
     public NBTTag getTag() {
         return tag;
     }

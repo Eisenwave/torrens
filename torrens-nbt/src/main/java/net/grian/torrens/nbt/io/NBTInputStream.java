@@ -1,5 +1,7 @@
-package net.grian.torrens.nbt;
+package net.grian.torrens.nbt.io;
 
+import net.grian.torrens.nbt.*;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.DataInputStream;
@@ -41,18 +43,19 @@ public final class NBTInputStream extends DataInputStream {
      *     thrown (unexpected end).
      * </p>
      *
-     * @return the tag that was read or null if eof is reached
+     * @return the tag that was read or null if EOF is reached
      * @throws IOException if an I/O error occurs
      */
     @Nullable
     public NBTNamedTag readNamedTag() throws IOException {
         return readNamedTag(0);
     }
-
+    
+    @Nullable
     private NBTNamedTag readNamedTag(int depth) throws IOException {
         int id = read();
         if (id == -1) return null;
-        NBTType type = NBTType.fromId(id);
+        NBTType type = NBTType.fromId((byte) id);
 
         String name = type!= NBTType.END? readString() : "";
 
@@ -80,80 +83,99 @@ public final class NBTInputStream extends DataInputStream {
      * @return the tag
      * @throws IOException if an I/O error occurs.
      */
-    private NBTTag readTag(NBTType type, int depth) throws IOException {
+    public NBTTag readTag(NBTType type, int depth) throws IOException {
         switch (type) {
             case END: return readTagEnd(depth);
-            case BYTE: return new TagByte(readByte());
-            case SHORT: return new TagShort(readShort());
-            case INT: return new TagInt(readInt());
-            case LONG: return new TagLong(readLong());
-            case FLOAT: return new TagFloat(readFloat());
-            case DOUBLE: return new TagDouble(readDouble());
+            case BYTE: return new NBTByte(readByte());
+            case SHORT: return new NBTShort(readShort());
+            case INT: return new NBTInt(readInt());
+            case LONG: return new NBTLong(readLong());
+            case FLOAT: return new NBTFloat(readFloat());
+            case DOUBLE: return new NBTDouble(readDouble());
             case BYTE_ARRAY: return readTagByteArray();
             case STRING: return readTagString();
             case LIST: return readTagList(depth);
             case COMPOUND: return readTagCompound(depth);
             case INT_ARRAY: return readTagIntArray();
+            case LONG_ARRAY: return readTagLongArray();
             default: throw new IOException("invalid tag type: " + type);
         }
     }
 
-    private TagEnd readTagEnd(int depth) throws IOException {
+    @NotNull
+    public NBTEnd readTagEnd(int depth) throws IOException {
         if (depth == 0)
             throw new IOException("TAG_End found without a TAG_Compound/TAG_List tag preceding it.");
-        return TagEnd.INSTANCE;
+        return NBTEnd.INSTANCE;
     }
 
-    private TagByteArray readTagByteArray() throws IOException {
+    @NotNull
+    public NBTByteArray readTagByteArray() throws IOException {
         int length = readInt();
         byte[] bytes = new byte[length];
         readFully(bytes);
-        return new TagByteArray(bytes);
+        return new NBTByteArray(bytes);
     }
 
-    private TagString readTagString() throws IOException {
-        return new TagString(readString());
+    @NotNull
+    public NBTString readTagString() throws IOException {
+        return new NBTString(readString());
     }
 
-    private TagList readTagList(int depth) throws IOException {
+    @NotNull
+    public NBTList readTagList(int depth) throws IOException {
         NBTType elementType = NBTType.fromId(readByte());
         final int length = readInt();
+        
+        if (elementType == NBTType.END && length > 0)
+            throw new IOException("List is of type TAG_End but not empty");
 
         List<NBTTag> tagList = new ArrayList<>();
         for (int i = 0; i < length; ++i) {
             NBTTag tag = readTag(elementType, depth + 1);
-            if (tag instanceof TagEnd)
-                throw new IOException("TAG_End not permitted in a list.");
             tagList.add(tag);
         }
 
-        return new TagList(elementType, tagList);
+        return new NBTList(elementType, tagList);
     }
 
-    private TagCompound readTagCompound(int depth) throws IOException {
+    @NotNull
+    public NBTCompound readTagCompound(int depth) throws IOException {
         Map<String, NBTTag> tagMap = new HashMap<>();
         while (true) {
             NBTNamedTag namedTag = readNamedTag(depth + 1);
             if (namedTag == null) throw new IOException("NBT ends inside a list");
             
             NBTTag tag = namedTag.getTag();
-            if (tag instanceof TagEnd) break;
+            if (tag instanceof NBTEnd) break;
             else tagMap.put(namedTag.getName(), tag);
         }
 
-        return new TagCompound(tagMap);
+        return new NBTCompound(tagMap);
     }
 
-    private TagIntArray readTagIntArray() throws IOException {
+    @NotNull
+    public NBTIntArray readTagIntArray() throws IOException {
         final int length = readInt();
         int[] data = new int[length];
         for (int i = 0; i < length; i++)
             data[i] = readInt();
 
-        return new TagIntArray(data);
+        return new NBTIntArray(data);
     }
     
-    private String readString() throws IOException {
+    @NotNull
+    public NBTLongArray readTagLongArray() throws IOException {
+        final int length = readInt();
+        long[] data = new long[length];
+        for (int i = 0; i < length; i++)
+            data[i] = readLong();
+        
+        return new NBTLongArray(data);
+    }
+    
+    @NotNull
+    public String readString() throws IOException {
         int length = readUnsignedShort();
         byte[] bytes = new byte[length];
         readFully(bytes);

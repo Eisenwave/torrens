@@ -1,17 +1,19 @@
 package net.grian.torrens.nbt;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * The {@code TAG_Byte} tag.
  */
-public final class TagByte extends NBTTag {
+public final class NBTByte extends NBTTag implements Cloneable {
 
-    private final byte value;
+    private byte value;
     
-    public TagByte(byte value) {
-        super();
+    public NBTByte(byte value) {
         this.value = value;
     }
 
+    @NotNull
     @Override
     public Byte getValue() {
         return value;
@@ -20,10 +22,27 @@ public final class TagByte extends NBTTag {
     public byte getByteValue() {
         return value;
     }
-
+    
+    public void setShortValue(byte value) {
+        this.value = value;
+    }
+    
+    @NotNull
     @Override
     public NBTType getType() {
         return NBTType.BYTE;
+    }
+    
+    // MISC
+    
+    @Override
+    public String toMSONString() {
+        return Byte.toUnsignedInt(value)+"b";
+    }
+    
+    @Override
+    public NBTByte clone() {
+        return new NBTByte(value);
     }
 
 }

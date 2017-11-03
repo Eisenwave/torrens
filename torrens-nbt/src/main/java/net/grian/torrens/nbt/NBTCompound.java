@@ -1,24 +1,31 @@
 package net.grian.torrens.nbt;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.*;
+import java.util.regex.Pattern;
 
 /**
  * The {@code TAG_Compound} tag.
  */
-public final class TagCompound extends NBTTag {
+public final class NBTCompound extends NBTTag {
+    
+    private static final Pattern SIMPLE_STRING = Pattern.compile("[A-Za-z0-9._+-]+");
 
     private final Map<String, NBTTag> value;
     
-    public TagCompound(Map<String, NBTTag> value) {
+    public NBTCompound(Map<String, NBTTag> value) {
         this.value = new LinkedHashMap<>(value);
     }
     
-    public TagCompound(NBTNamedTag... tags) {
+    public NBTCompound(NBTNamedTag... tags) {
         this.value = new LinkedHashMap<>();
         
         for (NBTNamedTag tag : tags)
             this.value.put(tag.getName(), tag.getTag());
     }
+    
+    // GETTERS
     
     /**
      * Returns the size of this compound.
@@ -28,46 +35,17 @@ public final class TagCompound extends NBTTag {
     public int size() {
         return value.size();
     }
-    
-    /**
-     * Returns whether this compound is empty.
-     *
-     * @return whether this compound is empty
-     */
-    public boolean isEmpty() {
-        return value.isEmpty();
-    }
 
+    @NotNull
     @Override
     public Map<String, NBTTag> getValue() {
         return value;
     }
 
+    @NotNull
     @Override
     public NBTType getType() {
         return NBTType.COMPOUND;
-    }
-
-    /**
-     * Returns whether this compound tag contains the given key.
-     *
-     * @param key the given key
-     * @return true if the tag contains the given key
-     */
-    public boolean containsKey(String key) {
-        return value.containsKey(key);
-    }
-
-    /**
-     * Returns whether this compound tag contains the given key and its value is of a given type.
-     *
-     * @param key the given key
-     * @param type the type of the value
-     * @return true if the tag contains an entry with given key and of given type
-     */
-    public boolean containsKey(String key, NBTType type) {
-        Objects.requireNonNull(type);
-        return value.containsKey(key) && value.get(key).getType() == type;
     }
 
     /**
@@ -78,7 +56,7 @@ public final class TagCompound extends NBTTag {
      * @throws NoSuchElementException if there is no tag with given name
      */
     public NBTTag getTag(String key) {
-        if (!containsKey(key)) throw new NoSuchElementException(key);
+        if (!hasKey(key)) throw new NoSuchElementException(key);
         return value.get(key);
     }
 
@@ -91,8 +69,8 @@ public final class TagCompound extends NBTTag {
      */
     public byte getByte(String key) {
         NBTTag tag = value.get(key);
-        if (!(tag instanceof TagByte)) throw new NoSuchElementException(key);
-        return ((TagByte) tag).getValue();
+        if (!(tag instanceof NBTByte)) throw new NoSuchElementException(key);
+        return ((NBTByte) tag).getValue();
     }
 
     /**
@@ -104,8 +82,8 @@ public final class TagCompound extends NBTTag {
      */
     public short getShort(String key) {
         NBTTag tag = value.get(key);
-        if (!(tag instanceof TagShort)) throw new NoSuchElementException(key);
-        return ((TagShort) tag).getValue();
+        if (!(tag instanceof NBTShort)) throw new NoSuchElementException(key);
+        return ((NBTShort) tag).getValue();
     }
 
     /**
@@ -117,8 +95,8 @@ public final class TagCompound extends NBTTag {
      */
     public int getInt(String key) {
         NBTTag tag = value.get(key);
-        if (!(tag instanceof TagInt)) throw new NoSuchElementException(key);
-        return ((TagInt) tag).getValue();
+        if (!(tag instanceof NBTInt)) throw new NoSuchElementException(key);
+        return ((NBTInt) tag).getValue();
     }
 
     /**
@@ -130,8 +108,8 @@ public final class TagCompound extends NBTTag {
      */
     public long getLong(String key) {
         NBTTag tag = value.get(key);
-        if (!(tag instanceof TagLong)) throw new NoSuchElementException(key);
-        return ((TagLong) tag).getValue();
+        if (!(tag instanceof NBTLong)) throw new NoSuchElementException(key);
+        return ((NBTLong) tag).getValue();
     }
 
     /**
@@ -143,8 +121,8 @@ public final class TagCompound extends NBTTag {
      */
     public float getFloat(String key) {
         NBTTag tag = value.get(key);
-        if (!(tag instanceof TagFloat)) throw new NoSuchElementException(key);
-        return ((TagFloat) tag).getValue();
+        if (!(tag instanceof NBTFloat)) throw new NoSuchElementException(key);
+        return ((NBTFloat) tag).getValue();
     }
 
     /**
@@ -156,8 +134,8 @@ public final class TagCompound extends NBTTag {
      */
     public double getDouble(String key) {
         NBTTag tag = value.get(key);
-        if (!(tag instanceof TagDouble)) throw new NoSuchElementException(key);
-        return ((TagDouble) tag).getValue();
+        if (!(tag instanceof NBTDouble)) throw new NoSuchElementException(key);
+        return ((NBTDouble) tag).getValue();
     }
 
     /**
@@ -169,8 +147,8 @@ public final class TagCompound extends NBTTag {
      */
     public byte[] getByteArray(String key) {
         NBTTag tag = value.get(key);
-        if (!(tag instanceof TagByteArray)) throw new NoSuchElementException(key);
-        return ((TagByteArray) tag).getValue();
+        if (!(tag instanceof NBTByteArray)) throw new NoSuchElementException(key);
+        return ((NBTByteArray) tag).getValue();
     }
 
     /**
@@ -182,8 +160,8 @@ public final class TagCompound extends NBTTag {
      */
     public String getString(String key) {
         NBTTag tag = value.get(key);
-        if (!(tag instanceof TagString)) throw new NoSuchElementException(key);
-        return ((TagString) tag).getValue();
+        if (!(tag instanceof NBTString)) throw new NoSuchElementException(key);
+        return ((NBTString) tag).getValue();
     }
 
     /**
@@ -205,10 +183,10 @@ public final class TagCompound extends NBTTag {
      * @return a list
      * @throws NoSuchElementException if there is no list with given name
      */
-    public TagList getTagList(String key) {
+    public NBTList getTagList(String key) {
         NBTTag tag = value.get(key);
-        if (!(tag instanceof TagList)) throw new NoSuchElementException(key);
-        return (TagList) tag;
+        if (!(tag instanceof NBTList)) throw new NoSuchElementException(key);
+        return (NBTList) tag;
     }
 
     /**
@@ -229,10 +207,10 @@ public final class TagCompound extends NBTTag {
      * @return a compound
      * @throws NoSuchElementException if there is no compound with given name
      */
-    public TagCompound getTagCompound(String key) {
+    public NBTCompound getTagCompound(String key) {
         NBTTag tag = value.get(key);
-        if (!(tag instanceof TagCompound)) throw new NoSuchElementException(key);
-        return (TagCompound) tag;
+        if (!(tag instanceof NBTCompound)) throw new NoSuchElementException(key);
+        return (NBTCompound) tag;
     }
 
     /**
@@ -244,18 +222,172 @@ public final class TagCompound extends NBTTag {
      */
     public int[] getIntArray(String key) {
         NBTTag tag = value.get(key);
-        if (!(tag instanceof TagIntArray)) throw new NoSuchElementException(key);
-        return ((TagIntArray) tag).getValue();
+        if (!(tag instanceof NBTIntArray)) throw new NoSuchElementException(key);
+        return ((NBTIntArray) tag).getValue();
     }
-
+    
+    // PREDICATES
+    
+    /**
+     * Returns whether this compound is empty.
+     *
+     * @return whether this compound is empty
+     */
+    public boolean isEmpty() {
+        return value.isEmpty();
+    }
+    
+    /**
+     * Returns whether this compound tag contains the given key.
+     *
+     * @param key the given key
+     * @return true if the tag contains the given key
+     */
+    public boolean hasKey(String key) {
+        return value.containsKey(key);
+    }
+    
+    /**
+     * Returns whether this compound tag contains the given key and its value is of a given type.
+     *
+     * @param key the given key
+     * @param type the type of the value
+     * @return true if the tag contains an entry with given key and of given type
+     */
+    public boolean hasKeyOfType(String key, NBTType type) {
+        Objects.requireNonNull(type);
+        return value.containsKey(key) && value.get(key).getType() == type;
+    }
+    
+    // MUTATORS
+    
+    /**
+     * Put the given name and its corresponding tag into the compound tag.
+     *
+     * @param name the tag name
+     * @param tag the tag value
+     */
+    public void put(@NotNull String name, @NotNull NBTTag tag) {
+        this.value.put(name, tag);
+    }
+    
+    /**
+     * Put the given key and value into the compound tag as a {@code TagByteArray}.
+     *
+     * @param key they key
+     * @param value the value
+     */
+    public void putByteArray(String key, byte[] value) {
+        put(key, new NBTByteArray(value));
+    }
+    
+    /**
+     * Put the given key and value into the compound tag as a {@code TagByte}.
+     *
+     * @param key they key
+     * @param value the value
+     */
+    public void putByte(String key, byte value) {
+        put(key, new NBTByte(value));
+    }
+    
+    /**
+     * Put the given key and value into the compound tag as a {@code TagDouble}.
+     *
+     * @param key they key
+     * @param value the value
+     */
+    public void putDouble(String key, double value) {
+        put(key, new NBTDouble(value));
+    }
+    
+    /**
+     * Put the given key and value into the compound tag as a {@code TagFloat}.
+     *
+     * @param key they key
+     * @param value the value
+     */
+    public void putFloat(String key, float value) {
+        put(key, new NBTFloat(value));
+    }
+    
+    /**
+     * Put the given key and value into the compound tag as a {@code TagIntArray}.
+     *
+     * @param key they key
+     * @param value the value
+     */
+    public void putIntArray(String key, int[] value) {
+        put(key, new NBTIntArray(value));
+    }
+    
+    /**
+     * Put the given key and value into the compound tag as an {@code TagInt}.
+     *
+     * @param key they key
+     * @param value the valu
+     */
+    public void putInt(String key, int value) {
+        put(key, new NBTInt(value));
+    }
+    
+    /**
+     * Put the given key and value into the compound tag as a {@code TagLong}.
+     *
+     * @param key they key
+     * @param value the value
+     */
+    public void putLong(String key, long value) {
+        put(key, new NBTLong(value));
+    }
+    
+    /**
+     * Put the given key and value into the compound tag as a {@code TagShort}.
+     *
+     * @param key they key
+     * @param value the value
+     */
+    public void putShort(String key, short value) {
+        put(key, new NBTShort(value));
+    }
+    
+    /**
+     * Put the given key and value into the compound tag as a {@code TagString}.
+     *
+     * @param key they key
+     * @param value the value
+     */
+    public void putString(String key, String value) {
+        put(key, new NBTString(value));
+    }
+    
+    // MISC
+    
     @Override
-    public String toString() {
-        StringBuilder builder = new StringBuilder(getType().toString());
-        builder.append("{");
-
+    public String toMSONString() {
+        StringBuilder builder = new StringBuilder("{");
+        Set<String> keys = this.value.keySet();
+    
+        for (String key : keys) {
+            if (builder.length() > 1) {
+                builder.append(',');
+            }
+            builder
+                .append(SIMPLE_STRING.matcher(key).matches()? key : NBTString.toMSONString(key))
+                .append(':')
+                .append(this.value.get(key).toMSONString());
+        }
+        
+        return builder.append("}").toString();
+    }
+    
+    /*
+    @Override
+    public String toMSONStringOld() {
+        StringBuilder builder = new StringBuilder("{");
         Iterator<Map.Entry<String, NBTTag>> iter = value.entrySet().iterator();
-        boolean hasNext = iter.hasNext();
-        while (hasNext) {
+        boolean first = true;
+        while (iter.hasNext()) {
             Map.Entry<String, NBTTag> next = iter.next();
             builder
                 .append('\"')
@@ -265,9 +397,8 @@ public final class TagCompound extends NBTTag {
             if (hasNext = iter.hasNext())
                 builder.append(", ");
         }
-
-        builder.append("}");
-        return builder.toString();
+        return builder.append("}").toString();
     }
+    */
 
 }

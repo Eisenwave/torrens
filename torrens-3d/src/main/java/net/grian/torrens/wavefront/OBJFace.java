@@ -1,4 +1,4 @@
-package net.grian.torrens.util.wavefront;
+package net.grian.torrens.wavefront;
 
 import net.grian.spatium.array.ArrayIterator;
 import org.jetbrains.annotations.NotNull;

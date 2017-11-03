@@ -1,4 +1,6 @@
-package net.grian.torrens.nbt;
+package net.grian.torrens.nbt.io;
+
+import net.grian.torrens.nbt.*;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -65,23 +67,21 @@ public final class NBTOutputStream extends DataOutputStream {
      * @param tag the tag
      * @throws IOException if an I/O error occurs
      */
-    private void writeTag(NBTTag tag) throws IOException {
+    public void writeTag(NBTTag tag) throws IOException {
         switch (tag.getType()) {
             case END: break;
-
-            case BYTE: writeByte(((TagByte) tag).getByteValue()); break;
-            case SHORT: writeShort(((TagShort) tag).getShortValue()); break;
-            case INT: writeInt(((TagInt) tag).getIntValue()); break;
-            case LONG: writeLong(((TagLong) tag).getLongValue()); break;
-            case FLOAT: writeFloat(((TagFloat) tag).getFloatValue()); break;
-            case DOUBLE: writeDouble(((TagDouble) tag).getDoubleValue()); break;
-
-            case BYTE_ARRAY: writeTagByteArray((TagByteArray) tag); break;
-            case STRING: writeTagString((TagString) tag); break;
-            case LIST: writeTagList((TagList) tag); break;
-            case COMPOUND: writeTagCompound((TagCompound) tag); break;
-            case INT_ARRAY: writeTagIntArray((TagIntArray) tag); break;
-
+            case BYTE: writeByte(((NBTByte) tag).getByteValue()); break;
+            case SHORT: writeShort(((NBTShort) tag).getShortValue()); break;
+            case INT: writeInt(((NBTInt) tag).getIntValue()); break;
+            case LONG: writeLong(((NBTLong) tag).getLongValue()); break;
+            case FLOAT: writeFloat(((NBTFloat) tag).getFloatValue()); break;
+            case DOUBLE: writeDouble(((NBTDouble) tag).getDoubleValue()); break;
+            case BYTE_ARRAY: writeTagByteArray((NBTByteArray) tag); break;
+            case STRING: writeTagString((NBTString) tag); break;
+            case LIST: writeTagList((NBTList) tag); break;
+            case COMPOUND: writeTagCompound((NBTCompound) tag); break;
+            case INT_ARRAY: writeTagIntArray((NBTIntArray) tag); break;
+            case LONG_ARRAY: writeTagLongArray((NBTLongArray) tag); break;
             default: throw new IOException("invalid tag type: " + tag.getType());
         }
     }
@@ -92,7 +92,7 @@ public final class NBTOutputStream extends DataOutputStream {
      * @param tag the tag.
      * @throws IOException if an I/O error occurs
      */
-    private void writeTagString(TagString tag) throws IOException {
+    public void writeTagString(NBTString tag) throws IOException {
         byte[] bytes = tag.getValue().getBytes(UTF_8);
         writeShort(bytes.length);
         write(bytes);
@@ -104,7 +104,7 @@ public final class NBTOutputStream extends DataOutputStream {
      * @param tag the tag
      * @throws IOException if an I/O error occurs
      */
-    private void writeTagByteArray(TagByteArray tag) throws IOException {
+    public void writeTagByteArray(NBTByteArray tag) throws IOException {
         byte[] bytes = tag.getValue();
         writeInt(bytes.length);
         write(bytes);
@@ -116,7 +116,7 @@ public final class NBTOutputStream extends DataOutputStream {
      * @param tag the tag.
      * @throws IOException if an I/O error occurs
      */
-    private void writeTagList(TagList tag) throws IOException {
+    public void writeTagList(NBTList tag) throws IOException {
         NBTType type = tag.getElementType();
         List<? extends NBTTag> tags = tag.getValue();
         int size = tags.size();
@@ -133,7 +133,7 @@ public final class NBTOutputStream extends DataOutputStream {
      * @param tag the tag
      * @throws IOException if an I/O error occurs
      */
-    private void writeTagCompound(TagCompound tag) throws IOException {
+    public void writeTagCompound(NBTCompound tag) throws IOException {
         for (Map.Entry<String, NBTTag> entry : tag.getValue().entrySet()) {
             writeNamedTag(entry.getKey(), entry.getValue());
         }
@@ -146,10 +146,22 @@ public final class NBTOutputStream extends DataOutputStream {
      * @param tag the tag
      * @throws IOException if an I/O error occurs
      */
-    private void writeTagIntArray(TagIntArray tag) throws IOException {
+    public void writeTagIntArray(NBTIntArray tag) throws IOException {
         writeInt(tag.length());
         for (int aData : tag.getValue())
             writeInt(aData);
+    }
+    
+    /**
+     * Writes a {@code TAG_Long_Array} tag.
+     *
+     * @param tag the tag
+     * @throws IOException if an I/O error occurs
+     */
+    public void writeTagLongArray(NBTLongArray tag) throws IOException {
+        writeInt(tag.length());
+        for (long aData : tag.getValue())
+            writeLong(aData);
     }
     
 }

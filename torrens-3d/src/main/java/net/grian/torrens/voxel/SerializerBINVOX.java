@@ -1,7 +1,7 @@
-package net.grian.torrens.util.voxel;
+package net.grian.torrens.voxel;
 
-import net.grian.spatium.geo3.BlockVector;
 import net.grian.torrens.io.Serializer;
+import net.grian.torrens.object.Vertex3i;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -82,8 +82,8 @@ public class SerializerBINVOX implements Serializer<BitArray3> {
     }
     
     @NotNull
-    private BlockVector posOf(int index) {
-        return BlockVector.fromXYZ(
+    private Vertex3i posOf(int index) {
+        return new Vertex3i(
             index / dyz,
             index % dy,
             (index / dy) % dz

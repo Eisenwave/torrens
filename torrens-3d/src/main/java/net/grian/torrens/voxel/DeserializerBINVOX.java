@@ -1,4 +1,4 @@
-package net.grian.torrens.util.voxel;
+package net.grian.torrens.voxel;
 
 import net.grian.torrens.error.FileFormatException;
 import net.grian.torrens.error.FileSyntaxException;

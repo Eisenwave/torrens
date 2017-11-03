@@ -1,4 +1,4 @@
-package net.grian.torrens.util.wavefront;
+package net.grian.torrens.wavefront;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

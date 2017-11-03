@@ -2,6 +2,8 @@ package net.grian.torrens.util;
 
 import org.junit.Test;
 
+import java.awt.*;
+
 import static org.junit.Assert.*;
 
 public class ColorMathTest {
@@ -21,7 +23,6 @@ public class ColorMathTest {
         assertEquals(510, ColorMath.componentDiff(ColorMath.SOLID_RED, ColorMath.SOLID_BLUE, true));
         assertEquals(765, ColorMath.componentDiff(ColorMath.INVISIBLE_BLACK, ColorMath.SOLID_WHITE, false));
         assertEquals(1020, ColorMath.componentDiff(ColorMath.INVISIBLE_BLACK, ColorMath.SOLID_WHITE, true));
-        
     }
     
     @Test
@@ -78,6 +79,43 @@ public class ColorMathTest {
         assertFalse(ColorMath.isInvisible(SOLID));
         assertFalse(ColorMath.isInvisible(TRANSPARENT));
         assertTrue(ColorMath.isInvisible(INVISIBLE));
+    }
+    
+    @Test
+    public void stack_opaque() throws Exception {
+        final int stacked = ColorMath.stack(ColorMath.SOLID_BLACK, ColorMath.SOLID_WHITE);
+    
+        assertTrue(ColorMath.isSolid(stacked));
+        assertEquals(stacked, ColorMath.SOLID_WHITE);
+    }
+    
+    @Test
+    public void stack_invisible() throws Exception {
+        final int stacked = ColorMath.stack(ColorMath.SOLID_RED, ColorMath.INVISIBLE_WHITE);
+    
+        assertTrue(ColorMath.isSolid(stacked));
+        assertEquals(stacked, ColorMath.SOLID_RED);
+    }
+    
+    @Test
+    public void stack_transparent_onOpaque() throws Exception {
+        // half-transparent blue on red
+        final int stacked = ColorMath.stack(ColorMath.SOLID_RED, ColorMath.fromRGB(0, 0, 255, 127));
+        // expect purple
+        assertTrue(ColorMath.isSolid(stacked));
+        assertEquals(new Color(127, 0, 127), new Color(stacked, true));
+    }
+    
+    @Test
+    public void stack_transparent_onTransparent() throws Exception {
+        // half-transparent green on half-transparent red
+        final int stacked = ColorMath.stack(ColorMath.fromRGB(255, 0, 0, 127), ColorMath.fromRGB(0, 255, 0, 127));
+        // expect slightly transparent lime
+        Color expected = new Color(85,  169, 0, 190); // expected values as seen in layer stacking  in GIMP 3.0
+        //System.out.println(expected.getAlpha()+" ?= "+ColorMath.alpha(stacked));
+        
+        assertFalse(ColorMath.isSolid(expected.getRGB()));
+        assertEquals(expected, new Color(stacked, true));
     }
 
 }

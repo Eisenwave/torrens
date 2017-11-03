@@ -1,16 +1,18 @@
-package net.grian.torrens.util.util;
+package net.grian.torrens.util;
 
-import net.grian.spatium.util.PrimMath;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
+import java.util.Random;
 
 /**
  * A utility library for performing calculations with colors represented as primitive ARGB integers.
  */
 @SuppressWarnings("unused")
 public final class ColorMath {
+    
+    private final static Random RANDOM = new Random();
 
     public final static int
     INVISIBLE_WHITE = 0x00_FF_FF_FF,
@@ -225,7 +227,7 @@ public final class ColorMath {
     @Contract(pure = true)
     public static int stack(int bottom, int top) {
         final int topAlpha = alpha(top);
-        return topAlpha == 0? bottom : stack(
+        return topAlpha == 0? bottom : topAlpha == 0xFF? top : stack(
             red(bottom), green(bottom), blue(bottom), alpha(bottom),
             red(top),    green(top),    blue(top),    topAlpha);
     }
@@ -336,7 +338,7 @@ public final class ColorMath {
      * @return the color's brightness
      */
     public static float brightness(int rgb) {
-        return PrimMath.max(red(rgb), green(rgb), blue(rgb)) / 255F;
+        return max(red(rgb), green(rgb), blue(rgb)) / 255F;
     }
     
     /**
@@ -350,8 +352,8 @@ public final class ColorMath {
     @Contract(pure = true)
     public static float saturation(int r, int g, int b) {
         final int
-            min = PrimMath.min(r, g, b),
-            max = PrimMath.max(r, g, b);
+            min = min(r, g, b),
+            max = max(r, g, b);
         return (max-min) / (float) max;
     }
     
@@ -377,8 +379,8 @@ public final class ColorMath {
     @Contract(pure = true)
     public static float hue(int r, int g, int b) {
         final int
-            min = PrimMath.min(r, g, b),
-            max = PrimMath.max(r, g, b);
+            min = min(r, g, b),
+            max = max(r, g, b);
         
         float
             rc = (max - r) / (float) (max - min),
@@ -486,10 +488,10 @@ public final class ColorMath {
      */
     public static int random(boolean alpha) {
         return fromRGB(
-            PrimMath.randomInt(255),
-            PrimMath.randomInt(255),
-            PrimMath.randomInt(255),
-            alpha? PrimMath.randomInt(255) : 255);
+            RANDOM.nextInt(256),
+            RANDOM.nextInt(255),
+            RANDOM.nextInt(255),
+            alpha? RANDOM.nextInt(255) : 255);
     }
     
     /**
@@ -572,6 +574,16 @@ public final class ColorMath {
     @Contract(pure = true)
     public static boolean isInvisible(int rgb) {
         return (rgb & 0xFF_000000) == 0;
+    }
+    
+    // UTIL
+    
+    private static int min(int a, int b, int c) {
+        return Math.min(Math.min(a, b), c);
+    }
+    
+    private static int max(int a, int b, int c) {
+        return Math.max(Math.max(a, b), c);
     }
 
 }

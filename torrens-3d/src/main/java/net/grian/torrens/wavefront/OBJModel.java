@@ -1,7 +1,7 @@
-package net.grian.torrens.util.wavefront;
+package net.grian.torrens.wavefront;
 
-import net.grian.spatium.Spatium;
-import net.grian.spatium.geo3.AxisAlignedBB;
+import net.grian.spatium.util.Spatium;
+import net.grian.torrens.object.BoundingBox6f;
 import net.grian.torrens.object.Vertex2f;
 import net.grian.torrens.object.Vertex3f;
 import org.jetbrains.annotations.NotNull;
@@ -9,6 +9,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.Serializable;
 import java.util.*;
+import java.util.function.Consumer;
 
 /**
  * Data representation of a Wavefront Object Model.
@@ -30,7 +31,7 @@ public class OBJModel implements Serializable {
         groups.add(defGroup);
     }
 
-    //GETTERS
+    // GETTERS
     
     /**
      * Returns the this model's material library or null if it has none.
@@ -47,10 +48,11 @@ public class OBJModel implements Serializable {
      *
      * @param index the index
      * @return the vertex with the given index
-     * @throws IndexOutOfBoundsException if the index is out of range (<code>index &lt; 0 || index &gt;= size()</code>)
+     * @throws IndexOutOfBoundsException if the index is out of range (<code>index &lt; 1 || index &gt;= size()</code>)
      */
     public Vertex3f getVertex(int index) {
-        return vertices.get(index);
+        if (index < 1) throw new IndexOutOfBoundsException("index < 1");
+        return vertices.get(index-1);
     }
 
     /**
@@ -58,10 +60,11 @@ public class OBJModel implements Serializable {
      *
      * @param index the index
      * @return the normal vertex with the given index
-     * @throws IndexOutOfBoundsException if the index is out of range (<code>index &lt; 0 || index &gt;= size()</code>)
+     * @throws IndexOutOfBoundsException if the index is out of range (<code>index &lt; 1 || index &gt;= size()</code>)
      */
     public Vertex3f getNormal(int index) {
-        return normals.get(index);
+        if (index < 1) throw new IndexOutOfBoundsException("index < 1");
+        return normals.get(index-1);
     }
 
     /**
@@ -69,10 +72,11 @@ public class OBJModel implements Serializable {
      *
      * @param index the index
      * @return the texture vertex with the given index
-     * @throws IndexOutOfBoundsException if the index is out of range (<code>index &lt; 0 || index &gt;= size()</code>)
+     * @throws IndexOutOfBoundsException if the index is out of range (<code>index &lt; 1 || index &gt;= size()</code>)
      */
     public Vertex2f getTexture(int index) {
-        return textures.get(index);
+        if (index < 1) throw new IndexOutOfBoundsException("index < 1");
+        return textures.get(index-1);
     }
     
     @NotNull
@@ -129,7 +133,7 @@ public class OBJModel implements Serializable {
         return Collections.unmodifiableSet(groups);
     }
     
-    public AxisAlignedBB getBoundaries() {
+    public BoundingBox6f getBoundaries() {
         float
             minX = 0, minY = 0, minZ = 0,
             maxX = 0, maxY = 0, maxZ = 0;
@@ -145,10 +149,10 @@ public class OBJModel implements Serializable {
             else if (z > maxZ) maxZ = z;
         }
         
-        return AxisAlignedBB.fromPoints(minX, minY, minZ, maxX, maxY, maxZ);
+        return new BoundingBox6f(minX, minY, minZ, maxX, maxY, maxZ);
     }
 
-    //CHECKERS
+    // PREDICATES
 
     /**
      * Returns whether this model has an attached material library.
@@ -159,7 +163,7 @@ public class OBJModel implements Serializable {
         return mtllib != null;
     }
 
-    //SETTERS
+    // MUTATORS
 
     /**
      * Sets the material library of this model.
@@ -207,6 +211,28 @@ public class OBJModel implements Serializable {
      */
     public void addGroup(OBJGroup group) {
         groups.add(Objects.requireNonNull(group));
+    }
+    
+    // ITERATION
+    
+    /**
+     * Performs an action for every vertex in the model.
+     *
+     * @param action the action
+     */
+    public void forEachVertex(Consumer<Vertex3f> action) {
+        for (Vertex3f v : vertices)
+            action.accept(v);
+    }
+    
+    /**
+     * Performs an action for every face in the model.
+     *
+     * @param action the action
+     */
+    public void forEachFace(Consumer<OBJFace> action) {
+        for (OBJGroup group : groups)
+            group.forEach(action);
     }
     
     //MISC

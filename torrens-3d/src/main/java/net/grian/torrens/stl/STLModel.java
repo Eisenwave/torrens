@@ -1,4 +1,7 @@
-package net.grian.torrens.util.stl;
+package net.grian.torrens.stl;
+
+import net.grian.torrens.object.BoundingBox6f;
+import net.grian.torrens.object.Vertex3f;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +24,7 @@ public class STLModel {
         this("");
     }
 
-    //GETTERS
+    // GETTERS
 
     public List<STLTriangle> getTriangles() {
         return triangles;
@@ -44,8 +47,43 @@ public class STLModel {
     public String getHeader() {
         return header;
     }
+    
+    public BoundingBox6f getBoundaries() {
+        if (isEmpty()) throw new IllegalStateException("empty models have no boundaries");
+        float
+            minX =  Float.MAX_VALUE, minY =  Float.MAX_VALUE, minZ =  Float.MAX_VALUE,
+            maxX = -Float.MAX_VALUE, maxY = -Float.MAX_VALUE, maxZ = -Float.MAX_VALUE;
+        
+        for (STLTriangle triangle : triangles) {
+            Vertex3f a = triangle.getA(), b = triangle.getB(), c = triangle.getC();
+            final float
+                ax = a.getX(), ay = a.getY(), az = a.getZ(),
+                bx = b.getX(), by = b.getY(), bz = b.getZ(),
+                cx = c.getX(), cy = c.getX(), cz = c.getZ();
+            
+            minX = Math.min(minX, Math.min(ax, Math.min(bx, cx)));
+            minY = Math.min(minY, Math.min(ay, Math.min(by, cy)));
+            minZ = Math.min(minZ, Math.min(az, Math.min(bz, cz)));
+            maxX = Math.max(maxX, Math.max(ax, Math.max(bx, cx)));
+            maxY = Math.max(maxY, Math.max(ay, Math.max(by, cy)));
+            maxZ = Math.max(maxZ, Math.max(az, Math.max(bz, cz)));
+        }
+        
+        return new BoundingBox6f(minX, minY, minZ, maxX, maxY, maxZ);
+    }
+    
+    // PREDICATES
+    
+    /**
+     * Returns whether this model contains no triangles.
+     * 
+     * @return whether this model is empty
+     */
+    public boolean isEmpty() {
+        return triangles.isEmpty();
+    }
 
-    //SETTERS
+    // MUTATORS
 
     public boolean add(STLTriangle triangle) {
         return triangles.add(triangle);
@@ -56,7 +94,7 @@ public class STLModel {
         this.header = header;
     }
     
-    //MISC
+    // MISC
     
     @Override
     public String toString() {

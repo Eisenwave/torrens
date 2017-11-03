@@ -1,8 +1,8 @@
-package net.grian.torrens.util.img;
+package net.grian.torrens.img;
 
-import net.grian.torrens.img.SerializerJPEG;
-import net.grian.torrens.img.Texture;
 import org.junit.Test;
+
+import static org.junit.Assert.*;
 
 public class SerializerJPEGTest {
     
@@ -10,7 +10,7 @@ public class SerializerJPEGTest {
     public void toBytes() throws Exception {
         Texture texture = Texture.alloc(16, 16);
         byte[] bytes = new SerializerJPEG().toBytes(texture.getImageWrapper());
-        Assert.assertTrue(bytes.length > 32);
+        assertTrue(bytes.length > 32);
     }
     
 }

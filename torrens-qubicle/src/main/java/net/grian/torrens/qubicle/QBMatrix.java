@@ -1,7 +1,7 @@
-package net.grian.torrens.util.qubicle;
+package net.grian.torrens.qubicle;
 
-import net.grian.spatium.geo3.BlockSelection;
-import net.grian.spatium.geo3.BlockVector;
+import net.grian.torrens.object.BoundingBox6i;
+import net.grian.torrens.object.Vertex3i;
 import net.grian.torrens.voxel.VoxelArray;
 
 import java.io.Serializable;
@@ -78,8 +78,8 @@ public class QBMatrix implements Cloneable, Serializable {
         return maxZ;
     }
 
-    public BlockVector getPosition() {
-        return BlockVector.fromXYZ(minX, minY, minZ);
+    public Vertex3i getPosition() {
+        return new Vertex3i(minX, minY, minZ);
     }
 
     /**
@@ -87,8 +87,8 @@ public class QBMatrix implements Cloneable, Serializable {
      *
      * @return the boundaries of this matrix
      */
-    public BlockSelection getBoundaries() {
-        return BlockSelection.fromPoints(minX, minY, minZ, maxX, maxY, maxZ);
+    public BoundingBox6i getBoundaries() {
+        return new BoundingBox6i(minX, minY, minZ, maxX, maxY, maxZ);
     }
 
     /**

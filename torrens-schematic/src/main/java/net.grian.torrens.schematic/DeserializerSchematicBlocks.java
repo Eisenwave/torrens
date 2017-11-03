@@ -1,10 +1,15 @@
 package net.grian.torrens.schematic;
 
+import net.grian.spatium.array.LowNibbleArray;
 import net.grian.torrens.error.FileFormatException;
 import net.grian.torrens.error.FileSyntaxException;
 import net.grian.torrens.error.FileVersionException;
 import net.grian.torrens.io.Deserializer;
-import net.grian.torrens.nbt.*;
+import net.grian.torrens.nbt.io.DeserializerNBT;
+import net.grian.torrens.nbt.NBTNamedTag;
+import net.grian.torrens.nbt.NBTType;
+import net.grian.torrens.nbt.NBTCompound;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -21,18 +26,18 @@ import java.io.InputStream;
  *     Only alpha version schematics are supported.
  * </p>
  */
-public class DeserializerSchematicBlocks implements Deserializer<BlockArray> {
+public class DeserializerSchematicBlocks implements Deserializer<BlockStructure> {
 
-    private TagCompound schematic;
+    private NBTCompound schematic;
 
     @NotNull
     @Override
-    public BlockArray fromStream(InputStream stream) throws IOException {
+    public ArrayBlockStructure fromStream(InputStream stream) throws IOException {
         this.schematic = readSchematic(stream);
         validateSchematic();
 
         final short sizeX = readShort("Width"), sizeY = readShort("Height"), sizeZ = readShort("Length");
-        BlockArray result = new BlockArray(sizeX, sizeY, sizeZ);
+        ArrayBlockStructure result = new ArrayBlockStructure(sizeX, sizeY, sizeZ);
 
         short[] blocks = readBlocks();
         byte[] data = readBytes("Data");
@@ -47,11 +52,8 @@ public class DeserializerSchematicBlocks implements Deserializer<BlockArray> {
         return result;
     }
 
-    private TagCompound readSchematic(InputStream stream) throws IOException {
-        NBTNamedTag[] rootTags = new DeserializerNBT().fromStream(stream);
-        if (rootTags.length == 0) throw new IOException("schematic is empty");
-        
-        NBTNamedTag rootTag = rootTags[0];
+    private NBTCompound readSchematic(InputStream stream) throws IOException {
+        NBTNamedTag rootTag = new DeserializerNBT().fromStream(stream);
 
         if (rootTag.getTag().getType() != NBTType.COMPOUND)
             throw new IOException("root tag is not a compound");
@@ -59,7 +61,7 @@ public class DeserializerSchematicBlocks implements Deserializer<BlockArray> {
         if (!rootTag.getName().equals("Schematic"))
             throw new FileFormatException("tag 'Schematic' does not exist or is not first");
 
-        return (TagCompound) rootTag.getTag();
+        return (NBTCompound) rootTag.getTag();
     }
 
     private void validateSchematic() throws IOException {
@@ -71,8 +73,10 @@ public class DeserializerSchematicBlocks implements Deserializer<BlockArray> {
 
     private short[] readBlocks() throws IOException {
         byte[] baseBlocks = readBytes("Blocks");
-        byte[] addBlocks = schematic.containsKey("AddBlocks")? readBytes("AddBlocks") : new byte[0];
-        return combine(baseBlocks, addBlocks);
+        
+        return schematic.hasKey("AddBlocks")?
+            toBlocks(baseBlocks, readBytes("AddBlocks")) :
+            toBlocks(baseBlocks);
     }
 
     private short readShort(String key) throws IOException {
@@ -88,8 +92,17 @@ public class DeserializerSchematicBlocks implements Deserializer<BlockArray> {
     }
 
     private void require(String key, NBTType type) throws FileSyntaxException {
-        if (!schematic.containsKey(key, type))
-            throw new FileSyntaxException("missing tag: ("+type.getName()+") "+key);
+        if (!schematic.hasKeyOfType(key, type))
+            throw new FileSyntaxException(String.format("nbt is missing tag \"%s\" of type %s", key, type));
+    }
+    
+    @Contract(pure = true)
+    private static short[] toBlocks(byte[] baseBlocks) {
+        short[] result = new short[baseBlocks.length];
+        for (int i = 0; i < baseBlocks.length; i++)
+            result[i] = (short) (baseBlocks[i] & 0xFF);
+        
+        return result;
     }
 
     /**
@@ -99,28 +112,24 @@ public class DeserializerSchematicBlocks implements Deserializer<BlockArray> {
      *     4096 blocks.
      * </p>
      * <p>
-     *     The byte array containing the additional blocks is of half the hypot of the base block array, with every
-     *     byte storing 2 times 4 bits of additional id space.
+     *     "AddBlocks" is a nibble (half-byte) array with even indexes in "Blocks" being in the low nibble and odd
+     *     indexes being in the high nibble.
      * </p>
      *
      * @param baseBlocks the base array of block id's
      * @param addBlocks the array of additional block id's
      * @return a new array containing the full block id
      */
-    private static short[] combine(byte[] baseBlocks, byte[] addBlocks) {
+    @NotNull
+    @Contract(pure = true)
+    private static short[] toBlocks(byte[] baseBlocks, byte[] addBlocks) {
         short[] blocks = new short[baseBlocks.length];
-
-        for (int i = 0; i < baseBlocks.length; i++) {
-
-            if ((i >> 1) >= addBlocks.length)// No corresponding AddBlocks index
-                blocks[i] = (short) (baseBlocks[i] & 0xFF);
-
-            else if ((i & 1) == 0)
-                blocks[i] = (short) (((addBlocks[i >> 1] & 0x0F) << 8) + (baseBlocks[i] & 0xFF));
-
-            else
-                blocks[i] = (short) (((addBlocks[i >> 1] & 0xF0) << 4) + (baseBlocks[i] & 0xFF));
-        }
+        LowNibbleArray nibbles = new LowNibbleArray(addBlocks.length * 2, addBlocks);
+        
+        final int lim = Math.min(baseBlocks.length, nibbles.getLength());
+        
+        for (int i = 0; i < lim; i++)
+            blocks[i] = (short) ((nibbles.get(i) << 8) | (baseBlocks[i] & 0xFF));
 
         return blocks;
     }

@@ -1,8 +1,7 @@
-package net.grian.torrens.util.voxel;
+package net.grian.torrens.voxel;
 
-import net.grian.spatium.geo3.BlockSelection;
+import net.grian.torrens.object.BoundingBox6i;
 import net.grian.torrens.util.ColorMath;
-import net.grian.torrens.voxel.VoxelArray;
 import org.junit.Test;
 
 import java.util.Random;
@@ -22,9 +21,9 @@ public class VoxelArrayTest {
     @Test
     public void getBoundaries() throws Exception {
         VoxelArray array = new VoxelArray(3, 5, 7);
-        BlockSelection bounds = array.getBoundaries();
+        BoundingBox6i bounds = array.getBoundaries();
 
-        assertEquals(BlockSelection.fromPoints(0, 0, 0, 2, 4, 6), bounds);
+        assertEquals(new BoundingBox6i(0, 0, 0, 2, 4, 6), bounds);
     }
 
     @Test

@@ -1,4 +1,4 @@
-package net.grian.torrens.util.img.gif;
+package net.grian.torrens.img.gif;
 
 import net.grian.spatium.util.FastMath;
 import org.jetbrains.annotations.Nullable;

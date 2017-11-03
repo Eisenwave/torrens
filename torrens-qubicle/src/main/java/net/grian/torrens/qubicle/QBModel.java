@@ -1,6 +1,6 @@
-package net.grian.torrens.util.qubicle;
+package net.grian.torrens.qubicle;
 
-import net.grian.spatium.geo3.BlockSelection;
+import net.grian.torrens.object.BoundingBox6i;
 import net.grian.torrens.voxel.VoxelArray;
 import org.jetbrains.annotations.NotNull;
 
@@ -82,7 +82,7 @@ public class QBModel implements Cloneable, Serializable, Iterable<QBMatrix> {
      *
      * @return the model boundaries
      */
-    public BlockSelection getBoundaries() {
+    public BoundingBox6i getBoundaries() {
         if (isEmpty()) throw new IllegalStateException("empty meshes have no boundaries");
         int[] result = {
             Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE,
@@ -100,7 +100,7 @@ public class QBModel implements Cloneable, Serializable, Iterable<QBMatrix> {
             if (minMax[5] > result[5]) result[5] = minMax[5];
         }
 
-        return BlockSelection.fromPoints(result[0], result[1], result[2], result[3], result[4], result[5]);
+        return new BoundingBox6i(result[0], result[1], result[2], result[3], result[4], result[5]);
     }
 
     /**

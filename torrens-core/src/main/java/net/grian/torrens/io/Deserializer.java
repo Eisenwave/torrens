@@ -1,10 +1,10 @@
-package net.grian.torrens.util.io;
+package net.grian.torrens.io;
 
-import net.grian.torrens.util.util.Resources;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.*;
 import java.net.URL;
+import java.nio.file.Paths;
 
 /**
  * Throwaway object only meant to perform one deserialization of a stream.
@@ -84,7 +84,8 @@ public interface Deserializer<T> {
      */
     @NotNull
     public default T fromResource(Class<?> clazz, String resPath) throws IOException {
-        try (InputStream stream = Resources.getStream(clazz, resPath)) {
+        try (InputStream stream = clazz.getClassLoader().getResourceAsStream(resPath)) {
+            if (stream == null) throw new IOException("resource \""+resPath+"\" could not be found");
             return fromStream(stream);
         }
     }

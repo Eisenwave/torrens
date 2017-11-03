@@ -1,4 +1,4 @@
-package net.grian.torrens.util.wavefront;
+package net.grian.torrens.wavefront;
 
 import net.grian.torrens.error.FileSyntaxException;
 import net.grian.torrens.img.DeserializerImage;

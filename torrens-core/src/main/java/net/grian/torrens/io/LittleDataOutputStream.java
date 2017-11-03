@@ -1,4 +1,4 @@
-package net.grian.torrens.util.io;
+package net.grian.torrens.io;
 
 import java.io.DataOutputStream;
 import java.io.IOException;

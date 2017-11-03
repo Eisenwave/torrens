@@ -1,4 +1,4 @@
-package net.grian.torrens.util.wavefront;
+package net.grian.torrens.wavefront;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -41,15 +41,30 @@ public class OBJTriplet implements Serializable, Cloneable {
     }
     
     // GETTERS
-
+    
+    /**
+     * Returns the vertex index of the triplet.
+     *
+     * @return the vertex index
+     */
     public int getVertexIndex() {
         return v;
     }
-
+    
+    /**
+     * Returns the normal index of the triplet or 0 if it has none.
+     *
+     * @return the vertex index
+     */
     public int getNormalIndex() {
         return vn;
     }
-
+    
+    /**
+     * Returns the texture index of the triplet or 0 if it has none
+     *
+     * @return the texture index
+     */
     public int getTextureIndex() {
         return vt;
     }
