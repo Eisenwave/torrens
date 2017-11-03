@@ -92,10 +92,13 @@ public class MojangsonWriter extends Writer {
             boolean first = true;
     
             for (String key : keys) {
-                if (first) first = false;
-                else {
+                if (first)
+                    first = false;
+                else if (simple)
                     write(", ");
-                    if (!simple) endLn();
+                else {
+                    write(",");
+                    endLn();
                 }
                 write(SIMPLE_STRING.matcher(key).matches()? key : NBTString.toMSONString(key));
                 write(": ");
@@ -126,10 +129,13 @@ public class MojangsonWriter extends Writer {
             boolean first = true;
     
             while (iter.hasNext()) {
-                if (first) first = false;
-                else {
+                if (first)
+                    first = false;
+                else if (simple)
                     write(", ");
-                    if (!simple) endLn();
+                else {
+                    write(",");
+                    endLn();
                 }
                 writeTag(iter.next());
             }
