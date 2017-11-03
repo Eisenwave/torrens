@@ -10,11 +10,11 @@ public final class NBTByteArray extends NBTTag {
 
     private final byte[] value;
     
-    public NBTByteArray(byte... value) {
+    public NBTByteArray(byte[] value) {
         this.value = value;
     }
     
-    public NBTByteArray(Number... numbers) {
+    public NBTByteArray(Number[] numbers) {
         this.value = new byte[numbers.length];
         for (int i = 0; i < numbers.length; i++)
             value[i] = numbers[i].byteValue();

@@ -2,8 +2,6 @@ package net.grian.torrens.nbt;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Objects;
-
 /**
  * The {@code TAG_Long_Array} tag.
  */
@@ -16,11 +14,11 @@ public final class NBTLongArray extends NBTTag {
      *
      * @param value the value of the tag
      */
-    public NBTLongArray(@NotNull long... value) {
-        this.value = Objects.requireNonNull(value);
+    public NBTLongArray(long... value) {
+        this.value = value;
     }
     
-    public NBTLongArray(Number... numbers) {
+    public NBTLongArray(Number[] numbers) {
         this.value = new long[numbers.length];
         for (int i = 0; i < numbers.length; i++)
             value[i] = numbers[i].longValue();

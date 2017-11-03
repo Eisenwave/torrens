@@ -16,12 +16,12 @@ public final class NBTIntArray extends NBTTag implements Cloneable {
      *
      * @param value the value of the tag
      */
-    public NBTIntArray(int... value) {
+    public NBTIntArray(int[] value) {
         super();
         this.value = Objects.requireNonNull(value);
     }
     
-    public NBTIntArray(Number... numbers) {
+    public NBTIntArray(Number[] numbers) {
         this.value = new int[numbers.length];
         for (int i = 0; i < numbers.length; i++)
             value[i] = numbers[i].intValue();
