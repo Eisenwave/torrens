@@ -1,10 +1,10 @@
 package net.grian.torrens.schematic;
 
+import eisenwave.nbt.NBTCompound;
+import eisenwave.nbt.NBTNamedTag;
+import eisenwave.nbt.io.NBTSerializer;
 import net.grian.torrens.error.FileSyntaxException;
 import net.grian.torrens.io.Serializer;
-import net.grian.torrens.nbt.NBTCompound;
-import net.grian.torrens.nbt.NBTNamedTag;
-import net.grian.torrens.nbt.io.SerializerNBT;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -30,7 +30,7 @@ public class SerializerSchematicBlocks implements Serializer<BlockStructure> {
         schematic.putString("Materials", "Alpha");
         writeBlocks(blocks);
         
-        new SerializerNBT().toStream(new NBTNamedTag("Schematic", schematic), stream);
+        new NBTSerializer().toStream(new NBTNamedTag("Schematic", schematic), stream);
     }
     
     private void writeDims(BlockStructure blocks) throws FileSyntaxException {

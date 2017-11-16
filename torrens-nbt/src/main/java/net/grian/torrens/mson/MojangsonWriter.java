@@ -42,17 +42,24 @@ public class MojangsonWriter extends Writer {
     }
     
     private final Writer writer;
+    private final boolean pretty;
     
     private int indent = 0;
     
-    public MojangsonWriter(@NotNull Writer writer) {
+    public MojangsonWriter(@NotNull Writer writer, boolean pretty) {
         this.writer = writer;
+        this.pretty = pretty;
+    }
+    
+    public MojangsonWriter(@NotNull Writer writer) {
+        this(writer, false);
     }
     
     public void writeNamedTag(String name, NBTTag root) throws IOException {
         if (!name.isEmpty()) {
             write((new NBTString(name).toMSONString()));
-            write(": ");
+            write(':');
+            if (pretty) write(' ');
         }
         
         writeTag(root);
@@ -63,6 +70,11 @@ public class MojangsonWriter extends Writer {
     }
     
     public void writeTag(NBTTag tag) throws IOException {
+        if (!pretty) {
+            write(tag.toMSONString());
+            return;
+        }
+        
         NBTType type = tag.getType();
         if (type == NBTType.END || type.isPrimitive() || type.isArray()) {
             writer.write(tag.toMSONString());

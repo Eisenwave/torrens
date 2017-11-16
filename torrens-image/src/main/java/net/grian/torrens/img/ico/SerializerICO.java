@@ -6,7 +6,7 @@ import net.grian.torrens.img.SerializerPNG;
 import net.grian.torrens.img.Texture;
 import net.grian.torrens.io.LittleDataOutputStream;
 import net.grian.torrens.io.Serializer;
-import net.grian.torrens.util.FileConstants;
+import net.grian.torrens.util.FileMagic;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.image.BufferedImage;
@@ -82,7 +82,7 @@ public class SerializerICO implements Serializer<BufferedImage[]> {
             entries[i] = entry;
         }
         
-        entries[0].offset = FileConstants.ICO_HEADER_LENGTH + entries.length*FileConstants.ICO_ICONDIRENTRY_LENGTH;
+        entries[0].offset = FileMagic.ICO_HEADER_LENGTH + entries.length*FileMagic.ICO_ICONDIRENTRY_LENGTH;
         for (int i = 1; i < entries.length; i++)
             entries[i].offset = entries[i-1].offset + entries[i-1].data;
     

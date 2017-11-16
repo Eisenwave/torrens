@@ -2,7 +2,7 @@ package net.grian.torrens.img;
 
 import net.grian.torrens.io.LittleDataOutputStream;
 import net.grian.torrens.util.ColorMath;
-import net.grian.torrens.util.FileConstants;
+import net.grian.torrens.util.FileMagic;
 import org.jetbrains.annotations.Contract;
 
 import java.io.IOException;
@@ -11,7 +11,7 @@ import java.io.OutputStream;
 public class ARGBSerializerBMP implements ARGBSerializer {
     
     private final static int
-        BI_OFF_BITS = FileConstants.BMP_FILE_HEADER_LENGTH + FileConstants.BMP_INFO_HEADER_LENGTH,
+        BI_OFF_BITS = FileMagic.BMP_FILE_HEADER_LENGTH + FileMagic.BMP_INFO_HEADER_LENGTH,
         BI_PLANES = 1,
         BI_COMPRESSION = 0, //uncompressed
         BI_X_PIXELS_PER_METER = 0,
@@ -61,7 +61,7 @@ public class ARGBSerializerBMP implements ARGBSerializer {
         }
         
         // BITMAPINFOHEADER
-        stream.writeLittleInt(FileConstants.BMP_INFO_HEADER_LENGTH);
+        stream.writeLittleInt(FileMagic.BMP_INFO_HEADER_LENGTH);
         stream.writeLittleInt(width);
         stream.writeLittleInt(btmUp? lines : -lines);
         stream.writeLittleShort(BI_PLANES);

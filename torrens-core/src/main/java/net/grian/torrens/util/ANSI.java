@@ -3,8 +3,9 @@ package net.grian.torrens.util;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
-@SuppressWarnings("unused")
-public class ANSI {
+public final class ANSI {
+    
+    private ANSI() {}
     
     private final static char ESC = '\u001B';
 

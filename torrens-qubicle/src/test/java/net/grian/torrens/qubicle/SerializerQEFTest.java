@@ -1,5 +1,7 @@
 package net.grian.torrens.qubicle;
 
+import net.grian.torrens.voxel.DeserializerQEF;
+import net.grian.torrens.voxel.SerializerQEF;
 import net.grian.torrens.voxel.VoxelArray;
 import org.junit.Test;
 

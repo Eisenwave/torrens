@@ -1,7 +1,5 @@
 package net.grian.torrens.io;
 
-import net.grian.torrens.util.Resources;
-
 import java.io.*;
 
 /**
@@ -42,19 +40,6 @@ public interface Serializer<T> {
             }
         }
     }
-    
-    /**
-     * Writes the object into a {@link RandomAccessFile}.
-     *
-     * @param object the object
-     * @param file the file
-     * @throws IOException if an I/O error occurs
-     */
-    public default void toFile(T object, RandomAccessFile file) throws IOException {
-        RandomAccessFileOutputStream stream = new RandomAccessFileOutputStream(file);
-        this.toStream(object, stream);
-        stream.flush();
-    }
 
     /**
      * Writes the object into bytes {@code byte[]} using a {@link ByteArrayOutputStream} with set capacity.
@@ -85,18 +70,6 @@ public interface Serializer<T> {
         this.toStream(object, stream);
         stream.close();
         return stream.toByteArray();
-    }
-
-    /**
-     * Writes the object into a resource by opening a stream to it.
-     *
-     * @param object the object
-     * @param clazz the class
-     * @param resPath the resource path
-     * @throws IOException if an I/O error occurs
-     */
-    public default void toResource(T object, Class<?> clazz, String resPath) throws IOException {
-        toFile(object, Resources.getFile(clazz, resPath));
     }
 
 }

@@ -2,8 +2,7 @@ package net.grian.torrens.schematic;
 
 import net.grian.spatium.array.Array3;
 import net.grian.spatium.array.LowNibbleArray;
-import net.grian.spatium.util.FastMath;
-import net.grian.spatium.util.PrimMath;
+import net.grian.spatium.util.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

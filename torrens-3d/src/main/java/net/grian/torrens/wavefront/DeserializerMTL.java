@@ -2,8 +2,8 @@ package net.grian.torrens.wavefront;
 
 import net.grian.torrens.error.FileSyntaxException;
 import net.grian.torrens.img.DeserializerImage;
-import net.grian.torrens.io.TextDeserializer;
 import net.grian.torrens.img.Texture;
+import net.grian.torrens.io.TextDeserializer;
 import net.grian.torrens.util.ColorMath;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

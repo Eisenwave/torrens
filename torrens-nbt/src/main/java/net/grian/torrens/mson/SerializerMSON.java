@@ -10,9 +10,21 @@ import java.io.Writer;
 
 public class SerializerMSON implements TextSerializer<NBTNamedTag> {
     
+    private final boolean pretty;
+    
+    public SerializerMSON(boolean pretty) {
+        this.pretty = pretty;
+    }
+    
+    public SerializerMSON() {
+        this(false);
+    }
+    
     @Override
     public void toWriter(NBTNamedTag nbt, Writer writer) throws IOException {
-        new MojangsonWriter(writer).writeNamedTag(nbt);
+        MojangsonWriter msonWriter = new MojangsonWriter(writer, pretty);
+        msonWriter.writeNamedTag(nbt);
+        msonWriter.endLn(); // end last line to comply with POSIX standard
     }
     
     @NotNull
@@ -20,7 +32,7 @@ public class SerializerMSON implements TextSerializer<NBTNamedTag> {
     public String toString(NBTNamedTag nbt) {
         StringWriter stringWriter = new StringWriter();
         try {
-            new MojangsonWriter(stringWriter).writeNamedTag(nbt);
+            toWriter(nbt, stringWriter);
         } catch (IOException e) {
             throw new AssertionError(e);
         }

@@ -1,14 +1,14 @@
 package net.grian.torrens.schematic;
 
+import eisenwave.nbt.NBTCompound;
+import eisenwave.nbt.NBTNamedTag;
+import eisenwave.nbt.NBTType;
+import eisenwave.nbt.io.NBTDeserializer;
 import net.grian.spatium.array.LowNibbleArray;
 import net.grian.torrens.error.FileFormatException;
 import net.grian.torrens.error.FileSyntaxException;
 import net.grian.torrens.error.FileVersionException;
 import net.grian.torrens.io.Deserializer;
-import net.grian.torrens.nbt.io.DeserializerNBT;
-import net.grian.torrens.nbt.NBTNamedTag;
-import net.grian.torrens.nbt.NBTType;
-import net.grian.torrens.nbt.NBTCompound;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -53,7 +53,7 @@ public class DeserializerSchematicBlocks implements Deserializer<BlockStructure>
     }
 
     private NBTCompound readSchematic(InputStream stream) throws IOException {
-        NBTNamedTag rootTag = new DeserializerNBT().fromStream(stream);
+        NBTNamedTag rootTag = new NBTDeserializer().fromStream(stream);
 
         if (rootTag.getTag().getType() != NBTType.COMPOUND)
             throw new IOException("root tag is not a compound");

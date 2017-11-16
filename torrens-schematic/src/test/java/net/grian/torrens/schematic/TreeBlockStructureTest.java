@@ -1,12 +1,8 @@
 package net.grian.torrens.schematic;
 
 import net.grian.spatium.util.TestUtil;
-import net.grian.torrens.object.Vertex3i;
 import org.junit.Test;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Random;
 
 import static org.junit.Assert.*;

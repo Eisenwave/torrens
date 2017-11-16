@@ -1,11 +1,11 @@
 package net.grian.torrens.img.ico;
 
 import net.grian.spatium.util.PrimArrays;
+import net.grian.torrens.io.*;
 import net.grian.torrens.error.FileSyntaxException;
 import net.grian.torrens.error.FileVersionException;
-import net.grian.torrens.io.Deserializer;
 import net.grian.torrens.io.LittleDataInputStream;
-import net.grian.torrens.util.FileConstants;
+import net.grian.torrens.util.FileMagic;
 import org.jetbrains.annotations.NotNull;
 
 import javax.imageio.ImageIO;
@@ -90,7 +90,7 @@ public class DeserializerICO implements Deserializer<BufferedImage[]> {
         
         // Officially, ICO files can contain both PNG and BMP image data, although PNG is not supported by Windows
         
-        if (FileConstants.isPNG(bytes)) {
+        if (FileMagic.isPNG(bytes)) {
             return ImageIO.read(new ByteArrayInputStream(bytes));
         }
     
@@ -129,7 +129,7 @@ public class DeserializerICO implements Deserializer<BufferedImage[]> {
         buffer.order(ByteOrder.LITTLE_ENDIAN);
         
         buffer.put(BF_TYPE, 0, BF_TYPE.length);
-        buffer.putInt(2, FileConstants.BMP_FILE_HEADER_LENGTH + bmp.length);// bfSize
+        buffer.putInt(2, FileMagic.BMP_FILE_HEADER_LENGTH + bmp.length);// bfSize
         buffer.putInt(6, 0x10c); //bfReserved
     
         int biSize;
@@ -139,7 +139,7 @@ public class DeserializerICO implements Deserializer<BufferedImage[]> {
             biSize = bmpBuffer.getInt(0);
         }
         
-        buffer.putInt(10, FileConstants.BMP_FILE_HEADER_LENGTH + biSize);
+        buffer.putInt(10, FileMagic.BMP_FILE_HEADER_LENGTH + biSize);
     
         return header;
     }

@@ -1,10 +1,6 @@
 package net.grian.torrens.img;
 
 import net.grian.spatium.util.TestUtil;
-import net.grian.torrens.img.DeserializerImage;
-import net.grian.torrens.img.SerializerPNG;
-import net.grian.torrens.img.Texture;
-import net.grian.torrens.img.Textures;
 import net.grian.torrens.img.scale.ScaleBilinear;
 import net.grian.torrens.img.scale.ScaleBox;
 import net.grian.torrens.img.scale.ScaleNearestNeighbour;
@@ -98,7 +94,7 @@ public class TexturesTest {
     }
     
     private static void title(String str) {
-        System.out.println("\n"+ANSI.BOLD+str+ANSI.BOLD_OFF);
+        System.out.println("\n"+ ANSI.BOLD+str+ANSI.BOLD_OFF);
     }
     
     private static void scale(Texture t, TextureScale method, int dims, int tests) {

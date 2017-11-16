@@ -4,7 +4,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.*;
 import java.net.URL;
-import java.nio.file.Paths;
 
 /**
  * Throwaway object only meant to perform one deserialization of a stream.
@@ -45,19 +44,6 @@ public interface Deserializer<T> {
                 return fromStream(buffStream);
             }
         }
-    }
-    
-    /**
-     * Deserializes an object from a {@link RandomAccessFile}.
-     *
-     * @param file the random access file
-     * @return the deserialized object
-     * @throws IOException if the deserialization fails
-     */
-    @NotNull
-    public default T fromFile(RandomAccessFile file) throws IOException {
-        RandomAccessFileInputStream stream = new RandomAccessFileInputStream(file);
-        return fromStream(stream);
     }
 
     /**
