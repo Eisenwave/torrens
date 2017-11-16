@@ -35,7 +35,7 @@ public class BlockKey implements Serializable {
      * @throws IllegalArgumentException if id or data are negative
      */
     public BlockKey(int id, int data) {
-        this((short) id, (byte) data);
+        this(id, (byte) data);
     }
     
     // GETTERS

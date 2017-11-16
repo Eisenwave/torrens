@@ -1,13 +1,9 @@
 package net.grian.torrens.schematic;
 
-import eisenwave.nbt.NBTCompound;
-import eisenwave.nbt.NBTNamedTag;
-import eisenwave.nbt.NBTType;
+import eisenwave.nbt.*;
 import eisenwave.nbt.io.NBTDeserializer;
 import net.grian.spatium.array.LowNibbleArray;
-import net.grian.torrens.error.FileFormatException;
-import net.grian.torrens.error.FileSyntaxException;
-import net.grian.torrens.error.FileVersionException;
+import net.grian.torrens.error.*;
 import net.grian.torrens.io.Deserializer;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;

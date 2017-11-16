@@ -8,12 +8,12 @@ public final class ANSI {
     private ANSI() {}
     
     private final static char ESC = '\u001B';
-
+    
     public static final String
-        SAVE_CURSOR_POS = ESC+"[s",
-        RESTORE_CURSOR_POS = ESC+"[u",
-        CLEAR_SCREEN = ESC+"[2J",
-        CLEAR_LINE = ESC+"[K";
+        SAVE_CURSOR_POS = ESC + "[s",
+        RESTORE_CURSOR_POS = ESC + "[u",
+        CLEAR_SCREEN = ESC + "[2J",
+        CLEAR_LINE = ESC + "[K";
     
     /**
      * An SGR (Select Graphic Rendition) sequence.
@@ -70,7 +70,7 @@ public final class ANSI {
     @NotNull
     @Contract(pure = true)
     private static String sgr(int code) {
-        return ESC + "\u001B[" + code + "m";
+        return ESC + "[" + code + "m";
     }
-
+    
 }
