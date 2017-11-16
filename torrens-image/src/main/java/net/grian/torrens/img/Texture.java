@@ -14,8 +14,7 @@ import java.util.function.Consumer;
 
 /**
  * <p>
- *     A basic image format using a two-dimensional array of ARGB integers to represent an image.
- * </p>
+ * A basic image format using a two-dimensional array of ARGB integers to represent an image.
  */
 public class Texture implements Serializable, BaseTexture, Iterable<Texture.Pixel> {
     
@@ -42,7 +41,7 @@ public class Texture implements Serializable, BaseTexture, Iterable<Texture.Pixe
         if (width < 1) throw new IllegalArgumentException("width must be >= 1");
         if (height < 1) throw new IllegalArgumentException("height must be >= 1");
         
-        return new Texture(new int[width*height], width, height, DEFAULT_BACKGROUND, false);
+        return new Texture(new int[width * height], width, height, DEFAULT_BACKGROUND, false);
     }
     
     /**
@@ -56,7 +55,7 @@ public class Texture implements Serializable, BaseTexture, Iterable<Texture.Pixe
     @NotNull
     public static Texture copy(int[] argb, int width, int height) {
         validate(argb, width, height);
-        return new Texture(Arrays.copyOfRange(argb, 0, width*height), width, height, DEFAULT_BACKGROUND, false);
+        return new Texture(Arrays.copyOfRange(argb, 0, width * height), width, height, DEFAULT_BACKGROUND, false);
     }
     
     /**
@@ -128,7 +127,7 @@ public class Texture implements Serializable, BaseTexture, Iterable<Texture.Pixe
     }
     
     private static int getBackground(BufferedImage image) {
-        return ((Graphics2D)image.getGraphics()).getBackground().getRGB();
+        return ((Graphics2D) image.getGraphics()).getBackground().getRGB();
     }
     
     private static void validate(int[] arr, int width, int height) {
@@ -137,16 +136,16 @@ public class Texture implements Serializable, BaseTexture, Iterable<Texture.Pixe
         if (height < 1)
             throw new IllegalArgumentException("height must be >= 1");
         if (arr.length % width != 0)
-            throw new IllegalArgumentException("rgb array can not represent img of width "+width);
+            throw new IllegalArgumentException("rgb array can not represent img of width " + width);
         if (arr.length < width * height)
-            throw new IllegalArgumentException("rgb array has insufficient length ("+arr.length+" < "+width*height+")");
+            throw new IllegalArgumentException("rgb array has insufficient length (" + arr.length + " < " + width * height + ")");
     }
     
     // OBJECT
     
     int background;
     private final int[] data;
-
+    
     private final boolean wrapper;
     
     final int width, height;
@@ -169,12 +168,12 @@ public class Texture implements Serializable, BaseTexture, Iterable<Texture.Pixe
         
         System.arraycopy(copyOf.data, 0, this.data, 0, this.data.length);
     }
-
+    
     @Override
     public int getWidth() {
         return width;
     }
-
+    
     @Override
     public int getHeight() {
         return height;
@@ -189,10 +188,10 @@ public class Texture implements Serializable, BaseTexture, Iterable<Texture.Pixe
     public float getAspectRatio() {
         return width / (float) height;
     }
-
+    
     @Override
     public int get(int x, int y) {
-        return data[x + y*width];
+        return data[x + y * width];
     }
     
     @Override
@@ -202,14 +201,14 @@ public class Texture implements Serializable, BaseTexture, Iterable<Texture.Pixe
         
         // special case: copying entire rows
         if (x == 0 && width == this.width) {
-            int srcPos = y*this.width;
-            System.arraycopy(this.data, srcPos, arr, offset, width*height);
+            int srcPos = y * this.width;
+            System.arraycopy(this.data, srcPos, arr, offset, width * height);
         }
         
         for (int j = 0; j < height; j++) {
             final int
-                offArr = j*width,
-                offCon = (y+j)*this.width;
+                offArr = j * width,
+                offCon = (y + j) * this.width;
             
             for (int i = 0; i < width; i++)
                 arr[offset + offArr + i] = data[offCon + x + i];
@@ -218,8 +217,8 @@ public class Texture implements Serializable, BaseTexture, Iterable<Texture.Pixe
     
     public int get(float u, float v) {
         return get(
-            u==1? (width-1) : (int) (u * width),
-            v==1? (width-1) : (int) (v * height));
+            u == 1? (width - 1) : (int) (u * width),
+            v == 1? (width - 1) : (int) (v * height));
     }
     
     public Pixel getPixel(int x, int y) {
@@ -227,24 +226,21 @@ public class Texture implements Serializable, BaseTexture, Iterable<Texture.Pixe
     }
     
     public Pixel getPixel(float u, float v) {
-        int x = u==1? (width-1) : (int) (u * width);
-        int y = v==1? (width-1) : (int) (v * height);
+        int x = u == 1? (width - 1) : (int) (u * width);
+        int y = v == 1? (width - 1) : (int) (v * height);
         
         return getPixel(x, y);
     }
     
     /**
      * <p>
-     *     Returns the total match amount between this and another texture.
-     * </p>
+     * Returns the total match amount between this and another texture.
      * <p>
-     *     The result is a value in range(0,1), with 0 being absolutely no match and 1 being complete pixel equality.
-     *     For instance, a completely white and completely black image would have 0 match (with no alpha).
-     * </p>
+     * The result is a value in range(0,1), with 0 being absolutely no match and 1 being complete pixel equality.
+     * For instance, a completely white and completely black image would have 0 match (with no alpha).
      * <p>
-     *     This only takes raw pixel differences into account, visual deviation is not being respected.
-     *     For instance, a completely transparent white and completely transparent black image still differ massively.
-     * </p>
+     * This only takes raw pixel differences into account, visual deviation is not being respected.
+     * For instance, a completely transparent white and completely transparent black image still differ massively.
      *
      * @param texture the texture to compare to
      * @param alpha whether the alpha channel is to be respected
@@ -252,7 +248,7 @@ public class Texture implements Serializable, BaseTexture, Iterable<Texture.Pixe
      */
     public float match(BaseTexture texture, boolean alpha) {
         final long
-            maxDiff = width*height * (alpha? 1020 : 765),
+            maxDiff = width * height * (alpha? 1020 : 765),
             result = diff(texture, alpha);
         
         return (maxDiff - result) / (float) maxDiff;
@@ -263,27 +259,29 @@ public class Texture implements Serializable, BaseTexture, Iterable<Texture.Pixe
             throw new IllegalArgumentException("can not get difference to texture with different resolution");
         
         long diff = 0;
-        for (int x = 0; x < width; x++) for (int y = 0; y < height; y++) {
-            diff += ColorMath.componentDiff(
-                this.get(x, y),
-                texture.get(x, y),
-                alpha
-            );
-        }
+        for (int x = 0; x < width; x++)
+            for (int y = 0; y < height; y++) {
+                diff += ColorMath.componentDiff(
+                    this.get(x, y),
+                    texture.get(x, y),
+                    alpha
+                );
+            }
         
         return diff;
     }
     
     static int count = 0;
+    
     private static int compDiffDebug(int a, int b, boolean alpha) {
         final int
-            red = Math.abs(ColorMath.red(a)-ColorMath.red(b)),
-            grn = Math.abs(ColorMath.green(a)-ColorMath.green(b)),
-            blue = Math.abs(ColorMath.blue(a)-ColorMath.blue(b)),
-            alp = (alpha? Math.abs(ColorMath.alpha(a)-ColorMath.alpha(b)) : 0);
+            red = Math.abs(ColorMath.red(a) - ColorMath.red(b)),
+            grn = Math.abs(ColorMath.green(a) - ColorMath.green(b)),
+            blue = Math.abs(ColorMath.blue(a) - ColorMath.blue(b)),
+            alp = (alpha? Math.abs(ColorMath.alpha(a) - ColorMath.alpha(b)) : 0);
         
-        if (count++ < 64) System.out.println(red+", "+grn+", "+blue+", "+alp);
-        return red+grn+blue+alp;
+        if (count++ < 64) System.out.println(red + ", " + grn + ", " + blue + ", " + alp);
+        return red + grn + blue + alp;
     }
     
     /**
@@ -293,17 +291,17 @@ public class Texture implements Serializable, BaseTexture, Iterable<Texture.Pixe
      * @return an argb int representing the average color
      */
     public int averageRGB(int minX, int minY, int maxX, int maxY, boolean transparency) {
-        if (minX < 0 || minX >= width) throw new IllegalArgumentException("minX out of range ("+minX+")");
-        if (minY < 0 || minY >= height) throw new IllegalArgumentException("minY out of range ("+minY+")");
-        if (maxX < 0 || maxX >= width) throw new IllegalArgumentException("maxX out of range ("+maxX+")");
-        if (maxY < 0 || maxY >= height) throw new IllegalArgumentException("maxY out of range ("+maxY+")");
-        if (maxX < minX) throw new IllegalArgumentException("maxX < minX ("+maxX+" < "+minX+")");
-        if (maxY < minY) throw new IllegalArgumentException("maxY < minY ("+maxY+" < "+minY+")");
+        if (minX < 0 || minX >= width) throw new IllegalArgumentException("minX out of range (" + minX + ")");
+        if (minY < 0 || minY >= height) throw new IllegalArgumentException("minY out of range (" + minY + ")");
+        if (maxX < 0 || maxX >= width) throw new IllegalArgumentException("maxX out of range (" + maxX + ")");
+        if (maxY < 0 || maxY >= height) throw new IllegalArgumentException("maxY out of range (" + maxY + ")");
+        if (maxX < minX) throw new IllegalArgumentException("maxX < minX (" + maxX + " < " + minX + ")");
+        if (maxY < minY) throw new IllegalArgumentException("maxY < minY (" + maxY + " < " + minY + ")");
         
         long r = 0, g = 0, b = 0, a = 0;
-        final int pixels = (maxX-minX+1) * (maxY-minY+1);
+        final int pixels = (maxX - minX + 1) * (maxY - minY + 1);
         
-        if (minX == 0 && minY == 0 && maxX == width-1 && maxY == height-1) for (int i = 0; i < pixels; i++) {
+        if (minX == 0 && minY == 0 && maxX == width - 1 && maxY == height - 1) for (int i = 0; i < pixels; i++) {
             final int rgb = data[i];
             r += ColorMath.red(rgb);
             g += ColorMath.green(rgb);
@@ -312,19 +310,20 @@ public class Texture implements Serializable, BaseTexture, Iterable<Texture.Pixe
                 a += ColorMath.alpha(rgb);
         }
         
-        else for (int x = minX; x <= maxX; x++) for (int y = minY; y <= maxY; y++) {
-            final int rgb = get(x, y);
-            r += ColorMath.red(rgb);
-            g += ColorMath.green(rgb);
-            b += ColorMath.blue(rgb);
-            if (transparency)
-                a += ColorMath.alpha(rgb);
-        }
+        else for (int x = minX; x <= maxX; x++)
+            for (int y = minY; y <= maxY; y++) {
+                final int rgb = get(x, y);
+                r += ColorMath.red(rgb);
+                g += ColorMath.green(rgb);
+                b += ColorMath.blue(rgb);
+                if (transparency)
+                    a += ColorMath.alpha(rgb);
+            }
         
         r /= pixels;
         g /= pixels;
         b /= pixels;
-        a = transparency? a/pixels : 0xFF;
+        a = transparency? a / pixels : 0xFF;
         
         return ColorMath.fromRGB((int) r, (int) g, (int) b, (int) a);
     }
@@ -336,7 +335,7 @@ public class Texture implements Serializable, BaseTexture, Iterable<Texture.Pixe
      * @return an argb int representing the average color
      */
     public int averageRGB(boolean transparency) {
-        return averageRGB(0, 0, width-1, height-1, transparency);
+        return averageRGB(0, 0, width - 1, height - 1, transparency);
     }
     
     /**
@@ -398,10 +397,10 @@ public class Texture implements Serializable, BaseTexture, Iterable<Texture.Pixe
     
     
     // SETTERS
-
+    
     @Override
     public void set(int x, int y, int rgb) {
-        data[x + y*width] = rgb;
+        data[x + y * width] = rgb;
     }
     
     public void paste(BaseTexture texture, final int u, final int v) {
@@ -421,7 +420,7 @@ public class Texture implements Serializable, BaseTexture, Iterable<Texture.Pixe
     private void internalPaste(BaseTexture content, int w, int h, int u, int v) {
         for (int i = 0; i < w; i++)
             for (int j = 0; j < h; j++)
-                set(u+i, v+j, content.get(i, j));
+                set(u + i, v + j, content.get(i, j));
     }
     
     //MISC
@@ -467,7 +466,7 @@ public class Texture implements Serializable, BaseTexture, Iterable<Texture.Pixe
     
     @Override
     public String toString() {
-        return Texture.class.getSimpleName()+"{width="+width+",height="+height+"}";
+        return Texture.class.getSimpleName() + "{width=" + width + ",height=" + height + "}";
     }
     
     /**
@@ -486,12 +485,10 @@ public class Texture implements Serializable, BaseTexture, Iterable<Texture.Pixe
     
     /**
      * <p>
-     *     Returns the data of this texture, a top-to-bottom ARGB int-array.
-     * </p>
+     * Returns the data of this texture, a top-to-bottom ARGB int-array.
      * <p>
-     *     Note that the texture may be wrapping an array but not using it in its entirety, the used length may be
-     *     calculated using <code>width * height</code>.
-     * </p>
+     * Note that the texture may be wrapping an array but not using it in its entirety, the used length may be
+     * calculated using <code>width * height</code>.
      *
      * @return the data of this texture
      */
@@ -555,12 +552,12 @@ public class Texture implements Serializable, BaseTexture, Iterable<Texture.Pixe
     public class PixelIterator implements Iterator<Pixel> {
         
         private final Incrementer2 increment = new Incrementer2(width, height);
-    
+        
         @Override
         public boolean hasNext() {
             return increment.canIncrement();
         }
-    
+        
         @Override
         public Pixel next() {
             int[] xy = increment.get();

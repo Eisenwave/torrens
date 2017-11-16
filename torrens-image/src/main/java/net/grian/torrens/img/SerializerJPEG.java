@@ -11,14 +11,12 @@ import java.io.OutputStream;
 
 /**
  * <p>
- *     A serializer for <b>Joint Photographic Experts Group (.jpeg / .jpg)</b> files.
- * </p>
+ * A serializer for <b>Joint Photographic Experts Group (.jpeg / .jpg)</b> files.
  * <p>
- *     No version restrictions exist.
- * </p>
+ * No version restrictions exist.
  */
 public class SerializerJPEG implements Serializer<RenderedImage> {
-
+    
     @Override
     public void toStream(RenderedImage image, OutputStream stream) throws IOException {
         if (!ImageIO.write(image, "jpg", stream))
@@ -30,5 +28,5 @@ public class SerializerJPEG implements Serializer<RenderedImage> {
         if (!ImageIO.write(image, "jpg", file))
             throw new FileFormatException("can not write jpg's");
     }
-
+    
 }

@@ -50,7 +50,7 @@ public class ARGBSerializerBMP implements ARGBSerializer {
             bands = alpha? 4 : 3,
             lineLength = lineLengthOf(width, bands),
             data = lines * lineLength,
-            padding = lineLength - width*bands;
+            padding = lineLength - width * bands;
         
         // BITMAPFILEHEADER
         if (header) {
@@ -86,18 +86,18 @@ public class ARGBSerializerBMP implements ARGBSerializer {
                 (byte) ColorMath.green(rgb),
                 (byte) ColorMath.red(rgb)};
         
-        if (btmUp) for (int line = lines-1; line >= 0; line--) {
-            final int off = line*width;
+        if (btmUp) for (int line = lines - 1; line >= 0; line--) {
+            final int off = line * width;
             for (int i = 0; i < width; i++)
-                stream.write( serializer.toBytes(argb[off+i]) );
+                stream.write(serializer.toBytes(argb[off + i]));
             if (padding != 0)
                 stream.write(new byte[padding]);
         }
         
         else for (int line = 0; line < lines; line++) {
-            final int off = line*width;
+            final int off = line * width;
             for (int i = 0; i < width; i++)
-                stream.write( serializer.toBytes(argb[off+i]) );
+                stream.write(serializer.toBytes(argb[off + i]));
             if (padding != 0)
                 stream.write(new byte[padding]);
         }
@@ -113,11 +113,11 @@ public class ARGBSerializerBMP implements ARGBSerializer {
             int padding = data % 4;
             if (padding != 0)
                 padding = 4 - padding;
-    
+            
             return data + padding;
         }
         
-        throw new IllegalArgumentException("illegal bands: "+bands);
+        throw new IllegalArgumentException("illegal bands: " + bands);
     }
     
     @FunctionalInterface

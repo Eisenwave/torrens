@@ -13,20 +13,18 @@ import java.net.URL;
 
 /**
  * <p>
- *     A deserializer for images of type:<ul>
- *         <li><b>Joint Photographic Experts Group (.jpeg / .jpg)</b></li>
- *         <li><b>Portable Network Graphics (.png)</b></li>
- *         <li><b>Bitmap (.bmp)</b></li>
- *         <li><b>Wireless Application Protocol Bitmap Format (.wbmp)</b></li>
- *         <li><b>Graphics Interchange Format (.gif)</b></li>
- *     </ul>
- * </p>
+ * A deserializer for images of type:<ul>
+ * <li><b>Joint Photographic Experts Group (.jpeg / .jpg)</b></li>
+ * <li><b>Portable Network Graphics (.png)</b></li>
+ * <li><b>Bitmap (.bmp)</b></li>
+ * <li><b>Wireless Application Protocol Bitmap Format (.wbmp)</b></li>
+ * <li><b>Graphics Interchange Format (.gif)</b></li>
+ * </ul>
  * <p>
- *     No version restrictions exist.
- * </p>
+ * No version restrictions exist.
  */
 public class DeserializerImage implements Deserializer<BufferedImage> {
-
+    
     @NotNull
     @Override
     public BufferedImage fromStream(InputStream stream) throws IOException {
@@ -53,5 +51,5 @@ public class DeserializerImage implements Deserializer<BufferedImage> {
             throw new FileFormatException("image could not be read");
         return result;
     }
-
+    
 }

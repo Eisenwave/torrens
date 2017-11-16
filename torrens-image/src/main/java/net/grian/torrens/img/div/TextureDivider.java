@@ -6,5 +6,4 @@ public interface TextureDivider {
     
     abstract Rectangle4i[] apply(BooleanTexture texture);
     
-    
 }

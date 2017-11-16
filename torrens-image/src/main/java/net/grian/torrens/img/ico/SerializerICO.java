@@ -25,7 +25,7 @@ public class SerializerICO implements Serializer<BufferedImage[]> {
     
     public SerializerICO(int format) {
         if (format != TYPE_PNG && format != TYPE_BMP)
-            throw new IllegalArgumentException("unknown format: "+format);
+            throw new IllegalArgumentException("unknown format: " + format);
         
         this.format = format;
     }
@@ -47,7 +47,7 @@ public class SerializerICO implements Serializer<BufferedImage[]> {
         stream.writeLittleShort(0); // reserved
         stream.writeLittleShort(1); // 1 for ICO, 2 for CUR
         stream.writeLittleShort(icons.length);
-    
+        
         ICODirEntry[] entries = new ICODirEntry[icons.length];
         byte[][] imgDataArr = new byte[icons.length][];
         
@@ -68,7 +68,7 @@ public class SerializerICO implements Serializer<BufferedImage[]> {
                 // windows icons require double height due to bullshit
                 ByteBuffer buffer = ByteBuffer.wrap(imgData);
                 buffer.order(ByteOrder.LITTLE_ENDIAN);
-                buffer.putInt(8, entry.height*2);
+                buffer.putInt(8, entry.height * 2);
             }
             
             else {
@@ -77,15 +77,15 @@ public class SerializerICO implements Serializer<BufferedImage[]> {
                 //System.out.println("writing PNG: "+ByteArrays.toHexString(imgData));
                 entry = makePNGEntry(imgData, width, height, 0);
             }
-    
+            
             imgDataArr[i] = imgData;
             entries[i] = entry;
         }
         
-        entries[0].offset = FileMagic.ICO_HEADER_LENGTH + entries.length*FileMagic.ICO_ICONDIRENTRY_LENGTH;
+        entries[0].offset = FileMagic.ICO_HEADER_LENGTH + entries.length * FileMagic.ICO_ICONDIRENTRY_LENGTH;
         for (int i = 1; i < entries.length; i++)
-            entries[i].offset = entries[i-1].offset + entries[i-1].data;
-    
+            entries[i].offset = entries[i - 1].offset + entries[i - 1].data;
+        
         for (ICODirEntry entry : entries)
             writeEntry(entry, stream);
         

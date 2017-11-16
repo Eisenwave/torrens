@@ -11,14 +11,12 @@ import java.io.OutputStream;
 
 /**
  * <p>
- *     A serializer for <b>Portable Network Graphics (.png)</b> files.
- * </p>
+ * A serializer for <b>Portable Network Graphics (.png)</b> files.
  * <p>
- *     No version restrictions exist.
- * </p>
+ * No version restrictions exist.
  */
 public class SerializerPNG implements Serializer<RenderedImage> {
-
+    
     @Override
     public void toStream(RenderedImage image, OutputStream stream) throws IOException {
         if (!ImageIO.write(image, "png", stream))

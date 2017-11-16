@@ -31,19 +31,16 @@ public class Textures {
     
     /**
      * <p>
-     *     Returns the light source location of the texture.
-     * </p>
+     * Returns the light source location of the texture.
      * <p>
-     *     The result is a pair of float coordinates (x,y) in range(-1,1) specifying the light source of an image.
-     * </p>
+     * The result is a pair of float coordinates (x,y) in range(-1,1) specifying the light source of an image.
      * <p>
-     *     The light source location of an image is defined as:
-     *     <blockquote>
-     *             let <b>location</b> be the deviation from the center <code>in range(-1,-1) to (1,1)</code>
-     *         <br>let <b>brightness</b> be the deviation from gray with -1 being pitch black, 1 being pure white
-     *         <code>(for all pixels: sum of (location * brightness)) / amount of pixels</code>
-     *     </blockquote>
-     * </p>
+     * The light source location of an image is defined as:
+     * <blockquote>
+     * let <b>location</b> be the deviation from the center <code>in range(-1,-1) to (1,1)</code>
+     * <br>let <b>brightness</b> be the deviation from gray with -1 being pitch black, 1 being pure white
+     * <code>(for all pixels: sum of (location * brightness)) / amount of pixels</code>
+     * </blockquote>
      *
      * @param texture the texture
      */
@@ -54,22 +51,23 @@ public class Textures {
             height = texture.getHeight(),
             area = width * height;
         final float
-            cenX = (width-1) / 2F,
-            cenY = (height-1) / 2F;
+            cenX = (width - 1) / 2F,
+            cenY = (height - 1) / 2F;
         
         float lightX = 0, lightY = 0;
         
-        for (int x = 0; x < width; x++) for (int y = 0; y < height; y++) {
-            final float
-                locX = (x - cenX) / cenX,
-                locY = (y - cenY) / cenX,
-                bright = (ColorMath.brightness(texture.get(x,y)) - 0.5F) * 2F;
-            
-            lightX += locX*bright;
-            lightY += locY*bright;
-        }
+        for (int x = 0; x < width; x++)
+            for (int y = 0; y < height; y++) {
+                final float
+                    locX = (x - cenX) / cenX,
+                    locY = (y - cenY) / cenX,
+                    bright = (ColorMath.brightness(texture.get(x, y)) - 0.5F) * 2F;
+                
+                lightX += locX * bright;
+                lightY += locY * bright;
+            }
         
-        return new Vertex2f(lightX/area, lightY/area);
+        return new Vertex2f(lightX / area, lightY / area);
     }
     
 }

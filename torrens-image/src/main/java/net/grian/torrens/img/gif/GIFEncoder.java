@@ -25,7 +25,7 @@ public class GIFEncoder implements Closeable {
     
     public void writeHeader(GIFHeader header) throws IOException {
         init();
-    
+        
         setLoop(header.isLoop());
         
         writer.prepareWriteSequence(null);
@@ -33,14 +33,14 @@ public class GIFEncoder implements Closeable {
     
     public void write(GIFFrame frame) throws IOException {
         int delay = frame.getDelayMillis() / 10;
-    
+        
         IIOMetadataNode gce = new IIOMetadataNode("GraphicControlExtension");
         gce.setAttribute("disposalMethod", frame.getDisposalMethod().toString());
         gce.setAttribute("userInputFlag", frame.hasUserInput()? "TRUE" : "FALSE");
         gce.setAttribute("transparentColorFlag", frame.hasTransparency()? "TRUE" : "FALSE");
         gce.setAttribute("delayTime", Integer.toString(delay));
         gce.setAttribute("transparentColorIndex", "0");
-    
+        
         root.appendChild(gce);
         imageMetaData.setFromTree(metaFormatName, root);
         
@@ -98,7 +98,8 @@ public class GIFEncoder implements Closeable {
         Iterator<ImageWriter> iter = ImageIO.getImageWritersBySuffix("gif");
         if (!iter.hasNext()) {
             throw new IIOException("No GIF Image Writers Exist");
-        } else {
+        }
+        else {
             return iter.next();
         }
     }
@@ -108,7 +109,6 @@ public class GIFEncoder implements Closeable {
      *
      * @param rootNode the <tt>IIOMetadataNode</tt> to search for the child node.
      * @param nodeName the name of the child node.
-     *
      * @return the child node, if found or a new node created with the given name.
      */
     private static IIOMetadataNode getNode(IIOMetadataNode rootNode, String nodeName) {
@@ -119,7 +119,7 @@ public class GIFEncoder implements Closeable {
         
         IIOMetadataNode node = new IIOMetadataNode(nodeName);
         rootNode.appendChild(node);
-        return(node);
+        return (node);
     }
     
     @Override

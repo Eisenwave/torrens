@@ -14,9 +14,9 @@ public class GIFColorTable {
         if (data.length < 2 || data.length > 256)
             throw new IllegalArgumentException("color table length must be in range(2,256)");
         if (!FastMath.isPower2(data.length))
-            throw new IllegalArgumentException("table length must be a power of two: "+data.length);
+            throw new IllegalArgumentException("table length must be a power of two: " + data.length);
         if (backgroundIndex > data.length)
-            throw new IndexOutOfBoundsException(backgroundIndex+" >= "+data.length);
+            throw new IndexOutOfBoundsException(backgroundIndex + " >= " + data.length);
         
         this.data = data;
         this.backgroundIndex = backgroundIndex;
@@ -32,7 +32,7 @@ public class GIFColorTable {
     
     @Nullable
     public Color getBackgroundColor() {
-        return backgroundIndex<0? null : new Color(data[backgroundIndex], true);
+        return backgroundIndex < 0? null : new Color(data[backgroundIndex], true);
     }
     
     /**
@@ -46,8 +46,8 @@ public class GIFColorTable {
     
     @Override
     public String toString() {
-        return getClass().getSimpleName()+
-            "{size="+size()+
-            ",backIndex="+backgroundIndex+ "}";
+        return getClass().getSimpleName() +
+            "{size=" + size() +
+            ",backIndex=" + backgroundIndex + "}";
     }
 }

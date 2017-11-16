@@ -9,7 +9,7 @@ import java.awt.*;
  * A rectangular texture.
  */
 public interface BaseTexture {
-
+    
     // GETTERS
     
     /**
@@ -54,7 +54,7 @@ public interface BaseTexture {
             w = getWidth(),
             h = getHeight(),
             outer = w * h;
-        return outer==1? 1 : outer - ( (w-2) * (h-2) );
+        return outer == 1? 1 : outer - ((w - 2) * (h - 2));
     }
     
     /**
@@ -90,7 +90,7 @@ public interface BaseTexture {
     default void get(int x, int y, int width, int height, int[] arr, int offset) {
         for (int i = 0; i < width; i++)
             for (int j = 0; j < height; j++)
-                arr[offset + i + j*width] = get(x+i, y+j);
+                arr[offset + i + j * width] = get(x + i, y + j);
     }
     
     /**
@@ -107,19 +107,20 @@ public interface BaseTexture {
         get(x, y, width, height, arr, 0);
         return arr;
     }
-
+    
     default int getTransparency() {
         final int limX = getWidth(), limY = getHeight();
         
         boolean opaque = true;
-        for (int x = 0; x < limX; x++) for (int y = 0; y < limY; y++) {
-            final int trans = ColorMath.getTransparency(get(x,y));
-            if (trans == Transparency.TRANSLUCENT)
-                return trans;
-            
-            else if (trans == Transparency.BITMASK && opaque)
-                opaque = false;
-        }
+        for (int x = 0; x < limX; x++)
+            for (int y = 0; y < limY; y++) {
+                final int trans = ColorMath.getTransparency(get(x, y));
+                if (trans == Transparency.TRANSLUCENT)
+                    return trans;
+                
+                else if (trans == Transparency.BITMASK && opaque)
+                    opaque = false;
+            }
         
         return opaque? Transparency.OPAQUE : Transparency.BITMASK;
     }
@@ -160,21 +161,23 @@ public interface BaseTexture {
     default void forEachPosition(Int2Consumer action) {
         final int limX = getWidth(), limY = getHeight();
         
-        for (int x = 0; x<limX; x++)
-            for (int y = 0; y<limY; y++)
+        for (int x = 0; x < limX; x++)
+            for (int y = 0; y < limY; y++)
                 action.accept(x, y);
     }
     
     default void forEdge(Int2Consumer action) {
         final int w = getWidth(), h = getHeight();
-    
+        
         // up & down
-        for (int y = 0; y < h; y += h-1) for (int x = 0; x < w; x++)
-            action.accept(x, y);
+        for (int y = 0; y < h; y += h - 1)
+            for (int x = 0; x < w; x++)
+                action.accept(x, y);
         
         // left & right
-        for (int x = 0; x < w; x += w-1) for (int y = 1; y < h-1; y++)
-            action.accept(x, y);
+        for (int x = 0; x < w; x += w - 1)
+            for (int y = 1; y < h - 1; y++)
+                action.accept(x, y);
     }
-
+    
 }

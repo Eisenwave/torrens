@@ -30,19 +30,19 @@ public class GIFDecoder implements Closeable {
     private final static String
         FORMAT = "javax_imageio_gif_image_1.0",
     
-        EL_GLOBAL_TABLE = "GlobalColorTable",
+    EL_GLOBAL_TABLE = "GlobalColorTable",
         EL_LOGICAL_SCREEN = "LogicalScreenDescriptor",
         EL_GCE = "GraphicControlExtension",
         EL_DESCRIPTOR = "ImageDescriptor",
     
-        ATTR_BACKGROUND_INDEX = "backgroundColorIndex",
+    ATTR_BACKGROUND_INDEX = "backgroundColorIndex",
         ATTR_LOG_SCR_WIDTH = "logicalScreenWidth",
         ATTR_LOG_SCR_HEIGHT = "logicalScreenHeight",
         ATTR_POS_X = "imageLeftPosition",
         ATTR_POS_Y = "imageTopPosition",
-        //ATTR_WIDTH = "imageWidth",
-        //ATTR_HEIGHT = "imageHeight",
-        ATTR_DISPOSAL = "disposalMethod",
+    //ATTR_WIDTH = "imageWidth",
+    //ATTR_HEIGHT = "imageHeight",
+    ATTR_DISPOSAL = "disposalMethod",
         ATTR_DELAY = "delayTime";
     
     @NotNull
@@ -102,15 +102,15 @@ public class GIFDecoder implements Closeable {
      */
     @NotNull
     public GIFHeader getHeader() throws IOException {
-        return header==null? readHeader() : header;
+        return header == null? readHeader() : header;
     }
     
     /**
      * <p>
-     *     Returns the current GIF frame or <code>null</code> if no frame has not been read yet.
+     * Returns the current GIF frame or <code>null</code> if no frame has not been read yet.
      * </p>
      * <p>
-     *     The frame's image data is temporary and can be safely mutated.
+     * The frame's image data is temporary and can be safely mutated.
      * </p>
      *
      * @return the current GIF frame
@@ -153,7 +153,7 @@ public class GIFDecoder implements Closeable {
             e.printStackTrace();
         }
         */
-    
+        
         this.data = Texture.alloc(header.getWidth(), header.getHeight());
         //this.canvas = master.getCanvasWrapper();
         
@@ -174,12 +174,12 @@ public class GIFDecoder implements Closeable {
     @Nullable
     private GIFFrame readFrame(int index) throws IOException {
         BufferedImage image;
-        try{
+        try {
             image = reader.read(index);
-        }catch (IndexOutOfBoundsException io){
+        } catch (IndexOutOfBoundsException io) {
             return null;
         }
-    
+        
         IIOMetadataNode root = (IIOMetadataNode) reader.getImageMetadata(index).getAsTree(FORMAT);
         IIOMetadataNode gce = (IIOMetadataNode) root.getElementsByTagName(EL_GCE).item(0);
     
@@ -190,13 +190,13 @@ public class GIFDecoder implements Closeable {
             e.printStackTrace();
         }
         */
-    
-        final int delay = Integer.valueOf( gce.getAttribute(ATTR_DELAY) );
-        final GIFDisposal disposal = GIFDisposal.fromName( gce.getAttribute(ATTR_DISPOSAL) );
-    
+        
+        final int delay = Integer.valueOf(gce.getAttribute(ATTR_DELAY));
+        final GIFDisposal disposal = GIFDisposal.fromName(gce.getAttribute(ATTR_DISPOSAL));
+        
         //final int w = image.getWidth(), h = image.getHeight();
         int x = 0, y = 0;
-    
+        
         NodeList children = root.getChildNodes();
         for (int nodeIndex = 0; nodeIndex < children.getLength(); nodeIndex++) {
             Node nodeItem = children.item(nodeIndex);
@@ -231,16 +231,16 @@ public class GIFDecoder implements Closeable {
             
             case TO_PREVIOUS:
                 if (previous == null)
-                    throw new FileSyntaxException("can not restore to previous at frame "+index);
-    
+                    throw new FileSyntaxException("can not restore to previous at frame " + index);
+                
                 this.data = previous;
                 break;
-                
+            
             case TO_BACKGROUND:
                 data.getCanvasWrapper().drawAll(data.getBackground());
                 break;
-                
-            default: throw new FileSyntaxException("unsupported disposal method: "+frame.getDisposalMethod());
+            
+            default: throw new FileSyntaxException("unsupported disposal method: " + frame.getDisposalMethod());
         }
     }
     
@@ -258,23 +258,23 @@ public class GIFDecoder implements Closeable {
     @NotNull
     private static GIFHeader deserializeHeader(@NotNull IIOMetadata metadata) throws FileSyntaxException {
         IIOMetadataNode globalRoot = (IIOMetadataNode) metadata.getAsTree(metadata.getNativeMetadataFormatName());
-    
+        
         NodeList globalColorTable = globalRoot.getElementsByTagName(EL_GLOBAL_TABLE);
         if (globalColorTable == null)
-            throw new FileSyntaxException("metadata missing: "+ EL_GLOBAL_TABLE);
+            throw new FileSyntaxException("metadata missing: " + EL_GLOBAL_TABLE);
         
         NodeList globalScreeDescriptor = globalRoot.getElementsByTagName(EL_LOGICAL_SCREEN);
         if (globalScreeDescriptor == null)
-            throw new FileSyntaxException("metadata missing: "+ EL_LOGICAL_SCREEN);
+            throw new FileSyntaxException("metadata missing: " + EL_LOGICAL_SCREEN);
         
         IIOMetadataNode descriptorNode = (IIOMetadataNode) globalScreeDescriptor.item(0);
         if (descriptorNode == null)
-            throw new FileSyntaxException("metadata missing: "+ EL_LOGICAL_SCREEN);
+            throw new FileSyntaxException("metadata missing: " + EL_LOGICAL_SCREEN);
         
         IIOMetadataNode tableNode = (IIOMetadataNode) globalColorTable.item(0);
         if (tableNode == null)
-            throw new FileSyntaxException("metadata missing: "+ EL_LOGICAL_SCREEN);
-    
+            throw new FileSyntaxException("metadata missing: " + EL_LOGICAL_SCREEN);
+        
         final int[] dims = deserializeScreenDescriptor(descriptorNode);
         final GIFColorTable gifColorTable = deserializerColorTable(tableNode);
         
@@ -300,17 +300,18 @@ public class GIFDecoder implements Closeable {
         
         for (IIOMetadataNode entry = (IIOMetadataNode) colorTable.getFirstChild();
              entry != null;
-             entry = (IIOMetadataNode) entry.getNextSibling()) try {
-            final int
-                i = Integer.parseInt(entry.getAttribute("index")),
-                r = Integer.parseInt(entry.getAttribute("red")),
-                g = Integer.parseInt(entry.getAttribute("green")),
-                b = Integer.parseInt(entry.getAttribute("blue"));
-            table[i] = ColorMath.fromRGB(r, g, b);
-        } catch (NumberFormatException ex) {
-            throw new FileSyntaxException(ex);
-        }
-    
+             entry = (IIOMetadataNode) entry.getNextSibling())
+            try {
+                final int
+                    i = Integer.parseInt(entry.getAttribute("index")),
+                    r = Integer.parseInt(entry.getAttribute("red")),
+                    g = Integer.parseInt(entry.getAttribute("green")),
+                    b = Integer.parseInt(entry.getAttribute("blue"));
+                table[i] = ColorMath.fromRGB(r, g, b);
+            } catch (NumberFormatException ex) {
+                throw new FileSyntaxException(ex);
+            }
+        
         final int backIndex = Integer.parseInt(colorTable.getAttribute(ATTR_BACKGROUND_INDEX));
         
         return new GIFColorTable(table, backIndex);

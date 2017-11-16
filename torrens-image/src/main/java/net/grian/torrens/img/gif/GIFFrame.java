@@ -14,7 +14,7 @@ public class GIFFrame {
     public GIFFrame(Texture data, int x, int y, int delay, GIFDisposal disposal) {
         if (disposal == null) throw new IllegalArgumentException("disposal method must not be null");
         if (delay < 0 || delay > MAX_DELAY)
-            throw new IllegalArgumentException("delay must be in range(0,"+MAX_DELAY+")");
+            throw new IllegalArgumentException("delay must be in range(0," + MAX_DELAY + ")");
         
         this.x = x;
         this.y = y;
@@ -115,11 +115,11 @@ public class GIFFrame {
     
     @Override
     public String toString() {
-        return GIFFrame.class.getSimpleName()+
-            "{width="+getWidth()+
-            ",height="+getHeight()+
-            ",delay="+delay+
-            ",disposal="+disposal
-            +"}";
+        return GIFFrame.class.getSimpleName() +
+            "{width=" + getWidth() +
+            ",height=" + getHeight() +
+            ",delay=" + delay +
+            ",disposal=" + disposal
+            + "}";
     }
 }

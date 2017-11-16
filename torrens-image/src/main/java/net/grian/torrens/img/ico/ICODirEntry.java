@@ -32,12 +32,12 @@ final class ICODirEntry implements Comparable<ICODirEntry> {
     
     @Override
     public String toString() {
-        return ICODirEntry.class.getSimpleName()+
-            "{dims="+width+"x"+height+
-            ", palette="+palette+
-            ", planes="+planes+
-            ", bpPixel="+bitsPerPixel+
-            ", data="+data+
-            ", offset="+offset+"}";
+        return ICODirEntry.class.getSimpleName() +
+            "{dims=" + width + "x" + height +
+            ", palette=" + palette +
+            ", planes=" + planes +
+            ", bpPixel=" + bitsPerPixel +
+            ", data=" + data +
+            ", offset=" + offset + "}";
     }
 }
