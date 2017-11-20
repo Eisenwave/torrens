@@ -218,7 +218,7 @@ public class Texture implements Serializable, BaseTexture, Iterable<Texture.Pixe
     public int get(float u, float v) {
         return get(
             u == 1? (width - 1) : (int) (u * width),
-            v == 1? (width - 1) : (int) (v * height));
+            v == 1? (height - 1) : (int) (v * height));
     }
     
     public Pixel getPixel(int x, int y) {
@@ -227,7 +227,7 @@ public class Texture implements Serializable, BaseTexture, Iterable<Texture.Pixe
     
     public Pixel getPixel(float u, float v) {
         int x = u == 1? (width - 1) : (int) (u * width);
-        int y = v == 1? (width - 1) : (int) (v * height);
+        int y = v == 1? (height - 1) : (int) (v * height);
         
         return getPixel(x, y);
     }

@@ -67,14 +67,20 @@ public final class ColorMath {
     public static int fromHSB(float h, float s, float b) {
         return Color.HSBtoRGB(h, s, b);
     }
-
-    public static int fromTintedRGB(int rgb, int tint) {
-        final int luma = luminance2(rgb);
+    
+    public static int applyTint(int rgb, int tint) {
+        return fromHSB(hue(tint), saturation(tint), brightness(rgb));
+    }
+    
+    /*
+    public static int applyTint(int rgb, int tint) {
+        final int luma = luminance2(tint);
         return fromRGB(
             (red(tint) * luma)   / 255,
             (green(tint) * luma) / 255,
             (blue(tint) * luma)  / 255);
     }
+    */
 
     //OPERATIONS
 
