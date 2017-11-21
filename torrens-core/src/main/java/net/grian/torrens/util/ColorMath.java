@@ -238,20 +238,6 @@ public final class ColorMath {
             red(top),    green(top),    blue(top),    topAlpha);
     }
 
-    @Contract(pure = true)
-    public static int anaglyph(int r, int g, int b, int a) {
-        return fromRGB(
-            (r * 30 + g * 59 + b * 11) / 100,
-            (r * 30 + g * 70) / 100,
-            (r * 30 + b * 70) / 100,
-            a);
-    }
-    
-    @Contract(pure = true)
-    public static int anaglyph(int rgb) {
-        return anaglyph(red(rgb), green(rgb), blue(rgb), alpha(rgb));
-    }
-
     // COLOR MODEL CONVERSIONS
     
     /**
