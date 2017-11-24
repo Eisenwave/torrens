@@ -4,11 +4,11 @@ import java.io.Serializable;
 
 @SuppressWarnings("unused")
 public class BlockKey implements Serializable {
-
+    
     public final static BlockKey
-    AIR = new BlockKey(0, 0),
-    STONE = new BlockKey(1, 0);
-
+        AIR = new BlockKey(0, 0),
+        STONE = new BlockKey(1, 0);
+    
     private final int id;
     private final byte data;
     
@@ -39,7 +39,7 @@ public class BlockKey implements Serializable {
     }
     
     // GETTERS
-
+    
     /**
      * Returns the block id.
      *
@@ -48,7 +48,7 @@ public class BlockKey implements Serializable {
     public int getId() {
         return id;
     }
-
+    
     /**
      * Returns the block data.
      *
@@ -59,24 +59,24 @@ public class BlockKey implements Serializable {
     }
     
     // MISC
-
+    
     @Override
     public int hashCode() {
         return id | data << 12;
     }
-
+    
     @Override
     public String toString() {
-        return id+":"+data;
+        return id + ":" + data;
     }
-
+    
     @Override
     public boolean equals(Object obj) {
         return obj instanceof BlockKey && equals((BlockKey) obj);
     }
-
+    
     public boolean equals(BlockKey key) {
         return this.id == key.id && this.data == key.data;
     }
-
+    
 }

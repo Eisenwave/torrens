@@ -8,21 +8,23 @@ import java.io.Serializable;
 import java.util.Arrays;
 
 public class ArrayBlockStructure extends AbstractArray3 implements BlockStructure, Serializable, Cloneable {
-
+    
     /** store block biomes */
     public final static int
-    FLAG_BIOMES = 1,
+        FLAG_BIOMES = 1,
     /** store block light */
     FLAG_LIGHT = 1 << 1;
-
+    
     private byte[] arrayId;
     private LowNibbleArray arrayData;
     
-    @Nullable private byte[] arrayBiome;
-    @Nullable private byte[] arrayLight;
-
+    @Nullable
+    private byte[] arrayBiome;
+    @Nullable
+    private byte[] arrayLight;
+    
     private final int flags;
-
+    
     public ArrayBlockStructure(int x, int y, int z, int flags) {
         super(x, y, z);
         if (super.length == 0)
@@ -33,13 +35,13 @@ public class ArrayBlockStructure extends AbstractArray3 implements BlockStructur
         this.arrayId = new byte[length];
         this.arrayData = new LowNibbleArray(length);
         this.arrayBiome = (flags & FLAG_BIOMES) != 0? new byte[x * z] : null;
-        this.arrayLight = (flags & FLAG_LIGHT)  != 0? new byte[length] : null;
+        this.arrayLight = (flags & FLAG_LIGHT) != 0? new byte[length] : null;
     }
-
+    
     public ArrayBlockStructure(int x, int y, int z) {
         this(x, y, z, 0);
     }
-
+    
     /**
      * Returns a copy of a part of this array.
      *
@@ -53,25 +55,27 @@ public class ArrayBlockStructure extends AbstractArray3 implements BlockStructur
      */
     public ArrayBlockStructure copy(int xmin, int ymin, int zmin, int xmax, int ymax, int zmax) {
         if (xmin < 0 || ymin < 0 || zmin < 0)
-            throw new IllegalArgumentException("min ("+xmin+","+ymin+","+zmin+") out of boundaries");
+            throw new IllegalArgumentException("min (" + xmin + "," + ymin + "," + zmin + ") out of boundaries");
         if (xmax >= getSizeX() || ymax >= getSizeY() || zmax >= getSizeZ())
-            throw new IllegalArgumentException("max ("+xmax+","+ymax+","+zmax+") out of boundaries");
-
-        ArrayBlockStructure result = new ArrayBlockStructure(xmax-xmin+1, ymax-ymin+1, zmax-zmin+1, getFlags());
-        for (int x = xmin; x<=xmax; x++) for (int y = ymin; y<=ymax; y++) for (int z = zmin; z<=zmax; z++) {
-            final int x2 = x-xmin, y2 = y-ymin, z2 = z-zmin;
-            result.setBlock(x2, y2, z2, getId(x, y, z), getData(x, y, z));
-            if (hasBiomes()) result.setBiome(x2, z2, getBiome(x, z));
-            if (hasLight()) result.setBlockLight(x2, y2, z2, getLight(x, y, z));
-        }
-
+            throw new IllegalArgumentException("max (" + xmax + "," + ymax + "," + zmax + ") out of boundaries");
+        
+        ArrayBlockStructure result = new ArrayBlockStructure(xmax - xmin + 1, ymax - ymin + 1, zmax - zmin + 1, getFlags());
+        for (int x = xmin; x <= xmax; x++)
+            for (int y = ymin; y <= ymax; y++)
+                for (int z = zmin; z <= zmax; z++) {
+                    final int x2 = x - xmin, y2 = y - ymin, z2 = z - zmin;
+                    result.setBlock(x2, y2, z2, getId(x, y, z), getData(x, y, z));
+                    if (hasBiomes()) result.setBiome(x2, z2, getBiome(x, z));
+                    if (hasLight()) result.setBlockLight(x2, y2, z2, getLight(x, y, z));
+                }
+        
         return result;
     }
     
     protected int indexOf(int x, int z) {
-        return z*sizeX + x;
+        return z * sizeX + x;
     }
-
+    
     /**
      * Returns all the extra content flags this array was created with.
      *
@@ -85,7 +89,7 @@ public class ArrayBlockStructure extends AbstractArray3 implements BlockStructur
     public int getId(int x, int y, int z) {
         return arrayId[indexOf(x, y, z)] & 0xFF;
     }
-
+    
     @Override
     public byte getData(int x, int y, int z) {
         return arrayData.get(indexOf(x, y, z));
@@ -105,16 +109,17 @@ public class ArrayBlockStructure extends AbstractArray3 implements BlockStructur
         return arrayLight[indexOf(x, y, z)];
     }
     
-    public int size() {
+    @Override
+    public int getBlockCount() {
         int size = 0;
-        for (short id : arrayId)
+        for (byte id : arrayId)
             if (id != 0) size++;
         
         return size;
     }
-
+    
     // PREDICATES
-
+    
     /**
      * Returns whether this block array stores biomes.
      *
@@ -125,7 +130,7 @@ public class ArrayBlockStructure extends AbstractArray3 implements BlockStructur
     public boolean hasBiomes() {
         return arrayBiome != null;
     }
-
+    
     /**
      * Returns whether this block array stores block light.
      *
@@ -145,40 +150,40 @@ public class ArrayBlockStructure extends AbstractArray3 implements BlockStructur
     public boolean equals(ArrayBlockStructure array) {
         return
             this.getSizeX() == array.getSizeX() &&
-            this.getSizeY() == array.getSizeY() &&
-            this.getSizeZ() == array.getSizeZ() &&
-            Arrays.equals(this.arrayId, array.arrayId) &&
-            this.arrayData.equals(array.arrayData) &&
-            Arrays.equals(this.arrayBiome, array.arrayBiome) &&
-            Arrays.equals(this.arrayLight, array.arrayLight);
+                this.getSizeY() == array.getSizeY() &&
+                this.getSizeZ() == array.getSizeZ() &&
+                Arrays.equals(this.arrayId, array.arrayId) &&
+                this.arrayData.equals(array.arrayData) &&
+                Arrays.equals(this.arrayBiome, array.arrayBiome) &&
+                Arrays.equals(this.arrayLight, array.arrayLight);
     }
-
+    
     // MUTATORS
-
+    
     @Override
     public void setId(int x, int y, int z, int id) {
         //System.out.println(x+" "+y+" "+z);
         arrayId[indexOf(x, y, z)] = (byte) id;
     }
-
+    
     @Override
     public void setData(int x, int y, int z, byte data) {
-        arrayData.set(indexOf(x, y, z),  data);
+        arrayData.set(indexOf(x, y, z), data);
     }
-
+    
     @Override
     public void setBlock(int x, int y, int z, int id, byte data) {
         arrayId[indexOf(x, y, z)] = (byte) id;
         arrayData.set(indexOf(x, y, z), data);
     }
-
+    
     @Override
     public void setBiome(int x, int z, int biomeId) {
         if (!hasBiomes()) throw new IllegalArgumentException("this block array has no biomes");
         assert arrayBiome != null;
         arrayBiome[indexOf(x, z)] = (byte) biomeId;
     }
-
+    
     @Override
     public void setBlockLight(int x, int y, int z, byte level) {
         if (!hasLight()) throw new IllegalArgumentException("this block array has no block light");
@@ -216,19 +221,19 @@ public class ArrayBlockStructure extends AbstractArray3 implements BlockStructur
     }
     
     //MISC
-
+    
     @Override
     public String toString() {
-        return ArrayBlockStructure.class.getSimpleName()+
-                "{dims="+getSizeX()+"x"+getSizeY()+"x"+getSizeZ()+
-                ", volume="+getVolume()+
-                ", size="+size()+"," +
-                ", biomes="+hasBiomes()+"}";
+        return ArrayBlockStructure.class.getSimpleName() +
+            "{dims=" + getSizeX() + "x" + getSizeY() + "x" + getSizeZ() +
+            ", volume=" + getVolume() +
+            ", blocks=" + getBlockCount() + "," +
+            ", biomes=" + hasBiomes() + "}";
     }
-
+    
     @Override
     public ArrayBlockStructure clone() {
-        return copy(0, 0, 0, getSizeX()-1, getSizeY()-1, getSizeZ()-1);
+        return copy(0, 0, 0, getSizeX() - 1, getSizeY() - 1, getSizeZ() - 1);
     }
     
 }

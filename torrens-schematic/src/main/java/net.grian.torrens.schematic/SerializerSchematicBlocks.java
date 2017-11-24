@@ -35,17 +35,17 @@ public class SerializerSchematicBlocks implements Serializer<BlockStructure> {
     
     private void writeDims(BlockStructure blocks) throws FileSyntaxException {
         final short
-            width =  (short) blocks.getSizeX(),
+            width = (short) blocks.getSizeX(),
             height = (short) blocks.getSizeY(),
             length = (short) blocks.getSizeZ();
-    
+        
         if (width < 0)
-            throw new FileSyntaxException("width too large ("+blocks.getSizeX()+")");
+            throw new FileSyntaxException("width too large (" + blocks.getSizeX() + ")");
         if (height < 0)
-            throw new FileSyntaxException("height too large ("+blocks.getSizeY()+")");
+            throw new FileSyntaxException("height too large (" + blocks.getSizeY() + ")");
         if (length < 0)
-            throw new FileSyntaxException("length too large ("+blocks.getSizeZ()+")");
-    
+            throw new FileSyntaxException("length too large (" + blocks.getSizeZ() + ")");
+        
         schematic.putShort("Width", width);
         schematic.putShort("Height", height);
         schematic.putShort("Length", length);
@@ -58,7 +58,7 @@ public class SerializerSchematicBlocks implements Serializer<BlockStructure> {
         byte[] ids = new byte[blocks.getVolume()];
         byte[] data = new byte[blocks.getVolume()];
         
-        blocks.forEachPos((x,y,z) -> {
+        blocks.forEachPos((x, y, z) -> {
             int index = (y * length + z) * width + x;
             ids[index] = (byte) blocks.getId(x, y, z);
             data[index] = blocks.getData(x, y, z);

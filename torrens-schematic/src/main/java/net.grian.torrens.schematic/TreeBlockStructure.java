@@ -11,12 +11,11 @@ public class TreeBlockStructure implements BlockStructure {
     private final static int
         MIN_POW = 2,
         MAX_POW = 15,
-    
         MIN_RES = 1 << MIN_POW,
         MIN_RES_SQR = MIN_RES * MIN_RES,
         MIN_RES_CUB = MIN_RES_SQR * MIN_RES,
     
-        MAX_RES = 1 << MAX_POW;
+    MAX_RES = 1 << MAX_POW;
     
     private final Array3<AbstractNode> array;
     
@@ -24,9 +23,9 @@ public class TreeBlockStructure implements BlockStructure {
     private final byte pow;
     
     public TreeBlockStructure(int x, int y, int z) {
-        if (x < 0) throw new NegativeArraySizeException("x: "+x);
-        if (y < 0) throw new NegativeArraySizeException("y: "+y);
-        if (z < 0) throw new NegativeArraySizeException("z: "+z);
+        if (x < 0) throw new NegativeArraySizeException("x: " + x);
+        if (y < 0) throw new NegativeArraySizeException("y: " + y);
+        if (z < 0) throw new NegativeArraySizeException("z: " + z);
         this.sizeX = x;
         this.sizeY = y;
         this.sizeZ = z;
@@ -78,13 +77,13 @@ public class TreeBlockStructure implements BlockStructure {
         for (AbstractNode node : array)
             if (node != null)
                 result += node.getAllocatedVolume();
-    
+        
         return result;
     }
     
     @Nullable
     private AbstractNode getOptionalNode(int x, int y, int z) {
-        return array.get(x/res, y/res, z/res);
+        return array.get(x / res, y / res, z / res);
     }
     
     @NotNull
@@ -122,19 +121,19 @@ public class TreeBlockStructure implements BlockStructure {
     @Override
     public int getId(int x, int y, int z) {
         AbstractNode node = getOptionalNode(x, y, z);
-        return node==null? 0 : node.getId(x, y, z);
+        return node == null? 0 : node.getId(x, y, z);
     }
     
     @Override
     public byte getData(int x, int y, int z) {
         AbstractNode node = getOptionalNode(x, y, z);
-        return node==null? 0 : node.getData(x, y, z);
+        return node == null? 0 : node.getData(x, y, z);
     }
     
     @Override
     public BlockKey getBlock(int x, int y, int z) {
         AbstractNode node = getOptionalNode(x, y, z);
-        return node==null? BlockKey.AIR : node.getBlock(x, y, z);
+        return node == null? BlockKey.AIR : node.getBlock(x, y, z);
     }
     
     @Override
@@ -167,7 +166,7 @@ public class TreeBlockStructure implements BlockStructure {
     private abstract static class AbstractNode {
         
         protected final int x, y, z;
-    
+        
         /**
          * Constructs a new abstract node.
          *
@@ -185,13 +184,13 @@ public class TreeBlockStructure implements BlockStructure {
         public abstract int getId(int x, int y, int z);
         
         public abstract byte getData(int x, int y, int z);
-    
+        
         public abstract BlockKey getBlock(int x, int y, int z);
-    
+        
         public abstract void setId(int x, int y, int z, int id);
-    
+        
         public abstract void setData(int x, int y, int z, byte data);
-    
+        
         public abstract void setBlock(int x, int y, int z, int id, byte data);
         
         protected abstract int getNodes();
@@ -199,7 +198,7 @@ public class TreeBlockStructure implements BlockStructure {
         protected abstract int getLeafs();
         
         protected abstract int getAllocatedVolume();
-    
+        
         @Override
         public String toString() {
             return String.format("%s{x=%d, y=%d, z=%d}", getClass().getSimpleName(), x, y, z);
@@ -217,47 +216,47 @@ public class TreeBlockStructure implements BlockStructure {
         }
         
         private int indexOf(int x, int y, int z) {
-            return (x-this.x) + (y-this.y) * MIN_RES + (z-this.z) * MIN_RES_SQR;
+            return (x - this.x) + (y - this.y) * MIN_RES + (z - this.z) * MIN_RES_SQR;
         }
-    
+        
         @Override
         public int getId(int x, int y, int z) {
             return arrayId[indexOf(x, y, z)];
         }
-    
+        
         @Override
         public byte getData(int x, int y, int z) {
             return arrayData.get(indexOf(x, y, z));
         }
-    
+        
         @Override
         public BlockKey getBlock(int x, int y, int z) {
             int index = indexOf(x, y, z);
             return new BlockKey(arrayId[index], arrayData.get(index));
         }
-    
+        
         @Override
         public void setId(int x, int y, int z, int id) {
             arrayId[indexOf(x, y, z)] = (byte) id;
         }
-    
+        
         @Override
         public void setData(int x, int y, int z, byte data) {
             arrayData.set(indexOf(x, y, z), data);
         }
-    
+        
         @Override
         public void setBlock(int x, int y, int z, int id, byte data) {
             int index = indexOf(x, y, z);
             arrayId[index] = (byte) id;
             arrayData.set(index, data);
         }
-    
+        
         @Override
         protected int getNodes() {
             return 1;
         }
-    
+        
         @Override
         protected int getLeafs() {
             return 1;
@@ -279,7 +278,7 @@ public class TreeBlockStructure implements BlockStructure {
         
         private final AbstractNode[] array;
         private final byte pow;
-    
+        
         /**
          * Constructs a new node-cube node.
          *
@@ -332,62 +331,62 @@ public class TreeBlockStructure implements BlockStructure {
             array[index] = newNode;
             return newNode.getRequiredNode(x, y, z);
         }
-    
+        
         @Override
         public int getId(int x, int y, int z) {
             AbstractNode node = getOptionalNode(x, y, z);
-            return node==null? 0 : node.getId(x, y, z);
+            return node == null? 0 : node.getId(x, y, z);
         }
-    
+        
         @Override
         public byte getData(int x, int y, int z) {
             AbstractNode node = getOptionalNode(x, y, z);
-            return node==null? 0 : node.getData(x, y, z);
+            return node == null? 0 : node.getData(x, y, z);
         }
-    
+        
         @Override
         public BlockKey getBlock(int x, int y, int z) {
             AbstractNode node = getOptionalNode(x, y, z);
-            return node==null? BlockKey.AIR : node.getBlock(x, y, z);
+            return node == null? BlockKey.AIR : node.getBlock(x, y, z);
         }
-    
+        
         @Override
         public void setId(int x, int y, int z, int id) {
             getRequiredNode(x, y, z).setId(x, y, z, id);
         }
-    
+        
         @Override
         public void setData(int x, int y, int z, byte data) {
             getRequiredNode(x, y, z).setData(x, y, z, data);
         }
-    
+        
         @Override
         public void setBlock(int x, int y, int z, int id, byte data) {
             getRequiredNode(x, y, z).setBlock(x, y, z, id, data);
         }
-    
+        
         @Override
         protected int getNodes() {
             return getLeafs() + 1;
         }
-    
+        
         @Override
         protected int getLeafs() {
             int result = 0;
             for (AbstractNode node : array)
                 if (node != null)
                     result += node.getNodes();
-        
+            
             return result;
         }
-    
+        
         @Override
         protected int getAllocatedVolume() {
             int result = 0;
             for (AbstractNode node : array)
                 if (node != null)
                     result += node.getAllocatedVolume();
-    
+            
             return result;
         }
         

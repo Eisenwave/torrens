@@ -107,24 +107,6 @@ public interface BlockStructure extends Iterable<BlockKey> {
      */
     abstract int getSizeZ();
     
-    /**
-     * Returns the total capacity in blocks of this structure.
-     *
-     * @return the total block capacity
-     */
-    default int getVolume() {
-        return getSizeX() * getSizeY() * getSizeZ();
-    }
-    
-    /**
-     * Returns the boundaries of this block structure.
-     *
-     * @return the boundaries of this structure
-     */
-    default BoundingBox6i getBoundaries() {
-        return new BoundingBox6i(0, 0, 0, getSizeX(), getSizeY(), getSizeZ());
-    }
-    
     // OPTIONAL
     
     /**
@@ -194,6 +176,37 @@ public interface BlockStructure extends Iterable<BlockKey> {
     }
     
     // DEFAULT
+    
+    /**
+     * Returns the amount of non-air blocks in this structure.
+     *
+     * @return the amount of blocks
+     */
+    default int getBlockCount() {
+        int result = 0;
+        for (BlockKey block : this)
+            if (block.getId() > 0)
+                result++;
+        return result;
+    }
+    
+    /**
+     * Returns the total capacity in blocks of this structure.
+     *
+     * @return the total block capacity
+     */
+    default int getVolume() {
+        return getSizeX() * getSizeY() * getSizeZ();
+    }
+    
+    /**
+     * Returns the boundaries of this block structure.
+     *
+     * @return the boundaries of this structure
+     */
+    default BoundingBox6i getBoundaries() {
+        return new BoundingBox6i(0, 0, 0, getSizeX(), getSizeY(), getSizeZ());
+    }
     
     /**
      * Removes the block at the specified position.
@@ -347,7 +360,7 @@ public interface BlockStructure extends Iterable<BlockKey> {
      * @param action the action to perform
      */
     default void forEachPos(Consumer<Vertex3i> action) {
-        forEachPos((x,y,z) -> action.accept(new Vertex3i(x, y, z)));
+        forEachPos((x, y, z) -> action.accept(new Vertex3i(x, y, z)));
     }
     
     /**
@@ -357,7 +370,7 @@ public interface BlockStructure extends Iterable<BlockKey> {
      */
     @Override
     default void forEach(Consumer<? super BlockKey> action) {
-        forEachPos((x,y,z) -> {
+        forEachPos((x, y, z) -> {
             if (hasBlock(x, y, z))
                 action.accept(getBlock(x, y, z));
         });

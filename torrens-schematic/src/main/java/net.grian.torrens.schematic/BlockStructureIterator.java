@@ -18,9 +18,9 @@ public class BlockStructureIterator implements Iterator<BlockKey> {
     
     @Override
     public BlockKey next() {
-        int[] xyz = incr.incrementAndGet();
+        int[] xyz = incr.get();
         skipToValid();
-        return struct.getBlock(xyz[0], xyz[1], xyz[2]);
+        return get(xyz);
     }
     
     @Override
@@ -28,21 +28,13 @@ public class BlockStructureIterator implements Iterator<BlockKey> {
         return incr.canIncrement();
     }
     
-    @Override
-    public void remove() {
-        int[] xyz = incr.get();
-        struct.setBlock(xyz[0], xyz[1], xyz[2], 0, (byte) 0);
-    }
-    
     private void skipToValid() {
-        while (hasNext()) {
-            if (peek().getId() > 0) break; // next block is air
-            else incr.increment();
-        }
+        incr.increment();
+        //noinspection StatementWithEmptyBody
+        while (hasNext() && get(incr.getAndIncrement()).getId() > 0) {}
     }
     
-    private BlockKey peek() throws NoSuchElementException {
-        int[] xyz = incr.peek();
+    private BlockKey get(int[] xyz) {
         return struct.getBlock(xyz[0], xyz[1], xyz[2]);
     }
     
