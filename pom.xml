@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>net.grian.torrens</groupId>
+    <groupId>eisenwave.torrens</groupId>
     <artifactId>torrens</artifactId>
     <packaging>pom</packaging>
     <version>1.0</version>
@@ -21,9 +21,7 @@
     <modules>
         <module>torrens-core</module>
         <module>torrens-schematic</module>
-        <module>torrens-qubicle</module>
         <module>torrens-3d</module>
-        <module>torrens-nbt</module>
         <module>torrens-core</module>
         <module>torrens-image</module>
     </modules>
@@ -40,16 +38,5 @@
             </plugin>
         </plugins>
     </build>
-
-    <distributionManagement>
-        <repository>
-            <id>nexus</id>
-            <url>http://grian.net:8081/repository/grian/</url>
-        </repository>
-        <snapshotRepository>
-            <id>nexus</id>
-            <url>http://grian.net:8081/repository/grian/</url>
-        </snapshotRepository>
-    </distributionManagement>
 
 </project>

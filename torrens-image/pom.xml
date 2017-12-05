@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>torrens</artifactId>
-        <groupId>net.grian.torrens</groupId>
+        <groupId>eisenwave.torrens</groupId>
         <version>1.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -13,25 +13,27 @@
 
     <dependencies>
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.12</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>net.grian.spatium</groupId>
             <artifactId>spatium-function</artifactId>
             <version>0.1</version>
         </dependency>
         <dependency>
-            <groupId>net.grian.torrens</groupId>
+            <groupId>eisenwave.torrens</groupId>
             <artifactId>torrens-core</artifactId>
             <version>1.0</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>net.grian.spatium</groupId>
             <artifactId>spatium-array</artifactId>
             <version>0.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
