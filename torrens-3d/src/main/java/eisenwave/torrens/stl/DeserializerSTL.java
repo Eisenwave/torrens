@@ -16,7 +16,9 @@ import java.nio.charset.Charset;
  * <p>
  * A deserializer for <b>Stereo-Lithography / Standard-Tessellation-Language (.stl)</b> files.
  * <p>
- * Only binary STL is supported, triangle attributes are given no special interpretation.
+ * Both ASCII STL and binary STL  files are supported.
+ * <p>
+ * If the STL-file is binary, triangle attributes are given no special interpretation.
  */
 public class DeserializerSTL implements Deserializer<STLModel> {
     
@@ -60,13 +62,14 @@ public class DeserializerSTL implements Deserializer<STLModel> {
     public STLModel fromStream(InputStream stream) throws IOException {
         String fiveStr = deserializeASCII(stream, 5);
         
+        // ASCII STL
         if (fiveStr.equals(ASCII_STL_MAGIC)) {
-            if (stream.skip(1) != 1) throw new IOException(); //one space
+            if (stream.skip(1) != 1) throw new IOException(); //skip one space
             BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
             String solidName = reader.readLine();
             
             result = new STLModel(solidName);
-            int lineNo = 2;
+            int lineNo = 2; //first line containing the solid name has already been read
             this.state = S_FACET;
             for (String line = reader.readLine(); ; line = reader.readLine(), lineNo++) {
                 if (line == null)
@@ -86,6 +89,7 @@ public class DeserializerSTL implements Deserializer<STLModel> {
             }
         }
         
+        // BINARY STL
         else {
             LittleDataInputStream littleStream = new LittleDataInputStream(stream);
             String header = fiveStr + deserializeASCII(stream, 75);

@@ -4,6 +4,9 @@ import eisenwave.torrens.object.Vertex3f;
 
 import java.util.Objects;
 
+/**
+ * A triangle in an {@link STLModel}.
+ */
 public class STLTriangle {
     
     private final Vertex3f normal, a, b, c;
