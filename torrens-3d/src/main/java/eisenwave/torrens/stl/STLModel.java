@@ -11,25 +11,25 @@ import java.util.List;
  * <i><b>S</b>tandard <b>T</b>essellation <b>L</b>anguage</i>.
  */
 public class STLModel {
-
+    
     private final List<STLTriangle> triangles = new ArrayList<>();
-
+    
     private String header;
-
+    
     public STLModel(String header) {
         setHeader(header);
     }
-
+    
     public STLModel() {
         this("");
     }
-
+    
     // GETTERS
-
+    
     public List<STLTriangle> getTriangles() {
         return triangles;
     }
-
+    
     /**
      * Returns the amount of triangles in this model.
      *
@@ -38,7 +38,7 @@ public class STLModel {
     public int size() {
         return triangles.size();
     }
-
+    
     /**
      * Returns the model header. For binary STL-Files, this will be the 80-character binary header. For ASCII-STL-Files,
      * this will be the name of the solid.
@@ -52,7 +52,7 @@ public class STLModel {
     public BoundingBox6f getBoundaries() {
         if (isEmpty()) throw new IllegalStateException("empty models have no boundaries");
         float
-            minX =  Float.MAX_VALUE, minY =  Float.MAX_VALUE, minZ =  Float.MAX_VALUE,
+            minX = Float.MAX_VALUE, minY = Float.MAX_VALUE, minZ = Float.MAX_VALUE,
             maxX = -Float.MAX_VALUE, maxY = -Float.MAX_VALUE, maxZ = -Float.MAX_VALUE;
         
         for (STLTriangle triangle : triangles) {
@@ -83,13 +83,13 @@ public class STLModel {
     public boolean isEmpty() {
         return triangles.isEmpty();
     }
-
+    
     // MUTATORS
-
+    
     public boolean add(STLTriangle triangle) {
         return triangles.add(triangle);
     }
-
+    
     public void setHeader(String header) {
         if (header.startsWith("solid")) throw new IllegalArgumentException("header must not start with 'solid'");
         this.header = header;
@@ -99,7 +99,7 @@ public class STLModel {
     
     @Override
     public String toString() {
-        return STLModel.class.getSimpleName()+ "{triangles="+size()+"}";
+        return STLModel.class.getSimpleName() + "{triangles=" + size() + "}";
     }
-
+    
 }
