@@ -1,7 +1,7 @@
 package eisenwave.torrens.img.scale;
 
-import net.grian.spatium.util.FastMath;
-import net.grian.spatium.util.PrimMath;
+import eisenwave.spatium.util.FastMath;
+import eisenwave.spatium.util.PrimMath;
 import eisenwave.torrens.util.ConcurrentArrays;
 import eisenwave.torrens.img.Texture;
 import eisenwave.torrens.util.ColorMath;

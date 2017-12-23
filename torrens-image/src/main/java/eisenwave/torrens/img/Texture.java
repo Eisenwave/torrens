@@ -1,6 +1,6 @@
 package eisenwave.torrens.img;
 
-import net.grian.spatium.util.Incrementer2;
+import eisenwave.spatium.util.Incrementer2;
 import eisenwave.torrens.util.RGBValue;
 import eisenwave.torrens.util.ColorMath;
 import org.jetbrains.annotations.NotNull;

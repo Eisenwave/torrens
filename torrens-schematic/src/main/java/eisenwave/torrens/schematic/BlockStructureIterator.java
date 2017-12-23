@@ -1,6 +1,6 @@
 package eisenwave.torrens.schematic;
 
-import net.grian.spatium.util.Incrementer3;
+import eisenwave.spatium.util.Incrementer3;
 
 import java.util.Iterator;
 

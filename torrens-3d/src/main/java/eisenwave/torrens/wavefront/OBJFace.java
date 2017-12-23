@@ -1,6 +1,6 @@
 package eisenwave.torrens.wavefront;
 
-import net.grian.spatium.array.ArrayIterator;
+import eisenwave.spatium.array.ArrayIterator;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Iterator;

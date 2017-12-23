@@ -1,8 +1,9 @@
 package eisenwave.torrens.schematic;
 
-import net.grian.spatium.array.Array3;
-import net.grian.spatium.array.LowNibbleArray;
-import net.grian.spatium.util.*;
+import eisenwave.spatium.util.FastMath;
+import eisenwave.spatium.util.PrimMath;
+import eisenwave.spatium.array.Array3;
+import eisenwave.spatium.array.LowNibbleArray;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

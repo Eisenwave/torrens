@@ -1,6 +1,6 @@
 package eisenwave.torrens.schematic;
 
-import net.grian.spatium.util.TestUtil;
+import eisenwave.spatium.util.TestUtil;
 import org.junit.Test;
 
 import java.util.Random;

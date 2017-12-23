@@ -1,7 +1,7 @@
 package eisenwave.torrens.img.ico;
 
 import eisenwave.torrens.io.Deserializer;
-import net.grian.spatium.util.PrimArrays;
+import eisenwave.spatium.util.PrimArrays;
 import eisenwave.torrens.error.FileSyntaxException;
 import eisenwave.torrens.error.FileVersionException;
 import eisenwave.torrens.io.LittleDataInputStream;

@@ -1,6 +1,6 @@
 package eisenwave.torrens.schematic;
 
-import net.grian.spatium.function.Int3Consumer;
+import eisenwave.spatium.function.Int3Consumer;
 import eisenwave.torrens.object.BoundingBox6i;
 import eisenwave.torrens.object.Vertex2i;
 import eisenwave.torrens.object.Vertex3i;

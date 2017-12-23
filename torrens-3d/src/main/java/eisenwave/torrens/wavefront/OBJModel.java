@@ -1,6 +1,6 @@
 package eisenwave.torrens.wavefront;
 
-import net.grian.spatium.util.Spatium;
+import eisenwave.spatium.util.Spatium;
 import eisenwave.torrens.object.BoundingBox6f;
 import eisenwave.torrens.object.Vertex2f;
 import eisenwave.torrens.object.Vertex3f;

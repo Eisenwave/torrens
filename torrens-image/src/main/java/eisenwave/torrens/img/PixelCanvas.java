@@ -1,10 +1,10 @@
 package eisenwave.torrens.img;
 
-import net.grian.spatium.array.IntArray2;
-import net.grian.spatium.enums.CardinalDirection;
-import net.grian.spatium.function.Int2Consumer;
-import net.grian.spatium.function.Int2IntFunction;
-import net.grian.spatium.function.Int2Predicate;
+import eisenwave.spatium.array.IntArray2;
+import eisenwave.spatium.enums.CardinalDirection;
+import eisenwave.spatium.function.Int2Consumer;
+import eisenwave.spatium.function.Int2IntFunction;
+import eisenwave.spatium.function.Int2Predicate;
 
 /**
  * Object dedicated to drawing in {@link Texture} objects.

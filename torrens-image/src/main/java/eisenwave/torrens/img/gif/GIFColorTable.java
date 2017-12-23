@@ -1,6 +1,6 @@
 package eisenwave.torrens.img.gif;
 
-import net.grian.spatium.util.FastMath;
+import eisenwave.spatium.util.FastMath;
 import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;

@@ -5,7 +5,7 @@ import eisenwave.nbt.io.NBTDeserializer;
 import eisenwave.torrens.error.FileFormatException;
 import eisenwave.torrens.error.FileSyntaxException;
 import eisenwave.torrens.error.FileVersionException;
-import net.grian.spatium.array.LowNibbleArray;
+import eisenwave.spatium.array.LowNibbleArray;
 import eisenwave.torrens.io.Deserializer;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;

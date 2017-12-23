@@ -1,6 +1,6 @@
 package eisenwave.torrens.img;
 
-import net.grian.spatium.function.Int2Consumer;
+import eisenwave.spatium.function.Int2Consumer;
 import eisenwave.torrens.util.ColorMath;
 
 import java.awt.*;

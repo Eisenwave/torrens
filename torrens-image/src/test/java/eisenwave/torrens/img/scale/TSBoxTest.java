@@ -1,6 +1,6 @@
 package eisenwave.torrens.img.scale;
 
-import net.grian.spatium.util.TestUtil;
+import eisenwave.spatium.util.TestUtil;
 import eisenwave.torrens.img.Texture;
 
 import static org.junit.Assert.*;

@@ -13,56 +13,56 @@ import java.util.Random;
 public final class ColorMath {
     
     private final static Random RANDOM = new Random();
-
+    
     public final static int
-    INVISIBLE_WHITE = 0x00_FF_FF_FF,
-    INVISIBLE_BLACK = 0,
-    SOLID_BLACK = 0xFF_00_00_00,
-    SOLID_RED =   0xFF_FF_00_00,
-    SOLID_GREEN = 0xFF_00_FF_00,
-    SOLID_BLUE =  0xFF_00_00_FF,
-    SOLID_YELLOW = SOLID_RED   | SOLID_GREEN,
-    SOLID_CYAN =   SOLID_GREEN | SOLID_BLUE,
-    SOLID_MAGENTA = SOLID_RED  | SOLID_BLUE,
-    SOLID_WHITE = SOLID_RED | SOLID_GREEN | SOLID_BLUE,
-    DEBUG1 = SOLID_MAGENTA,
-    DEBUG2 = SOLID_CYAN,
-    DEFAULT_TINT = 0xFF_8DB360;
-
+        INVISIBLE_WHITE = 0x00_FF_FF_FF,
+        INVISIBLE_BLACK = 0,
+        SOLID_BLACK = 0xFF_00_00_00,
+        SOLID_RED = 0xFF_FF_00_00,
+        SOLID_GREEN = 0xFF_00_FF_00,
+        SOLID_BLUE = 0xFF_00_00_FF,
+        SOLID_YELLOW = SOLID_RED | SOLID_GREEN,
+        SOLID_CYAN = SOLID_GREEN | SOLID_BLUE,
+        SOLID_MAGENTA = SOLID_RED | SOLID_BLUE,
+        SOLID_WHITE = SOLID_RED | SOLID_GREEN | SOLID_BLUE,
+        DEBUG1 = SOLID_MAGENTA,
+        DEBUG2 = SOLID_CYAN,
+        DEFAULT_TINT = 0xFF_8DB360;
+    
     private ColorMath() {}
-
+    
     // RGB "CONSTRUCTORS"
     
     @Contract(pure = true)
     public static int fromRGB(int r, int g, int b, int a) {
         if (r > 0xFF || g > 0xFF || b > 0xFF || a > 0xFF || r < 0 || g < 0 || b < 0 || a < 0)
-            throw new IllegalArgumentException("channel out of range; argb{"+r+", "+g+", "+b+", "+a+"}");
-
-        return a<<24 | r<<16 | g<<8 | b;
+            throw new IllegalArgumentException("channel out of range; argb{" + r + ", " + g + ", " + b + ", " + a + "}");
+        
+        return a << 24 | r << 16 | g << 8 | b;
     }
     
     @Contract(pure = true)
     public static int fromRGB(float r, float g, float b, float a) {
-        return fromRGB((int) (r*255), (int) (g*255), (int) (b*255), (int) (a*255));
+        return fromRGB((int) (r * 255), (int) (g * 255), (int) (b * 255), (int) (a * 255));
     }
-
+    
     @Contract(pure = true)
     public static int fromRGB(float r, float g, float b) {
         return fromRGB(r, g, b, 1);
     }
-
+    
     @Contract(pure = true)
     public static int fromRGB(int r, int g, int b) {
         return fromRGB(r, g, b, 0xFF);
     }
     
     // OTHER "CONSTRUCTORS"
-
+    
     @Contract(pure = true)
     public static int fromHSB(float h, float s, float b, float a) {
-        return (fromHSB(h, s, b) & 0x00FFFFFF) | ((int) (a*255)<<24);
+        return (fromHSB(h, s, b) & 0x00FFFFFF) | ((int) (a * 255) << 24);
     }
-
+    
     @Contract(pure = true)
     public static int fromHSB(float h, float s, float b) {
         return Color.HSBtoRGB(h, s, b);
@@ -81,19 +81,16 @@ public final class ColorMath {
             (blue(tint) * luma)  / 255);
     }
     */
-
+    
     //OPERATIONS
-
+    
     /**
      * <p>
-     *     Returns the total difference between the components of two colors.
-     * </p>
+     * Returns the total difference between the components of two colors.
      * <p>
-     *     This is the sum of the differences of the red, blue, green (and alpha) channels of both colors.
-     * </p>
+     * This is the sum of the differences of the red, blue, green (and alpha) channels of both colors.
      * <p>
-     *     With alpha, the maximum difference may be {@code 1020}, without: {@code 765}.
-     * </p>
+     * With alpha, the maximum difference may be {@code 1020}, without: {@code 765}.
      *
      * @param a first color
      * @param b second color
@@ -102,22 +99,18 @@ public final class ColorMath {
      */
     @Contract(pure = true)
     public static int componentDiff(int a, int b, boolean alpha) {
-        return
-            Math.abs(red(a)-red(b)) +
-            Math.abs(green(a)-green(b)) +
-            Math.abs(blue(a)-blue(b)) +
-            (alpha? Math.abs(alpha(a)-alpha(b)) : 0);
+        return Math.abs(red(a) - red(b)) +
+            Math.abs(green(a) - green(b)) +
+            Math.abs(blue(a) - blue(b)) +
+            (alpha? Math.abs(alpha(a) - alpha(b)) : 0);
     }
-
+    
     /**
      * <p>
-     *     Returns the visual difference between two colors.
-     * </p>
-     *
+     * Returns the visual difference between two colors.
      * <p>
-     *     This methods is solely to be used for comparison of differences, the returned value itself is mathematically
-     *     useless, its sole purpose is to be compared with other values returned by this method.
-     * </p>
+     * This methods is solely to be used for comparison of differences, the returned value itself is mathematically
+     * useless, its sole purpose is to be compared with other values returned by this method.
      *
      * @return the visual difference between the colors
      */
@@ -130,18 +123,18 @@ public final class ColorMath {
         red = ((512 + redM) * red * red) >> 8;
         grn = 4 * grn * grn;
         blu = ((767 - redM) * blu * blu) >> 8;
-
+        
         return red + grn + blu;
     }
-
+    
     /**
      * <p>
-     *     Returns the visual difference between two colors.
+     * Returns the visual difference between two colors.
      * </p>
-     *
      * <p>
-     *     This methods is solely to be used for comparison of differences, the returned value itself is mathematically
-     *     useless, its sole purpose is to be compared with other values returned by this method.
+     * <p>
+     * This methods is solely to be used for comparison of differences, the returned value itself is mathematically
+     * useless, its sole purpose is to be compared with other values returned by this method.
      * </p>
      *
      * @param a the first color
@@ -152,7 +145,7 @@ public final class ColorMath {
     public static int visualDiff(int a, int b) {
         return visualDiff(red(a), green(a), blue(a), red(b), green(b), blue(b));
     }
-
+    
     /**
      * "Stacks" two colors which means rendering one color in front of another or rendering one layer above another.
      *
@@ -171,15 +164,15 @@ public final class ColorMath {
                             float topR, float topG, float topB, float topA) {
         final float
             deficit = (1 - topA),
-            outA = topA + btmA*deficit;
-
+            outA = topA + btmA * deficit;
+        
         return fromRGB(
-            (topR*topA + btmR*btmA*deficit) / outA,
-            (topG*topA + btmG*btmA*deficit) / outA,
-            (topB*topA + btmB*btmA*deficit) / outA,
+            (topR * topA + btmR * btmA * deficit) / outA,
+            (topG * topA + btmG * btmA * deficit) / outA,
+            (topB * topA + btmB * btmA * deficit) / outA,
             outA);
     }
-
+    
     /**
      * "Stacks" two colors which means rendering one color in front of another or rendering one layer above another.
      *
@@ -195,7 +188,7 @@ public final class ColorMath {
      */
     @Contract(pure = true)
     public static int stack(int btmR, int btmG, int btmB, int btmA, int topR, int topG, int topB, int topA) {
-        return stack(btmR/255F, btmG/255F, btmB/255F, btmA/255F, topR/255F, topG/255F, topB/255F, topA/255F);
+        return stack(btmR / 255F, btmG / 255F, btmB / 255F, btmA / 255F, topR / 255F, topG / 255F, topB / 255F, topA / 255F);
     }
     
     @Contract(pure = true)
@@ -204,10 +197,10 @@ public final class ColorMath {
         float weightB = 1 - weightA;
         
         int
-            red = (int) (red(a)*weightA + red(b)*weightB),
-            grn = (int) (green(a)*weightA + green(b)*weightB),
-            blu = (int) (blue(a)*weightA + blue(b)*weightB),
-            alp = (int) (alpha(a)*weightA + alpha(b)*weightB);
+            red = (int) (red(a) * weightA + red(b) * weightB),
+            grn = (int) (green(a) * weightA + green(b) * weightB),
+            blu = (int) (blue(a) * weightA + blue(b) * weightB),
+            alp = (int) (alpha(a) * weightA + alpha(b) * weightB);
         
         return fromRGB(red, grn, blu, alp);
     }
@@ -222,7 +215,7 @@ public final class ColorMath {
             (int) (blue(rgb) * scale),
             alpha(rgb));
     }
-
+    
     /**
      * "Stacks" two colors which means rendering one color in front of another or rendering one layer above another.
      *
@@ -235,9 +228,9 @@ public final class ColorMath {
         final int topAlpha = alpha(top);
         return topAlpha == 0? bottom : topAlpha == 0xFF? top : stack(
             red(bottom), green(bottom), blue(bottom), alpha(bottom),
-            red(top),    green(top),    blue(top),    topAlpha);
+            red(top), green(top), blue(top), topAlpha);
     }
-
+    
     // COLOR MODEL CONVERSIONS
     
     /**
@@ -252,10 +245,10 @@ public final class ColorMath {
     @NotNull
     public static float[] xyz(float r, float g, float b) {
         final float
-            x = 0.4124F*r + 0.3576F*g + 0.1805F*b,
-            y = 0.2126F*r + 0.7152F*g + 0.0722F*b,
-            z = 0.0193F*r + 0.1192F*g + 0.9505F*b;
-            //sum = x + y + z;
+            x = 0.4124F * r + 0.3576F * g + 0.1805F * b,
+            y = 0.2126F * r + 0.7152F * g + 0.0722F * b,
+            z = 0.0193F * r + 0.1192F * g + 0.9505F * b;
+        //sum = x + y + z;
         
         return new float[] {x, y, z};
         /*
@@ -275,7 +268,7 @@ public final class ColorMath {
      */
     @NotNull
     public static float[] xyz(int rgb) {
-        return xyz(red(rgb)/255F, green(rgb)/255F, blue(rgb)/255F);
+        return xyz(red(rgb) / 255F, green(rgb) / 255F, blue(rgb) / 255F);
     }
     
     @NotNull
@@ -298,9 +291,9 @@ public final class ColorMath {
      */
     public static float luminance(float r, float g, float b) {
         //min to compensate for result > 1 due to imprecision
-        return Math.min(1F, 0.2126F*r + 0.7152F*g + 0.0722F*b);
+        return Math.min(1F, 0.2126F * r + 0.7152F * g + 0.0722F * b);
     }
-
+    
     /**
      * Returns an accurate luminance value of a color.
      *
@@ -310,9 +303,9 @@ public final class ColorMath {
      * @return the color's luminance
      */
     public static float luminance(int r, int g, int b) {
-        return luminance(r/255F, g/255F, b/255F);
+        return luminance(r / 255F, g / 255F, b / 255F);
     }
-
+    
     /**
      * Returns an accurate luminance value of a color.
      *
@@ -346,7 +339,7 @@ public final class ColorMath {
         final int
             min = min(r, g, b),
             max = max(r, g, b);
-        return (max-min) / (float) max;
+        return (max - min) / (float) max;
     }
     
     /**
@@ -388,7 +381,7 @@ public final class ColorMath {
             hue = 4.0f + gc - rc;
         
         hue /= 6.0f;
-        return hue<0? hue + 1.0f : hue;
+        return hue < 0? hue + 1.0f : hue;
     }
     
     /**
@@ -412,9 +405,9 @@ public final class ColorMath {
      */
     @Contract(pure = true)
     public static int luminance2(int r, int b, int g) {
-        return (r+r+r + b + g+g+g+g) >> 3;
+        return (r + r + r + b + g + g + g + g) >> 3;
     }
-
+    
     /**
      * Returns a fast approximation of the luminance of a color.
      *
@@ -425,7 +418,7 @@ public final class ColorMath {
     public static int luminance2(int rgb) {
         return luminance2(red(rgb), green(rgb), blue(rgb));
     }
-
+    
     /**
      * Returns the alpha channel of an ARGB color.
      *
@@ -436,7 +429,7 @@ public final class ColorMath {
     public static int alpha(int rgb) {
         return rgb >> 24 & 0xFF;
     }
-
+    
     /**
      * Returns the red channel of an ARGB color.
      *
@@ -447,7 +440,7 @@ public final class ColorMath {
     public static int red(int rgb) {
         return rgb >> 16 & 0xFF;
     }
-
+    
     /**
      * Returns the green channel of an ARGB color.
      *
@@ -458,7 +451,7 @@ public final class ColorMath {
     public static int green(int rgb) {
         return rgb >> 8 & 0xFF;
     }
-
+    
     /**
      * Returns the blue channel of an ARGB color.
      *
@@ -469,7 +462,7 @@ public final class ColorMath {
     public static int blue(int rgb) {
         return rgb & 0xFF;
     }
-
+    
     // MISC
     
     /**
@@ -529,7 +522,7 @@ public final class ColorMath {
     public static byte[] bytesRGB(int rgb) {
         return new byte[] {(byte) red(rgb), (byte) green(rgb), (byte) blue(rgb)};
     }
-
+    
     // TRANSPARENCY
     
     /**
@@ -540,29 +533,29 @@ public final class ColorMath {
      */
     @Contract(pure = true)
     public static int getTransparency(int rgb) {
-        if ( (rgb & 0xFF_000000) == 0xFF_000000 )
+        if ((rgb & 0xFF_000000) == 0xFF_000000)
             return Transparency.OPAQUE;
-        else if ( (rgb & 0xFF_000000) == 0 )
+        else if ((rgb & 0xFF_000000) == 0)
             return Transparency.BITMASK;
         else
             return Transparency.TRANSLUCENT;
     }
-
+    
     @Contract(pure = true)
     public static boolean isTransparent(int rgb) {
         return (rgb & 0xFF_000000) != 0xFF_000000;
     }
-
+    
     @Contract(pure = true)
     public static boolean isSolid(int rgb) {
         return (rgb & 0xFF_000000) == 0xFF_000000;
     }
-
+    
     @Contract(pure = true)
     public static boolean isVisible(int rgb) {
         return (rgb & 0xFF_000000) != 0;
     }
-
+    
     @Contract(pure = true)
     public static boolean isInvisible(int rgb) {
         return (rgb & 0xFF_000000) == 0;
@@ -577,5 +570,5 @@ public final class ColorMath {
     private static int max(int a, int b, int c) {
         return Math.max(Math.max(a, b), c);
     }
-
+    
 }

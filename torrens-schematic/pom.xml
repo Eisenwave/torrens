@@ -26,12 +26,12 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>net.grian.spatium</groupId>
+            <groupId>eisenwave.spatium</groupId>
             <artifactId>spatium-array</artifactId>
             <version>0.1</version>
         </dependency>
         <dependency>
-            <groupId>net.grian.spatium</groupId>
+            <groupId>eisenwave.spatium</groupId>
             <artifactId>spatium-function</artifactId>
             <version>0.1</version>
         </dependency>

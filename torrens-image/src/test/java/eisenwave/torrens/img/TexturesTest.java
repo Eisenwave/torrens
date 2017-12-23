@@ -1,6 +1,6 @@
 package eisenwave.torrens.img;
 
-import net.grian.spatium.util.TestUtil;
+import eisenwave.spatium.util.TestUtil;
 import eisenwave.torrens.img.scale.ScaleBilinear;
 import eisenwave.torrens.img.scale.ScaleBox;
 import eisenwave.torrens.img.scale.ScaleNearestNeighbour;

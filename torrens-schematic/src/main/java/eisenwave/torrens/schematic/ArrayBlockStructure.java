@@ -1,7 +1,7 @@
 package eisenwave.torrens.schematic;
 
-import net.grian.spatium.array.AbstractArray3;
-import net.grian.spatium.array.LowNibbleArray;
+import eisenwave.spatium.array.AbstractArray3;
+import eisenwave.spatium.array.LowNibbleArray;
 import eisenwave.torrens.object.Vertex2i;
 import eisenwave.torrens.object.Vertex3i;
 import org.jetbrains.annotations.*;

@@ -13,8 +13,13 @@
 
     <dependencies>
         <dependency>
-            <groupId>net.grian.spatium</groupId>
+            <groupId>eisenwave.spatium</groupId>
             <artifactId>spatium-function</artifactId>
+            <version>0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>eisenwave.spatium</groupId>
+            <artifactId>spatium-array</artifactId>
             <version>0.1</version>
         </dependency>
         <dependency>
@@ -22,11 +27,6 @@
             <artifactId>torrens-core</artifactId>
             <version>1.0</version>
             <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>net.grian.spatium</groupId>
-            <artifactId>spatium-array</artifactId>
-            <version>0.1</version>
         </dependency>
 
         <dependency>

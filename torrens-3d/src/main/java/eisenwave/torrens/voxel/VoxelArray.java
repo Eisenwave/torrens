@@ -1,9 +1,9 @@
 package eisenwave.torrens.voxel;
 
-import net.grian.spatium.array.AbstractArray3;
-import net.grian.spatium.enums.Direction;
-import net.grian.spatium.function.Int3Consumer;
-import net.grian.spatium.util.Incrementer3;
+import eisenwave.spatium.array.AbstractArray3;
+import eisenwave.spatium.enums.Direction;
+import eisenwave.spatium.function.Int3Consumer;
+import eisenwave.spatium.util.Incrementer3;
 import eisenwave.torrens.object.BoundingBox6i;
 import eisenwave.torrens.object.Vertex3i;
 import eisenwave.torrens.util.ColorMath;

@@ -40,9 +40,10 @@ public class STLModel {
     }
 
     /**
-     * Returns the model header.
+     * Returns the model header. For binary STL-Files, this will be the 80-character binary header. For ASCII-STL-Files,
+     * this will be the name of the solid.
      *
-     * @return the model header
+     * @return the model header or solid name
      */
     public String getHeader() {
         return header;
@@ -76,7 +77,7 @@ public class STLModel {
     
     /**
      * Returns whether this model contains no triangles.
-     * 
+     *
      * @return whether this model is empty
      */
     public boolean isEmpty() {

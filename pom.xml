@@ -22,7 +22,6 @@
         <module>torrens-core</module>
         <module>torrens-schematic</module>
         <module>torrens-3d</module>
-        <module>torrens-core</module>
         <module>torrens-image</module>
     </modules>
 

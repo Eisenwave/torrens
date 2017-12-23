@@ -64,16 +64,24 @@ public class STLTriangle {
     
     /**
      * <p>
-     *     Returns the triangle attribute.
-     * </p>
+     * Returns the triangle attribute.
      * <p>
-     *     This is an optional value which is being set to <code>0</code> by most applications.
-     * </p>
+     * This is an optional value which is being set to <code>0</code> by most applications.
      *
      * @return the triangle attribute
      */
     public short getAttribute() {
         return attribute;
+    }
+    
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() +
+            "{a=" + getA() +
+            ", b=" + getB() +
+            ", c=" + getC() +
+            ", n=" + getNormal() +
+            "attr=" + Integer.toHexString(getAttribute()) + "}";
     }
     
 }

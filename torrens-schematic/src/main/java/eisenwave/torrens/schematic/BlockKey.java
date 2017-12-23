@@ -38,6 +38,19 @@ public class BlockKey implements Serializable {
         this(id, (byte) data);
     }
     
+    /**
+     * Constructs a new arbitrary block key.
+     *
+     * @param id the block id (positive)
+     * @throws IllegalArgumentException if id is negative
+     */
+    public BlockKey(int id) {
+        if (id < 0) throw new IllegalArgumentException("id must be positive");
+        
+        this.id = id;
+        this.data = 0;
+    }
+    
     // GETTERS
     
     /**
