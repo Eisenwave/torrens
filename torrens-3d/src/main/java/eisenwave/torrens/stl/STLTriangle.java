@@ -1,6 +1,7 @@
 package eisenwave.torrens.stl;
 
 import eisenwave.torrens.object.Vertex3f;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
@@ -12,12 +13,17 @@ public class STLTriangle {
     private final Vertex3f normal, a, b, c;
     private final short attribute;
     
-    public STLTriangle(Vertex3f normal, Vertex3f a, Vertex3f b, Vertex3f c, short attribute) {
-        Objects.requireNonNull(normal);
-        Objects.requireNonNull(a);
-        Objects.requireNonNull(b);
-        Objects.requireNonNull(c);
-        
+    /**
+     * Constructs a new triangle.
+     *
+     * @param normal the triangle normal.
+     * @param a the first vertex
+     * @param b the second vertex
+     * @param c the third vertex
+     * @param attribute the attribute, a number which can have special meaning depending on software
+     */
+    public STLTriangle(@NotNull Vertex3f normal, @NotNull Vertex3f a, @NotNull Vertex3f b, @NotNull Vertex3f c,
+                       short attribute) {
         this.normal = normal;
         this.a = a;
         this.b = b;
@@ -25,6 +31,14 @@ public class STLTriangle {
         this.attribute = attribute;
     }
     
+    /**
+     * Constructs a new triangle with the default attribute of {@code 0}.
+     *
+     * @param normal the triangle normal
+     * @param a the first vertex
+     * @param b the second vertex
+     * @param c the third vertex
+     */
     public STLTriangle(Vertex3f normal, Vertex3f a, Vertex3f b, Vertex3f c) {
         this(normal, a, b, c, (short) 0);
     }
