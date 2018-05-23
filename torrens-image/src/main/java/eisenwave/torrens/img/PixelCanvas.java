@@ -125,8 +125,17 @@ public class PixelCanvas {
         drawRaw((x, y) -> rgb);
     }
     
+    /**
+     * Draws a shape with given rgb value into the texture.
+     *
+     * @param condition the condition for a pixel to be drawn
+     * @param rgb the rgb value
+     */
     public void drawIf(Int2Predicate condition, int rgb) {
-        forEachPixel((x, y) -> {if (condition.test(x, y)) draw(x, y, rgb);});
+        for (int x = 0; x < width; x++)
+            for (int y = 0; y < height; y++)
+                if (condition.test(x, y))
+                    draw(x, y, rgb);
     }
     
     public void drawIfElse(Int2Predicate condition, int rgbTrue, int rgbFalse) {
@@ -142,18 +151,6 @@ public class PixelCanvas {
         for (int x = 0; x < width; x++)
             for (int y = 0; y < height; y++)
                 draw(x, y, function.apply(x, y));
-    }
-    
-    /**
-     * Draws a shape with given rgb value into the texture.
-     *
-     * @param shape the shape
-     * @param rgb the rgb value
-     */
-    public void drawShape(Int2Predicate shape, int rgb) {
-        for (int x = 0; x < width; x++)
-            for (int y = 0; y < height; y++)
-                if (shape.test(x, y)) draw(x, y, rgb);
     }
     
     /**
@@ -174,7 +171,7 @@ public class PixelCanvas {
      */
     public void drawRaster(int rgb0, int rgb1, int tileSize) {
         if (tileSize < 1) return;
-        drawRaw(((x, y) -> x / tileSize % 2 == y / tileSize % 2? rgb0 : rgb1));
+        drawRaw(((x, y) -> (x / tileSize & 1) == (y / tileSize & 1)? rgb0 : rgb1));
     }
     
     public void drawRectangle(int rgb, int x0, int y0, int x1, int y1) {
@@ -186,6 +183,75 @@ public class PixelCanvas {
             for (int y = minY; y < maxY; y++)
                 data.set(x, y, rgb);
     }
+    
+    /**
+     * Draws a circle at given x, y coordinates and a radius.
+     *
+     * @param x the x-coordinate of the circle center
+     * @param y the y-coordinate of the circle center
+     * @param r the circle radius
+     * @param rgb the circle color
+     */
+    public void drawCircle(int x, int y, int r, int rgb) {
+        if (r == 0) {
+            draw(x, y, rgb);
+            return;
+        }
+        
+        internalDrawCircle(x, y, Math.abs(r), rgb);
+    }
+    
+    @SuppressWarnings("SuspiciousNameCombination")
+    public void internalDrawCircle(final int cx, final int cy, final int radius, final int rgb) {
+        final int r2 = radius << 1;
+        /* Wikipedia Parameters: x = radius - 1, y = 0, dx = 1, dy = 1
+        (https://en.wikipedia.org/wiki/Midpoint_circle_algorithm)
+        
+        This implementation delivers less square-shaped results at lower resolutions. */
+        int x = radius,
+            y = 0,
+            dx = 2,
+            dy = 2,
+            error = dx - r2;
+        
+        while (x >= y) {
+            final int
+                x0 = cx - x, x1 = cx + x,
+                y0 = cy - y, y1 = cy + y;
+            draw(x0, y0, rgb);
+            draw(x0, y1, rgb);
+            draw(x1, y0, rgb);
+            draw(x1, y1, rgb);
+            draw(y0, x0, rgb);
+            draw(y0, x1, rgb);
+            draw(y1, x0, rgb);
+            draw(y1, x1, rgb);
+            
+            if (error <= 0) {
+                y++;
+                error += dy;
+                dy += 2;
+            }
+            if (error > 0) {
+                x--;
+                dx += 2;
+                error += dx - r2;
+            }
+        }
+    }
+    
+    /*
+    public void drawEllipse(int x0, int y0, int rx, int rgb) {
+        if (x0 == x1 && y0 == y1) {
+            draw(x0, y0, rgb);
+            return;
+        }
+        
+        internalDrawLine(
+            Math.min(x0, x1), Math.min(y0, y1),
+            Math.max(x0, x1), Math.max(y0, y1), rgb);
+    }
+    */
     
     public void drawLine(int x0, int y0, int x1, int y1, int rgb) {
         if (x0 == x1 && y0 == y1) {
@@ -234,7 +300,7 @@ public class PixelCanvas {
     public void drawTexture(BaseTexture img, int x, int y, int w, int h) {
         for (int i = 0; i < w; i++)
             for (int j = 0; j < h; j++)
-                img.set(x + i, y + j, img.get(i, j));
+                draw(x + i, y + j, img.get(i, j));
     }
     
     /**

@@ -1,5 +1,6 @@
 package eisenwave.torrens.wavefront;
 
+import eisenwave.spatium.util.Spatium;
 import eisenwave.torrens.error.FileSyntaxException;
 import eisenwave.torrens.io.TextDeserializer;
 import eisenwave.torrens.object.Vertex2f;
@@ -117,7 +118,8 @@ public class DeserializerOBJ implements TextDeserializer<OBJModel> {
             Float.parseFloat(args[1]),
             Float.parseFloat(args[2]),
             Float.parseFloat(args[3]));
-        model.addNormal(vertex);
+        float lenSqr = vertex.getLengthSquared();
+        model.addNormal(Spatium.equals(lenSqr, 1)? vertex : vertex.divided((float) Math.sqrt(lenSqr)));
     }
     
     private void readVT(String[] args) {

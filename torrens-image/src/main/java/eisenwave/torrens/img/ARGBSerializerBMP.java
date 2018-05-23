@@ -122,6 +122,7 @@ public class ARGBSerializerBMP implements ARGBSerializer {
     
     @FunctionalInterface
     private static interface ARGBSerializer {
+    
         abstract byte[] toBytes(int i);
     }
     

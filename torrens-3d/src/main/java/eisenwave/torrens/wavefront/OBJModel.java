@@ -15,7 +15,7 @@ import java.util.function.Consumer;
  * Data representation of a Wavefront Object Model.
  */
 public class OBJModel implements Serializable {
-
+    
     private final List<Vertex3f> vertices = new ArrayList<>();
     private final List<Vertex3f> normals = new ArrayList<>();
     private final List<Vertex2f> textures = new ArrayList<>();
@@ -23,14 +23,14 @@ public class OBJModel implements Serializable {
     @NotNull
     private final OBJGroup defGroup;
     private final Set<OBJGroup> groups = new HashSet<>();
-
+    
     private MTLLibrary mtllib;
     
     public OBJModel() {
         this.defGroup = new OBJGroup(this, "Default");
         groups.add(defGroup);
     }
-
+    
     // GETTERS
     
     /**
@@ -42,7 +42,7 @@ public class OBJModel implements Serializable {
     public MTLLibrary getMaterials() {
         return mtllib;
     }
-
+    
     /**
      * Returns the vertex with the given index.
      *
@@ -52,9 +52,9 @@ public class OBJModel implements Serializable {
      */
     public Vertex3f getVertex(int index) {
         if (index < 1) throw new IndexOutOfBoundsException("index < 1");
-        return vertices.get(index-1);
+        return vertices.get(index - 1);
     }
-
+    
     /**
      * Returns the normal vertex with the given index.
      *
@@ -64,9 +64,9 @@ public class OBJModel implements Serializable {
      */
     public Vertex3f getNormal(int index) {
         if (index < 1) throw new IndexOutOfBoundsException("index < 1");
-        return normals.get(index-1);
+        return normals.get(index - 1);
     }
-
+    
     /**
      * Returns the texture vertex with the given index.
      *
@@ -76,14 +76,14 @@ public class OBJModel implements Serializable {
      */
     public Vertex2f getTexture(int index) {
         if (index < 1) throw new IndexOutOfBoundsException("index < 1");
-        return textures.get(index-1);
+        return textures.get(index - 1);
     }
     
     @NotNull
     public OBJGroup getDefaultGroup() {
         return defGroup;
     }
-
+    
     /**
      * Returns the amount of vertices in this model.
      *
@@ -92,7 +92,7 @@ public class OBJModel implements Serializable {
     public int getVertexCount() {
         return vertices.size();
     }
-
+    
     /**
      * Returns the amount of normal vertices in this model.
      *
@@ -101,7 +101,7 @@ public class OBJModel implements Serializable {
     public int getNormalCount() {
         return normals.size();
     }
-
+    
     /**
      * Returns the amount of texture vertices in this model.
      *
@@ -123,7 +123,7 @@ public class OBJModel implements Serializable {
         
         return result;
     }
-
+    
     public int getGroupCount() {
         return groups.size();
     }
@@ -151,9 +151,9 @@ public class OBJModel implements Serializable {
         
         return new BoundingBox6f(minX, minY, minZ, maxX, maxY, maxZ);
     }
-
+    
     // PREDICATES
-
+    
     /**
      * Returns whether this model has an attached material library.
      *
@@ -162,9 +162,9 @@ public class OBJModel implements Serializable {
     public boolean hasMaterials() {
         return mtllib != null;
     }
-
+    
     // MUTATORS
-
+    
     /**
      * Sets the material library of this model.
      *
@@ -173,7 +173,7 @@ public class OBJModel implements Serializable {
     public void setMaterials(@NotNull MTLLibrary mtllib) {
         this.mtllib = mtllib;
     }
-
+    
     /**
      * Adds a vertex to this model.
      *
@@ -182,19 +182,19 @@ public class OBJModel implements Serializable {
     public void addVertex(Vertex3f vertex) {
         vertices.add(Objects.requireNonNull(vertex));
     }
-
+    
     /**
      * Adds a normal vertex to this model. This must be a unit vector.
      *
      * @param vertex the vertex
      */
     public void addNormal(Vertex3f vertex) {
-        final float x = vertex.getX(), y = vertex.getY(), z = vertex.getZ();
-        if (!Spatium.equals(1, x*x + y*y + z*z))
-            throw new IllegalArgumentException("normal is not a unit vector");
+        float lenSqr = vertex.getLengthSquared();
+        if (!Spatium.equals(1, lenSqr))
+            throw new IllegalArgumentException("normal is not a unit vector (len = " + Math.sqrt(lenSqr) + ")");
         normals.add(vertex);
     }
-
+    
     /**
      * Adds a texture vertex to this model.
      *
@@ -236,7 +236,7 @@ public class OBJModel implements Serializable {
     }
     
     //MISC
-
+    
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder(OBJModel.class.getSimpleName());
@@ -252,7 +252,5 @@ public class OBJModel implements Serializable {
         
         return builder.append("]}").toString();
     }
-
     
-
 }

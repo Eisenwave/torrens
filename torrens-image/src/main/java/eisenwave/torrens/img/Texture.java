@@ -70,7 +70,6 @@ public class Texture implements Serializable, BaseTexture, Iterable<Texture.Pixe
             width = image.getWidth(),
             height = image.getHeight();
         final int[] argb = image.getRGB(0, 0, width, height, new int[width * height], 0, width);
-        
         return new Texture(argb, width, height, getBackground(image), false);
     }
     
@@ -123,6 +122,7 @@ public class Texture implements Serializable, BaseTexture, Iterable<Texture.Pixe
      * @see #copy(BufferedImage)
      */
     public static Texture wrapOrCopy(BufferedImage image) {
+        //System.out.println(image.getType());
         return image.getType() == BufferedImage.TYPE_INT_ARGB? wrap(image) : copy(image);
     }
     

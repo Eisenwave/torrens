@@ -40,6 +40,21 @@ public interface Serializer<T> {
             }
         }
     }
+    
+    /**
+     * Writes the object into a {@link File} specified by path using a {@link FileOutputStream}.
+     *
+     * @param object the object
+     * @param path the file
+     * @throws IOException if an I/O error occurs
+     */
+    public default void toFile(T object, String path) throws IOException {
+        try (FileOutputStream stream = new FileOutputStream(new File(path))) {
+            try (BufferedOutputStream buffStream = new BufferedOutputStream(stream)) {
+                toStream(object, buffStream);
+            }
+        }
+    }
 
     /**
      * Writes the object into bytes {@code byte[]} using a {@link ByteArrayOutputStream} with set capacity.
