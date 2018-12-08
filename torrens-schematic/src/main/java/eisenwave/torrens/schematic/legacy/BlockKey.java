@@ -1,4 +1,4 @@
-package eisenwave.torrens.schematic;
+package eisenwave.torrens.schematic.legacy;
 
 import java.io.Serializable;
 

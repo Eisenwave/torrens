@@ -1,11 +1,11 @@
-package eisenwave.torrens.schematic;
+package eisenwave.torrens.schematic.legacy;
 
 import eisenwave.torrens.object.Vertex3i;
 
 import java.util.HashMap;
 import java.util.function.Consumer;
 
-public class HashMapBlockStructure extends HashMap<Vertex3i, BlockKey> implements BlockStructure {
+public class HashMapBlockStructure extends HashMap<Vertex3i, BlockKey> implements LegacyBlockStructure {
     
     private final int x, y, z;
     

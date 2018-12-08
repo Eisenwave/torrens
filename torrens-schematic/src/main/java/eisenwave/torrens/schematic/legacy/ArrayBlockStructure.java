@@ -1,4 +1,4 @@
-package eisenwave.torrens.schematic;
+package eisenwave.torrens.schematic.legacy;
 
 import eisenwave.spatium.array.AbstractArray3;
 import eisenwave.spatium.array.LowNibbleArray;
@@ -9,7 +9,7 @@ import org.jetbrains.annotations.*;
 import java.io.Serializable;
 import java.util.Arrays;
 
-public class ArrayBlockStructure extends AbstractArray3 implements BlockStructure, Serializable, Cloneable {
+public class ArrayBlockStructure extends AbstractArray3 implements LegacyBlockStructure, Serializable, Cloneable {
     
     /** store block biomes */
     public final static int

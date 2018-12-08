@@ -17,7 +17,17 @@ public class VoxelArrayTest {
         
         assertEquals(array, array);
     }
-
+    
+    @Test
+    public void equalsCopy() throws Exception {
+        VoxelArray expected = new VoxelArray(3, 5, 7);
+        expected.forEachPosition((x, y, z) -> expected.setRGB(x, y, z, ColorMath.random(true)));
+        
+        VoxelArray actual = expected.copy(0, 0, 0, 2, 4, 6);
+        
+        assertEquals(expected, actual);
+    }
+    
     @Test
     public void getBoundaries() throws Exception {
         VoxelArray array = new VoxelArray(3, 5, 7);

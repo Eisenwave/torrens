@@ -5,11 +5,12 @@ import eisenwave.nbt.NBTNamedTag;
 import eisenwave.nbt.io.NBTSerializer;
 import eisenwave.torrens.error.FileSyntaxException;
 import eisenwave.torrens.io.Serializer;
+import eisenwave.torrens.schematic.legacy.LegacyBlockStructure;
 
 import java.io.IOException;
 import java.io.OutputStream;
 
-public class SerializerSchematicBlocks implements Serializer<BlockStructure> {
+public class SerializerSchematicBlocks implements Serializer<LegacyBlockStructure> {
     
     private NBTCompound schematic = new NBTCompound();
     
@@ -25,7 +26,7 @@ public class SerializerSchematicBlocks implements Serializer<BlockStructure> {
     }
     
     @Override
-    public void toStream(BlockStructure blocks, OutputStream stream) throws IOException {
+    public void toStream(LegacyBlockStructure blocks, OutputStream stream) throws IOException {
         writeDims(blocks);
         schematic.putString("Materials", "Alpha");
         writeBlocks(blocks);
@@ -33,7 +34,7 @@ public class SerializerSchematicBlocks implements Serializer<BlockStructure> {
         new NBTSerializer().toStream(new NBTNamedTag("Schematic", schematic), stream);
     }
     
-    private void writeDims(BlockStructure blocks) throws FileSyntaxException {
+    private void writeDims(LegacyBlockStructure blocks) throws FileSyntaxException {
         final short
             width = (short) blocks.getSizeX(),
             height = (short) blocks.getSizeY(),
@@ -51,7 +52,7 @@ public class SerializerSchematicBlocks implements Serializer<BlockStructure> {
         schematic.putShort("Length", length);
     }
     
-    private void writeBlocks(BlockStructure blocks) {
+    private void writeBlocks(LegacyBlockStructure blocks) {
         int width = blocks.getSizeX(),
             length = blocks.getSizeZ();
         

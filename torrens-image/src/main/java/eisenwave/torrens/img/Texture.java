@@ -403,6 +403,14 @@ public class Texture implements Serializable, BaseTexture, Iterable<Texture.Pixe
         data[x + y * width] = rgb;
     }
     
+    public void fill(int x, int y, int w, int h, int rgb) {
+        for (int j = 0; j < h; j++) {
+            int offset = x + (y + j) * width;
+            for (int i = 0; i < w; i++)
+                data[offset + i] = rgb;
+        }
+    }
+    
     public void paste(BaseTexture texture, final int u, final int v) {
         final int w = texture.getWidth(), h = texture.getHeight();
         if (w + u > this.getWidth())

@@ -1,10 +1,7 @@
 package eisenwave.torrens.img;
 
-import eisenwave.spatium.array.IntArray2;
 import eisenwave.spatium.enums.CardinalDirection;
-import eisenwave.spatium.function.Int2Consumer;
-import eisenwave.spatium.function.Int2IntFunction;
-import eisenwave.spatium.function.Int2Predicate;
+import eisenwave.spatium.function.*;
 
 /**
  * Object dedicated to drawing in {@link Texture} objects.
@@ -178,9 +175,9 @@ public class PixelCanvas {
         final int
             minX = Math.min(x0, x1), maxX = Math.max(x0, x1),
             minY = Math.min(y0, y1), maxY = Math.max(y0, y1);
-        
-        for (int x = minX; x < maxX; x++)
-            for (int y = minY; y < maxY; y++)
+    
+        for (int x = minX; x <= maxX; x++)
+            for (int y = minY; y <= maxY; y++)
                 data.set(x, y, rgb);
     }
     
@@ -325,7 +322,7 @@ public class PixelCanvas {
         F = 1 << 5;
     
     public void floodFill(int ox, int oy, Int2Predicate fillCond, int rgb) {
-        IntArray2 mask = new IntArray2(width, height);
+        Texture mask = Texture.alloc(width, height);
         forEachPixel((x, y) -> { //predefine all unfillable pixels
             if (!fillCond.test(x, y))
                 mask.set(x, y, F);
@@ -350,7 +347,7 @@ public class PixelCanvas {
         
     }
     
-    private void internalFloodFill(IntArray2 mask, FloodFillConfig config, int org, int x, int y) {
+    private void internalFloodFill(Texture mask, FloodFillConfig config, int org, int x, int y) {
         int here = mask.get(x, y);
         //pixel is either empty or already processed
         if (here >= 0b1111) return;
@@ -368,14 +365,14 @@ public class PixelCanvas {
         if (x != config.minX && org != W) internalFloodFill(mask, config, E, x - 1, y);
     }
     
-    private void ffFinalize(IntArray2 mask, int x, int y) {
+    private void ffFinalize(Texture mask, int x, int y) {
         int val = mask.get(x, y);
         if ((val & F) != 0)
             mask.set(x, y, val | NESW);
     }
     
     public void edgeFloodFill2(Int2Predicate fillCond, int rgb) {
-        IntArray2 mask = new IntArray2(width, height);
+        Texture mask = Texture.alloc(width, height);
         forEachPixel((x, y) -> { //predefine all barriers
             if (!fillCond.test(x, y)) mask.set(x, y, -1);
         });
@@ -389,7 +386,7 @@ public class PixelCanvas {
     
     public void edgeFloodFill(Int2Predicate fillCond, int rgb) {
         final int xmax = width - 1, ymax = height - 1;
-        IntArray2 mask = new IntArray2(width, height);
+        Texture mask = Texture.alloc(width, height);
         
         forEachEdgePixel((x, y) -> {
             int here = mask.get(x, y);
@@ -429,7 +426,7 @@ public class PixelCanvas {
         drawIf((x, y) -> mask.get(x, y) != 0, rgb);
     }
     
-    public void spreadMaskSafely(IntArray2 mask, int x, int y, int xmax, int ymax) {
+    public void spreadMaskSafely(Texture mask, int x, int y, int xmax, int ymax) {
         //signalize to surrounding 4 pixels that dir is blocked
         if (y < ymax) mask.set(x, y + 1, mask.get(x, y + 1) | S);
         if (x < xmax) mask.set(x + 1, y, mask.get(x + 1, y) | W);
@@ -437,7 +434,7 @@ public class PixelCanvas {
         if (x > 0) mask.set(x - 1, y, mask.get(x - 1, y) | E);
     }
     
-    public void spreadMask(IntArray2 mask, int x, int y) {
+    public void spreadMask(Texture mask, int x, int y) {
         //signalize to surrounding 4 pixels that dir is blocked
         mask.set(x, y + 1, mask.get(x, y + 1) | S);
         mask.set(x + 1, y, mask.get(x + 1, y) | W);

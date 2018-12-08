@@ -1,4 +1,4 @@
-package eisenwave.torrens.schematic;
+package eisenwave.torrens.schematic.legacy;
 
 import eisenwave.spatium.util.FastMath;
 import eisenwave.spatium.util.PrimMath;
@@ -13,7 +13,7 @@ import org.jetbrains.annotations.Nullable;
  * This structure is intended to be used as a way to reduce the amount of stored air (like in
  * {@link ArrayBlockStructure}).
  */
-public class TreeBlockStructure implements BlockStructure {
+public class TreeBlockStructure implements LegacyBlockStructure {
     
     private final static int
         MIN_POW = 2,

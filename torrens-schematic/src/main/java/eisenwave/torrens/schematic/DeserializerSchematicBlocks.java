@@ -7,6 +7,8 @@ import eisenwave.torrens.error.FileSyntaxException;
 import eisenwave.torrens.error.FileVersionException;
 import eisenwave.spatium.array.LowNibbleArray;
 import eisenwave.torrens.io.Deserializer;
+import eisenwave.torrens.schematic.legacy.ArrayBlockStructure;
+import eisenwave.torrens.schematic.legacy.LegacyBlockStructure;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -21,13 +23,13 @@ import java.io.InputStream;
  * <p>
  * Only alpha version schematics are supported.
  */
-public class DeserializerSchematicBlocks implements Deserializer<BlockStructure> {
+public class DeserializerSchematicBlocks implements Deserializer<LegacyBlockStructure> {
     
     private NBTCompound schematic;
     
     @NotNull
     @Override
-    public BlockStructure fromStream(InputStream stream) throws IOException {
+    public LegacyBlockStructure fromStream(InputStream stream) throws IOException {
         this.schematic = readSchematic(stream);
         validateSchematic();
         

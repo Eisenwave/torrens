@@ -1,6 +1,7 @@
 package eisenwave.torrens.stl;
 
 import eisenwave.torrens.object.Vertex3f;
+import eisenwave.torrens.object.Vertex3i;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;

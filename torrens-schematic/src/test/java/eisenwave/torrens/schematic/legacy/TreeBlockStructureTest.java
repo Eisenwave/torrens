@@ -1,4 +1,4 @@
-package eisenwave.torrens.schematic;
+package eisenwave.torrens.schematic.legacy;
 
 import eisenwave.spatium.util.TestUtil;
 import org.junit.Test;
@@ -10,14 +10,14 @@ import static org.junit.Assert.*;
 public class TreeBlockStructureTest {
     
     @Test
-    public void resolution() throws Exception {
+    public void resolution() {
         TreeBlockStructure struct = new TreeBlockStructure(17, 23, 55);
         
         assertEquals(64, struct.getResolution());
     }
     
     @Test
-    public void setAndGet() throws Exception {
+    public void setAndGet() {
         TreeBlockStructure struct = new TreeBlockStructure(17, 23, 55);
         Random rng = new Random();
         
@@ -32,7 +32,7 @@ public class TreeBlockStructureTest {
     }
     
     @Test
-    public void allocation() throws Exception {
+    public void allocation() {
         TreeBlockStructure struct = new TreeBlockStructure(16, 23, 30);
         
         assertEquals(32, struct.getResolution());
@@ -66,6 +66,7 @@ public class TreeBlockStructureTest {
         SET = 1,
         FILL = 2;
     
+    @SuppressWarnings("ConstantConditions")
     @Test
     public void performance() {
         final int times = 1_000_000, lim = 256, which = TREE;
@@ -76,36 +77,33 @@ public class TreeBlockStructureTest {
         
         //System.out.println("");
         
-        BlockStructure struct;
+        LegacyBlockStructure struct;
         
-        if (which == ARRAY)
-        {
+        if (which == ARRAY) {
             struct = new ArrayBlockStructure(lim, lim, lim);
             System.out.println("array upon creation: "+ profile(struct, times, lim, SET) );
             System.out.println("array next time: "+     profile(struct, times, lim, GET) );
         }
-    
-        else if (which == TREE)
-        {
+        
+        else if (which == TREE) {
             struct = new TreeBlockStructure(lim, lim, lim);
             System.out.println("tree upon creation: "+ profile(struct, times, lim, SET) );
             System.out.println("tree next time: "+     profile(struct, times, lim, GET) );
         }
-    
-        else if (which == MAP)
-        {
+        
+        else if (which == MAP) {
             struct = new HashMapBlockStructure(lim, lim, lim);
             System.out.println("map upon creation: "+ profile(struct, times, lim, SET) );
             System.out.println("map next time: "+     profile(struct, times, lim, GET) );
         }
-    
+        
         System.out.println("---------------------------");
         System.out.println("Results for "+struct.getClass().getSimpleName()+":");
         System.out.println(String.format("Req Time: %d ms", System.currentTimeMillis()-t));
         System.out.println(String.format("Req Memory: %.2f mB", (TestUtil.usedMemory()-mem) / 1_000_000F));
     }
     
-    private static long profile(BlockStructure struct, int times, int lim, int method) {
+    private static long profile(LegacyBlockStructure struct, int times, int lim, int method) {
         Random random = new Random();
     
         long t0 = System.currentTimeMillis();

@@ -1,4 +1,4 @@
-package eisenwave.torrens.schematic;
+package eisenwave.torrens.schematic.legacy;
 
 import eisenwave.spatium.util.Incrementer3;
 
@@ -6,10 +6,10 @@ import java.util.Iterator;
 
 public class BlockStructureIterator implements Iterator<BlockKey> {
     
-    private final BlockStructure struct;
+    private final LegacyBlockStructure struct;
     private final Incrementer3 incr;
     
-    public BlockStructureIterator(BlockStructure struct) {
+    public BlockStructureIterator(LegacyBlockStructure struct) {
         this.struct = struct;
         this.incr = new Incrementer3(struct.getSizeX(), struct.getSizeY(), struct.getSizeZ());
         skipToValid();

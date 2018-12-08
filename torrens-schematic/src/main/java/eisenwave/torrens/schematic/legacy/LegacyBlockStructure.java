@@ -1,9 +1,7 @@
-package eisenwave.torrens.schematic;
+package eisenwave.torrens.schematic.legacy;
 
 import eisenwave.spatium.function.Int3Consumer;
-import eisenwave.torrens.object.BoundingBox6i;
-import eisenwave.torrens.object.Vertex2i;
-import eisenwave.torrens.object.Vertex3i;
+import eisenwave.torrens.object.*;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Iterator;
@@ -12,7 +10,7 @@ import java.util.function.Consumer;
 /**
  * A 3-dimensional structure of <i>Minecraft</i> blocks.
  */
-public interface BlockStructure extends Iterable<BlockKey> {
+public interface LegacyBlockStructure extends Iterable<BlockKey> {
     
     // ABSTRACT
     
