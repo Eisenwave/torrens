@@ -9,7 +9,6 @@
     <packaging>pom</packaging>
     <version>1.0</version>
     <name>Torrens</name>
-    <description>Grian I/O and data structure library</description>
 
     <developers>
         <developer>
