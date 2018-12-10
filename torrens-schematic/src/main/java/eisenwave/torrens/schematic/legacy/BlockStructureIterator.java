@@ -4,7 +4,7 @@ import eisenwave.spatium.util.Incrementer3;
 
 import java.util.Iterator;
 
-public class BlockStructureIterator implements Iterator<BlockKey> {
+public class BlockStructureIterator implements Iterator<LegacyBlockKey> {
     
     private final LegacyBlockStructure struct;
     private final Incrementer3 incr;
@@ -16,7 +16,7 @@ public class BlockStructureIterator implements Iterator<BlockKey> {
     }
     
     @Override
-    public BlockKey next() {
+    public LegacyBlockKey next() {
         int[] xyz = incr.get();
         skipToValid();
         return get(xyz);
@@ -33,7 +33,7 @@ public class BlockStructureIterator implements Iterator<BlockKey> {
         while (hasNext() && get(incr.getAndIncrement()).getId() > 0) {}
     }
     
-    private BlockKey get(int[] xyz) {
+    private LegacyBlockKey get(int[] xyz) {
         return struct.getBlock(xyz[0], xyz[1], xyz[2]);
     }
     

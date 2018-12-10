@@ -147,9 +147,9 @@ public class TreeBlockStructure implements LegacyBlockStructure {
     }
     
     @Override
-    public BlockKey getBlock(int x, int y, int z) {
+    public LegacyBlockKey getBlock(int x, int y, int z) {
         AbstractNode node = getOptionalNode(x, y, z);
-        return node == null? BlockKey.AIR : node.getBlock(x, y, z);
+        return node == null? LegacyBlockKey.AIR : node.getBlock(x, y, z);
     }
     
     @Override
@@ -200,8 +200,8 @@ public class TreeBlockStructure implements LegacyBlockStructure {
         public abstract int getId(int x, int y, int z);
         
         public abstract byte getData(int x, int y, int z);
-        
-        public abstract BlockKey getBlock(int x, int y, int z);
+    
+        public abstract LegacyBlockKey getBlock(int x, int y, int z);
         
         public abstract void setId(int x, int y, int z, int id);
         
@@ -246,9 +246,9 @@ public class TreeBlockStructure implements LegacyBlockStructure {
         }
         
         @Override
-        public BlockKey getBlock(int x, int y, int z) {
+        public LegacyBlockKey getBlock(int x, int y, int z) {
             int index = indexOf(x, y, z);
-            return new BlockKey(Byte.toUnsignedInt(arrayId[index]), arrayData.get(index));
+            return new LegacyBlockKey(Byte.toUnsignedInt(arrayId[index]), arrayData.get(index));
         }
         
         @Override
@@ -361,9 +361,9 @@ public class TreeBlockStructure implements LegacyBlockStructure {
         }
         
         @Override
-        public BlockKey getBlock(int x, int y, int z) {
+        public LegacyBlockKey getBlock(int x, int y, int z) {
             AbstractNode node = getOptionalNode(x, y, z);
-            return node == null? BlockKey.AIR : node.getBlock(x, y, z);
+            return node == null? LegacyBlockKey.AIR : node.getBlock(x, y, z);
         }
         
         @Override

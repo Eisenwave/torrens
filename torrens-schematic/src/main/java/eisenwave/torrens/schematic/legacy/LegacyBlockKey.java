@@ -3,11 +3,11 @@ package eisenwave.torrens.schematic.legacy;
 import java.io.Serializable;
 
 @SuppressWarnings("unused")
-public class BlockKey implements Serializable {
+public class LegacyBlockKey implements Serializable {
     
-    public final static BlockKey
-        AIR = new BlockKey(0, 0),
-        STONE = new BlockKey(1, 0);
+    public final static LegacyBlockKey
+        AIR = new LegacyBlockKey(0, 0),
+        STONE = new LegacyBlockKey(1, 0);
     
     private final int id;
     private final byte data;
@@ -19,7 +19,7 @@ public class BlockKey implements Serializable {
      * @param data the block data (positive)
      * @throws IllegalArgumentException if id or data are negative
      */
-    public BlockKey(int id, byte data) {
+    public LegacyBlockKey(int id, byte data) {
         if (id < 0) throw new IllegalArgumentException("id must be positive");
         if (data < 0) throw new IllegalArgumentException("data must be positive");
         
@@ -34,7 +34,7 @@ public class BlockKey implements Serializable {
      * @param data the block data (positive)
      * @throws IllegalArgumentException if id or data are negative
      */
-    public BlockKey(int id, int data) {
+    public LegacyBlockKey(int id, int data) {
         this(id, (byte) data);
     }
     
@@ -44,7 +44,7 @@ public class BlockKey implements Serializable {
      * @param id the block id (positive)
      * @throws IllegalArgumentException if id is negative
      */
-    public BlockKey(int id) {
+    public LegacyBlockKey(int id) {
         if (id < 0) throw new IllegalArgumentException("id must be positive");
         
         this.id = id;
@@ -85,10 +85,10 @@ public class BlockKey implements Serializable {
     
     @Override
     public boolean equals(Object obj) {
-        return obj instanceof BlockKey && equals((BlockKey) obj);
+        return obj instanceof LegacyBlockKey && equals((LegacyBlockKey) obj);
     }
     
-    public boolean equals(BlockKey key) {
+    public boolean equals(LegacyBlockKey key) {
         return this.id == key.id && this.data == key.data;
     }
     

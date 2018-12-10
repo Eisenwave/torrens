@@ -10,7 +10,7 @@ import java.util.function.Consumer;
 /**
  * A 3-dimensional structure of <i>Minecraft</i> blocks.
  */
-public interface LegacyBlockStructure extends Iterable<BlockKey> {
+public interface LegacyBlockStructure extends Iterable<LegacyBlockKey> {
     
     // ABSTRACT
     
@@ -182,7 +182,7 @@ public interface LegacyBlockStructure extends Iterable<BlockKey> {
      */
     default int getBlockCount() {
         int result = 0;
-        for (BlockKey block : this)
+        for (LegacyBlockKey block : this)
             if (block.getId() > 0)
                 result++;
         return result;
@@ -261,8 +261,8 @@ public interface LegacyBlockStructure extends Iterable<BlockKey> {
      * @param z the z-coordinate
      * @return the block at the specified position
      */
-    default BlockKey getBlock(int x, int y, int z) {
-        return new BlockKey(getId(x, y, z), getData(x, y, z));
+    default LegacyBlockKey getBlock(int x, int y, int z) {
+        return new LegacyBlockKey(getId(x, y, z), getData(x, y, z));
     }
     
     /**
@@ -271,7 +271,7 @@ public interface LegacyBlockStructure extends Iterable<BlockKey> {
      * @param v the position
      * @return the block at the specified position
      */
-    default BlockKey getBlock(Vertex3i v) {
+    default LegacyBlockKey getBlock(Vertex3i v) {
         return getBlock(v.getX(), v.getY(), v.getZ());
     }
     
@@ -312,7 +312,7 @@ public interface LegacyBlockStructure extends Iterable<BlockKey> {
      * @param pos the position
      * @param block the block
      */
-    default void setBlock(Vertex3i pos, BlockKey block) {
+    default void setBlock(Vertex3i pos, LegacyBlockKey block) {
         setBlock(pos.getX(), pos.getY(), pos.getZ(), block.getId(), block.getData());
     }
     
@@ -367,7 +367,7 @@ public interface LegacyBlockStructure extends Iterable<BlockKey> {
      * @param action the action to perform
      */
     @Override
-    default void forEach(Consumer<? super BlockKey> action) {
+    default void forEach(Consumer<? super LegacyBlockKey> action) {
         forEachPos((x, y, z) -> {
             if (hasBlock(x, y, z))
                 action.accept(getBlock(x, y, z));
@@ -376,7 +376,7 @@ public interface LegacyBlockStructure extends Iterable<BlockKey> {
     
     @NotNull
     @Override
-    default Iterator<BlockKey> iterator() {
+    default Iterator<LegacyBlockKey> iterator() {
         return new BlockStructureIterator(this);
     }
     

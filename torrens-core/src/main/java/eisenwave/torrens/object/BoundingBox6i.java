@@ -17,6 +17,10 @@ public class BoundingBox6i {
         this.maxZ = Math.max(z0, z1);
     }
     
+    public BoundingBox6i(Vertex3i v0, Vertex3i v1) {
+        this(v0.getX(), v0.getY(), v0.getZ(), v1.getX(), v1.getY(), v1.getZ());
+    }
+    
     public int getMinX() {
         return minX;
     }

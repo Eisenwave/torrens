@@ -1,14 +1,14 @@
 package eisenwave.torrens.schematic;
 
-import eisenwave.torrens.schematic.legacy.BlockKey;
+import eisenwave.torrens.schematic.legacy.LegacyBlockKey;
 import eisenwave.torrens.schematic.legacy.LegacyBlockStructure;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
 
 public class DeserializerSchematicBlocksTest {
-
-    public final static BlockKey COAL_BLOCK = new BlockKey(173, 0);
+    
+    public final static LegacyBlockKey COAL_BLOCK = new LegacyBlockKey(173, 0);
 
     @Test
     public void deserialize_bunny() throws Exception {

@@ -5,7 +5,7 @@ import eisenwave.torrens.object.Vertex3i;
 import java.util.HashMap;
 import java.util.function.Consumer;
 
-public class HashMapBlockStructure extends HashMap<Vertex3i, BlockKey> implements LegacyBlockStructure {
+public class HashMapBlockStructure extends HashMap<Vertex3i, LegacyBlockKey> implements LegacyBlockStructure {
     
     private final int x, y, z;
     
@@ -26,7 +26,7 @@ public class HashMapBlockStructure extends HashMap<Vertex3i, BlockKey> implement
     }
     
     @Override
-    public BlockKey getBlock(int x, int y, int z) {
+    public LegacyBlockKey getBlock(int x, int y, int z) {
         return get(new Vertex3i(x, y, z));
     }
     
@@ -42,7 +42,7 @@ public class HashMapBlockStructure extends HashMap<Vertex3i, BlockKey> implement
     
     @Override
     public void setBlock(int x, int y, int z, int id, byte data) {
-        put(new Vertex3i(x, y, z), new BlockKey(id, data));
+        put(new Vertex3i(x, y, z), new LegacyBlockKey(id, data));
     }
     
     @Override
@@ -61,7 +61,7 @@ public class HashMapBlockStructure extends HashMap<Vertex3i, BlockKey> implement
     }
     
     @Override
-    public void forEach(Consumer<? super BlockKey> action) {
+    public void forEach(Consumer<? super LegacyBlockKey> action) {
         values().forEach(action);
     }
     

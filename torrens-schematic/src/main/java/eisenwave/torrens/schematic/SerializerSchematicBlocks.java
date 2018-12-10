@@ -1,7 +1,6 @@
 package eisenwave.torrens.schematic;
 
-import eisenwave.nbt.NBTCompound;
-import eisenwave.nbt.NBTNamedTag;
+import eisenwave.nbt.*;
 import eisenwave.nbt.io.NBTSerializer;
 import eisenwave.torrens.error.FileSyntaxException;
 import eisenwave.torrens.io.Serializer;

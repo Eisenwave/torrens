@@ -24,7 +24,7 @@ public class TreeBlockStructureTest {
         struct.forEachPos((x,y,z) -> {
             int id = rng.nextInt(255) + 1;
             byte data = (byte) rng.nextInt(16);
-            BlockKey block = new BlockKey(id, data);
+            LegacyBlockKey block = new LegacyBlockKey(id, data);
             
             struct.setBlock(x, y, z, id, data);
             assertEquals(block, struct.getBlock(x, y, z));
