@@ -1,4 +1,4 @@
-package eisenwave.torrens.schematic;
+package eisenwave.torrens.schematic.legacy;
 
 import eisenwave.nbt.*;
 import eisenwave.nbt.io.NBTDeserializer;

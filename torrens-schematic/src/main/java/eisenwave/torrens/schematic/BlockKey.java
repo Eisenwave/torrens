@@ -8,25 +8,36 @@ import java.util.*;
 public class BlockKey {
     
     public final static String DEFAULT_NAMESPACE = "minecraft";
+    private final static int DEFAULT_NAMESPACE_HASH = DEFAULT_NAMESPACE.hashCode();
     
     //public final static BlockKey AIR = minecraft("air");
     
-    public static BlockKey minecraft(String key) {
-        return new BlockKey(DEFAULT_NAMESPACE, key);
+    public static BlockKey minecraft(@NotNull String key) {
+        return new BlockKey(DEFAULT_NAMESPACE, DEFAULT_NAMESPACE_HASH, key, Collections.emptyMap());
     }
     
     private final String nameSpace;
+    private final int nameSpaceHash;
     private final String key;
     private final Map<String, String> blockState;
     
+    private BlockKey(String nameSpace, int hash, String id, Map<String, String> blockState) {
+        this.nameSpace = nameSpace;
+        this.nameSpaceHash = hash;
+        this.key = id;
+        this.blockState = blockState;
+    }
+    
     public BlockKey(@NotNull String nameSpace, @NotNull String id) {
         this.nameSpace = nameSpace;
+        this.nameSpaceHash = nameSpace.hashCode();
         this.key = id;
         this.blockState = Collections.emptyMap();
     }
     
     public BlockKey(@NotNull String nameSpace, @NotNull String id, @NotNull Map<String, String> blockState) {
         this.nameSpace = nameSpace;
+        this.nameSpaceHash = nameSpace.hashCode();
         this.key = id;
         this.blockState = new HashMap<>(blockState);
     }
@@ -39,6 +50,14 @@ public class BlockKey {
         return key;
     }
     
+    public Set<String> getBlockStateKeys() {
+        return Collections.unmodifiableSet(blockState.keySet());
+    }
+    
+    public Map<String, String> getBlockState() {
+        return Collections.unmodifiableMap(blockState);
+    }
+    
     @Nullable
     public String getBlockState(String key) {
         return blockState.get(key);
@@ -48,7 +67,7 @@ public class BlockKey {
     
     @Override
     public int hashCode() {
-        return nameSpace.hashCode() ^ key.hashCode();
+        return nameSpaceHash ^ key.hashCode();
     }
     
     @Override

@@ -1,6 +1,5 @@
 package eisenwave.torrens.schematic;
 
-import eisenwave.torrens.schematic.legacy.StructureBlock;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Iterator;

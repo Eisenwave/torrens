@@ -3,6 +3,7 @@ package eisenwave.torrens.schematic.legacy;
 import eisenwave.spatium.util.Incrementer3;
 import eisenwave.torrens.schematic.BlockKey;
 import eisenwave.torrens.schematic.BlockStructureStream;
+import eisenwave.torrens.schematic.StructureBlock;
 
 public class LegacyBlockStructureStream implements BlockStructureStream {
     

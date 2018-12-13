@@ -1,6 +1,8 @@
-package eisenwave.torrens.schematic;
+package eisenwave.torrens.schematic.legacy;
 
+import eisenwave.torrens.schematic.legacy.DeserializerSchematicBlocks;
 import eisenwave.torrens.schematic.legacy.LegacyBlockStructure;
+import eisenwave.torrens.schematic.legacy.SerializerSchematicBlocks;
 import org.junit.Test;
 
 import java.io.IOException;
