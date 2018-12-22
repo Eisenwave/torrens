@@ -1,7 +1,6 @@
-package eisenwave.torrens.schematic;
+package eisenwave.torrens.schematic.legacy;
 
-import eisenwave.torrens.schematic.legacy.LegacyBlockKey;
-import eisenwave.torrens.schematic.legacy.LegacyBlockStructure;
+// import eisenwave.torrens.schematic.legacy.*;
 import org.junit.Test;
 
 import static org.junit.Assert.*;

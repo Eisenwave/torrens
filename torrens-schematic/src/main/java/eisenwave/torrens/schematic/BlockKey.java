@@ -63,6 +63,14 @@ public class BlockKey {
         return blockState.get(key);
     }
     
+    public boolean hasBlockState() {
+        return !blockState.isEmpty();
+    }
+    
+    public BlockKey withoutBlockState() {
+        return new BlockKey(nameSpace, nameSpaceHash, key, Collections.emptyMap());
+    }
+    
     // MISC
     
     @Override

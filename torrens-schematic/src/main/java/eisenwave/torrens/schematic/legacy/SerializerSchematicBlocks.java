@@ -1,10 +1,9 @@
-package eisenwave.torrens.schematic;
+package eisenwave.torrens.schematic.legacy;
 
 import eisenwave.nbt.*;
 import eisenwave.nbt.io.NBTSerializer;
 import eisenwave.torrens.error.FileSyntaxException;
 import eisenwave.torrens.io.Serializer;
-import eisenwave.torrens.schematic.legacy.LegacyBlockStructure;
 
 import java.io.IOException;
 import java.io.OutputStream;
