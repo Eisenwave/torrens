@@ -13,14 +13,15 @@ public class SerializerSchematicBlocks implements Serializer<LegacyBlockStructur
     private NBTCompound schematic = new NBTCompound();
     
     @SuppressWarnings("FieldCanBeLocal")
-    private final boolean addBlocks; //TODO AddBlocks implementation
+    private final boolean addBlocks, tileEntities; //TODO AddBlocks implementation
     
-    public SerializerSchematicBlocks(boolean addBlocks) {
+    public SerializerSchematicBlocks(boolean tileEntities, boolean addBlocks) {
         this.addBlocks = addBlocks;
+        this.tileEntities = tileEntities;
     }
     
     public SerializerSchematicBlocks() {
-        this(false);
+        this(true, false);
     }
     
     @Override
@@ -28,6 +29,7 @@ public class SerializerSchematicBlocks implements Serializer<LegacyBlockStructur
         writeDims(blocks);
         schematic.putString("Materials", "Alpha");
         writeBlocks(blocks);
+        schematic.put("TileEntities", new NBTList(NBTType.COMPOUND));
         
         new NBTSerializer().toStream(new NBTNamedTag("Schematic", schematic), stream);
     }
