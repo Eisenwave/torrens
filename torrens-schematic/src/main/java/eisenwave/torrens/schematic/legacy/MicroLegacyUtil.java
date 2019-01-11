@@ -47,7 +47,6 @@ public final class MicroLegacyUtil {
     
     @Nullable
     public static BlockKey getByLegacyKey(LegacyBlockKey key) {
-        //noinspection deprecation
         BlockKey result = INSTANCE.byLegacyKey.get(key);
         
         return result != null? result : INSTANCE.byLegacyKey.get(new LegacyBlockKey(key.getId()));

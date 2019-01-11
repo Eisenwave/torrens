@@ -201,7 +201,6 @@ public class DeserializerBINVOX implements Deserializer<VoxelArray> {
                     int y = (j / sx) % sz;
                     int z = (j / (sx * sy));
     
-                    //noinspection SuspiciousNameCombination
                     result.setRGB(x, y, z, voxelRGB);
                 }
                 continue;

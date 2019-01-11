@@ -6,7 +6,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 
-@SuppressWarnings("Duplicates")
 public class ScaleNearestNeighbour extends TextureScale {
     
     @Override

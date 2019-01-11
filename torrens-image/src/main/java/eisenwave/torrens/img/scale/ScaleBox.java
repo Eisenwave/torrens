@@ -6,7 +6,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-@SuppressWarnings("Duplicates")
 public class ScaleBox extends TextureScale {
     
     private final int threads;

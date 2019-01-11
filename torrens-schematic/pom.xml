@@ -33,6 +33,11 @@
         </dependency>
         <dependency>
             <groupId>eisenwave.spatium</groupId>
+            <artifactId>spatium-util</artifactId>
+            <version>0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>eisenwave.spatium</groupId>
             <artifactId>spatium-function</artifactId>
             <version>0.1</version>
             <scope>compile</scope>

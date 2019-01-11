@@ -529,7 +529,10 @@ public class VoxelArray extends AbstractArray3 implements BitArray3, Cloneable, 
         }
         
         private Voxel(Voxel copyOf) {
-            this(copyOf.x, copyOf.y, copyOf.z);
+            this.x = copyOf.x;
+            this.y = copyOf.y;
+            this.z = copyOf.z;
+            this.index = copyOf.index;
         }
         
         private Voxel(Vertex3i pos) {

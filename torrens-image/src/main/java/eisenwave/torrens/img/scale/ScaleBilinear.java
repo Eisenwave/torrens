@@ -1,7 +1,6 @@
 package eisenwave.torrens.img.scale;
 
-import eisenwave.spatium.util.FastMath;
-import eisenwave.spatium.util.PrimMath;
+import eisenwave.spatium.util.*;
 import eisenwave.torrens.util.ConcurrentArrays;
 import eisenwave.torrens.img.Texture;
 import eisenwave.torrens.util.ColorMath;
@@ -10,7 +9,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-@SuppressWarnings("Duplicates")
 public class ScaleBilinear extends TextureScale {
     
     private final int threads;

@@ -13,7 +13,6 @@ public class SerializerBINVOX implements Serializer<BitArray3> {
     
     private final static int MAX_RUN_LENGTH = 255;
     
-    @SuppressWarnings("FieldCanBeLocal")
     private int dx, dy, dz, dyz;
     
     /**

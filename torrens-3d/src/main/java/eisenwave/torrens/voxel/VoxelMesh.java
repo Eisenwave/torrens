@@ -86,7 +86,6 @@ public class VoxelMesh implements Serializable, Iterable<VoxelMesh.Element> {
         return new BoundingBox6i(xmin, ymin, zmin, xmax, ymax, zmax);
     }
     
-    @SuppressWarnings("Duplicates")
     public Vertex3i getMin() {
         if (isEmpty()) throw new IllegalStateException("empty meshes have no minimum point");
         int

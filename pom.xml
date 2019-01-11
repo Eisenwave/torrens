@@ -10,6 +10,10 @@
     <version>1.0</version>
     <name>Torrens</name>
 
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
     <developers>
         <developer>
             <name>Jan Schultke</name>

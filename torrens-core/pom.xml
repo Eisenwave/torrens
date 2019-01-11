@@ -13,11 +13,11 @@
     <version>1.0</version>
 
     <dependencies>
-        <dependency>
+        <!--dependency>
             <groupId>eisenwave.spatium</groupId>
             <artifactId>spatium-util</artifactId>
             <version>0.1</version>
-        </dependency>
+        </dependency-->
         <!--dependency>
             <groupId>eisenwave.spatium</groupId>
             <artifactId>spatium-function</artifactId>

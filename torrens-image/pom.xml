@@ -18,6 +18,11 @@
             <version>1.0</version>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+            <groupId>eisenwave.spatium</groupId>
+            <artifactId>spatium-util</artifactId>
+            <version>0.1</version>
+        </dependency>
 
         <dependency>
             <groupId>junit</groupId>
